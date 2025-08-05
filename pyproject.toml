@@ -1,0 +1,29 @@
+[project]
+name = "csagent"
+version = "0.1.0"
+description = "Customer Service Agent"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "langchain>=0.3.27",
+    "langchain-google-genai>=2.1.9",
+    "langgraph>=0.6.3",
+    "python-dotenv>=1.1.1",
+    "streamlit>=1.47.1",
+]
+
+[build-system]
+requires = ["setuptools>=73.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["csagent"]
+
+[tool.setuptools.package-dir]
+"csagent" = "src/csagent"
+
+[dependency-groups]
+dev = [
+    "langgraph-api>=0.2.120",
+    "langgraph-cli>=0.3.6",
+]
