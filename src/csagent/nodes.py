@@ -16,7 +16,7 @@ import inspect
 
 def orchid_agent(state: ChatWorkflowState, config: RunnableConfig):
     """
-    This is Orchid Agent, an expert in orchid.
+    This is Orchid Agent, an expert in 'Orchid', one of the perfume brands by our company.
     """
     question = state["question"]
     product = "orchid"
@@ -44,13 +44,13 @@ def orchid_agent(state: ChatWorkflowState, config: RunnableConfig):
 
     llm = init_chat_model(config["configurable"]["model"], temperature=1)
     response = llm.invoke(messages)
-    answer = HumanMessage(content=response.content, name="orchid_agent")
+    answer = AIMessage(content=response.content, name="orchid_agent")
 
     return {"messages": [answer]}
 
 def violet_agent(state: ChatWorkflowState, config: RunnableConfig):
     """
-    This is Violet Agent, an expert in violet.
+    This is Violet Agent, an expert in 'Violet', one of the perfume brands by our company.
     """
     question = state["question"]
     product = "violet"
@@ -78,13 +78,13 @@ def violet_agent(state: ChatWorkflowState, config: RunnableConfig):
 
     llm = init_chat_model(config["configurable"]["model"], temperature=1)
     response = llm.invoke(messages)
-    answer = HumanMessage(content=response.content, name="violet_agent")
+    answer = AIMessage(content=response.content, name="violet_agent")
 
     return {"messages": [answer]}
 
 def summary_agent(state: ChatWorkflowState, config: RunnableConfig):
     """
-    This is Summary Agent, an expert in summary.
+    This is Summary Agent, the final agent to call to answer the user's question.
     """
     question = state["question"]
     final_answer = state["final_answer"]
