@@ -84,12 +84,12 @@ def violet_agent(state: ChatWorkflowState, config: RunnableConfig):
 
 def summary_agent(state: ChatWorkflowState, config: RunnableConfig):
     """
-    This is Summary Agent, the final agent to call to answer the user's question.
+    This is Summary Agent. This agent will formulate the final answer or recommendation for the user based on the final answer. This agent should always be the final step. Only call this agent when you have all the information to answer the question.
     """
     question = state["question"]
-    final_answer = state["final_answer"]
-    system_prompt = "You are a summary agent, your task is to answer the user's question based on the final answer. Make sure to limit your response to under 200 words. Do not end your response with a question. Be friendly and helpful. Here is the question: {question}. Here is the final answer: {final_answer}"
-    messages = [HumanMessage(content=system_prompt.format(question=question, final_answer=final_answer))]
+    # final_answer = state["final_answer"]
+    system_prompt = "You are a summary agent, your task is to answer the user's question based on the given conversation. Make sure to limit your response to under 200 words. Do not end your response with a question. Be friendly and helpful. Here is the question: {question}."
+    messages = state["messages"][1:] + [HumanMessage(content=system_prompt.format(question=question))]
 
     llm = init_chat_model(config["configurable"]["model"], temperature=0)   
     response = llm.invoke(messages)
@@ -125,7 +125,8 @@ class Router(TypedDict):
     next: Literal[*get_agents()]
     question: str = Field(description="The question for this agent.")
     reason: str = Field(description="The reason for routing to this agent.")
-    final_answer: Optional[str] = Field(description="The final answer for this agent.")
+    # tasks: str = Field(description="Task that you still need to do in order to answer the user's question.")
+    # final_answer: Optional[str] = Field(description="The final answer to the user's question. Keep this empty until you have all the information to answer the question.")
 
 def product_supervisor_node(state: ChatWorkflowState, config: RunnableConfig) -> Command[Literal[*get_agents()]]:
     question = state["question"]
@@ -149,17 +150,18 @@ def product_supervisor_node(state: ChatWorkflowState, config: RunnableConfig) ->
         system_prompt = system_prompt_template.format(
             members=get_agents(),
             agents=agents_str,
+            question=question,
         )
         messages.append(SystemMessage(content=system_prompt))
-        messages.append(HumanMessage(content=question))
+        # messages.append(HumanMessage(content=question))
     
     instruction_prompt = HumanMessage(content="Now as a supervisor, analyze the steps that have been done and think about what to do next. If you can answer the user's question using the past steps, then pass your answer to the summary agent. Otherwise, break it down into delegated tasks.")
-    llm = init_chat_model(config["configurable"]["model"], temperature=0).with_structured_output(Router)
+    llm = init_chat_model("google_genai:gemini-2.5-flash", temperature=0).with_structured_output(Router)
     response = llm.invoke(messages + [instruction_prompt])
 
     # tool_message = ToolMessage(content=f"Tool:{response['next']}",tool_call_id=uuid.uuid4().hex)
-    final_answer = ""
-    if response["final_answer"]:
-        final_answer = response["final_answer"]
+    # final_answer = ""
+    # if response["final_answer"]:
+    #     final_answer = response["final_answer"]
 
-    return Command(goto=response["next"], update={"next": response["next"], "question": response["question"], "final_answer": final_answer})
+    return Command(goto=response["next"], update={"next": response["next"], "question": response["question"]})

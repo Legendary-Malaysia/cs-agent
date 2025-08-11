@@ -5,4 +5,4 @@ Analyze the user's request and think about which agent will be the best to respo
 Here are available agents:
 {agents}
 
-Now analyze the information that you have and think about which agent will be the best to respond. Only call one agent at a time. If you have enough information to respond, pass your answer to the summary agent.
+Human Question: {question}

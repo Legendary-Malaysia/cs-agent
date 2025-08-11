@@ -4,9 +4,8 @@ from langgraph.graph import MessagesState
 
 class ChatWorkflowState(MessagesState):
     question: str
-    product: str
     response: str
-    final_answer: str
+    # final_answer: str
 
 
 class ChatWorkflowStateInput(MessagesState):
