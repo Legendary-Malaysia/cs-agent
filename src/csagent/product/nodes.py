@@ -1,4 +1,4 @@
-from csagent.state import ChatWorkflowState
+from csagent.product.state import ChatWorkflowState
 from csagent.configuration import Configuration
 from langchain_core.runnables import RunnableConfig
 import random
@@ -26,11 +26,11 @@ def _product_agent_factory(state: ChatWorkflowState, config: RunnableConfig, pro
     if not messages:
         current_dir = Path(__file__).parent
 
-        product_description_path = f"{current_dir}/../../resources/products/{product}_{config['configurable']['language']}.md"
+        product_description_path = f"{current_dir}/../../../resources/products/{product}_{config['configurable']['language']}.md"
         with open(product_description_path, "r") as f:
             product_description = f.read()
 
-        prompt_path = f"{current_dir}/../../resources/prompts/product_prompt_{config['configurable']['language']}.md"
+        prompt_path = f"{current_dir}/../../../resources/prompts/product_prompt_{config['configurable']['language']}.md"
         with open(prompt_path, "r") as f:
             system_prompt_template = f.read()
 
@@ -145,7 +145,7 @@ def product_supervisor_node(state: ChatWorkflowState, config: RunnableConfig) ->
     if len(messages) == 0:
         current_dir = Path(__file__).parent
 
-        prompt_path = f"{current_dir}/../../resources/prompts/supervisor_prompt_{config['configurable']['language']}.md"
+        prompt_path = f"{current_dir}/../../../resources/prompts/supervisor_prompt_{config['configurable']['language']}.md"
         with open(prompt_path, "r") as f:
             system_prompt_template = f.read()
 

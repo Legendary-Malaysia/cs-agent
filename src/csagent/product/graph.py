@@ -1,11 +1,11 @@
 from langgraph.graph import START, StateGraph, END
 from langgraph.checkpoint.memory import InMemorySaver
-from csagent.state import (
+from csagent.product.state import (
     ChatWorkflowState,
     ChatWorkflowStateInput,
     ChatWorkflowStateOutput,
 )
-from csagent.nodes import product_supervisor_node, orchid_agent, violet_agent, summary_agent, mahsuri_agent, man_agent, spiritI_agent, spiritII_agent, threewishes_agent
+from csagent.product.nodes import product_supervisor_node, orchid_agent, violet_agent, summary_agent, mahsuri_agent, man_agent, spiritI_agent, spiritII_agent, threewishes_agent
 from csagent.configuration import Configuration
 
 # Build the chat graph
@@ -37,4 +37,4 @@ chat_builder.add_edge("threewishes_agent", "product_supervisor_node")
 chat_builder.add_edge("summary_agent", END)
 
 checkpointer = InMemorySaver()
-chat_graph = chat_builder.compile()
+product_graph = chat_builder.compile()
