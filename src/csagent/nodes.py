@@ -14,20 +14,20 @@ from pydantic import Field
 import inspect
 
 
-def orchid_agent(state: ChatWorkflowState, config: RunnableConfig):
+def _product_agent_factory(state: ChatWorkflowState, config: RunnableConfig, product: str):
     """
-    This is Orchid Agent, an expert in 'Orchid', one of the perfume brands by our company.
+    This is a generic agent for any perfume brand.
+    It takes the product name as an argument.
     """
     question = state["question"]
-    product = "orchid"
     messages = []
 
     # Prepare messages for the LLM
-    if len(messages) == 0:
+    if not messages:
         current_dir = Path(__file__).parent
 
-        product_description = f"{current_dir}/../../resources/products/{product}_{config['configurable']['language']}.md"
-        with open(product_description, "r") as f:
+        product_description_path = f"{current_dir}/../../resources/products/{product}_{config['configurable']['language']}.md"
+        with open(product_description_path, "r") as f:
             product_description = f.read()
 
         prompt_path = f"{current_dir}/../../resources/prompts/product_prompt_{config['configurable']['language']}.md"
@@ -40,55 +40,64 @@ def orchid_agent(state: ChatWorkflowState, config: RunnableConfig):
             product_description=product_description,
         )
         messages.append(SystemMessage(content=system_prompt))
+    
     messages.append(HumanMessage(content=question))
 
     llm = init_chat_model(config["configurable"]["model"], temperature=1)
     response = llm.invoke(messages)
-    answer = AIMessage(content=response.content, name="orchid_agent")
+    answer = AIMessage(content=response.content, name=f"{product}_agent")
 
     return {"messages": [answer]}
+
+def mahsuri_agent(state: ChatWorkflowState, config: RunnableConfig):
+    """
+    This is Mahsuri Agent, an expert in 'Mahsuri', one of the perfume brands by our company.
+    """
+    return _product_agent_factory(state, config, "mahsuri")
+
+def man_agent(state: ChatWorkflowState, config: RunnableConfig):
+    """
+    This is Man Agent, an expert in 'Man', one of the perfume brands by our company.
+    """
+    return _product_agent_factory(state, config, "man")
+
+def orchid_agent(state: ChatWorkflowState, config: RunnableConfig):
+    """
+    This is Orchid Agent, an expert in 'Orchid', one of the perfume brands by our company.
+    """
+    return _product_agent_factory(state, config, "orchid")
+
+def spiritI_agent(state: ChatWorkflowState, config: RunnableConfig):
+    """
+    This is Spirit I Agent, an expert in 'Spirit I', one of the perfume brands by our company.
+    """
+    return _product_agent_factory(state, config, "spiritI")
+
+def spiritII_agent(state: ChatWorkflowState, config: RunnableConfig):
+    """
+    This is Spirit II Agent, an expert in 'Spirit II', one of the perfume brands by our company.
+    """
+    return _product_agent_factory(state, config, "spiritII")
+
+def threewishes_agent(state: ChatWorkflowState, config: RunnableConfig):
+    """
+    This is Three Wishes Agent, an expert in 'Three Wishes', one of the perfume brands by our company.
+    """
+    return _product_agent_factory(state, config, "threewishes")
 
 def violet_agent(state: ChatWorkflowState, config: RunnableConfig):
     """
     This is Violet Agent, an expert in 'Violet', one of the perfume brands by our company.
     """
-    question = state["question"]
-    product = "violet"
-    messages = []
-
-    # Prepare messages for the LLM
-    if len(messages) == 0:
-        current_dir = Path(__file__).parent
-
-        product_description = f"{current_dir}/../../resources/products/{product}_{config['configurable']['language']}.md"
-        with open(product_description, "r") as f:
-            product_description = f.read()
-
-        prompt_path = f"{current_dir}/../../resources/prompts/product_prompt_{config['configurable']['language']}.md"
-        with open(prompt_path, "r") as f:
-            system_prompt_template = f.read()
-
-        system_prompt = system_prompt_template.format(
-            product=product,
-            question=question,
-            product_description=product_description,
-        )
-        messages.append(SystemMessage(content=system_prompt))
-    messages.append(HumanMessage(content=question))
-
-    llm = init_chat_model(config["configurable"]["model"], temperature=1)
-    response = llm.invoke(messages)
-    answer = AIMessage(content=response.content, name="violet_agent")
-
-    return {"messages": [answer]}
+    return _product_agent_factory(state, config, "violet")
 
 def summary_agent(state: ChatWorkflowState, config: RunnableConfig):
     """
     This is Summary Agent. This agent will formulate the final answer or recommendation for the user based on the final answer. This agent should always be the final step. Only call this agent when you have all the information to answer the question.
     """
-    question = state["question"]
+    question = state["users_question"]
     # final_answer = state["final_answer"]
-    system_prompt = "You are a summary agent, your task is to answer the user's question based on the given conversation. Make sure to limit your response to under 200 words. Do not end your response with a question. Be friendly and helpful. Here is the question: {question}."
+    system_prompt = "You are a customer service agent, your task is to answer the customer's question based on the given conversation. Answer the customer's question as if you are talking directly to the customer. Make sure to be concise and to the point. Whenever possible, limit your response to under 200 words. Do not end your response with a question. Be friendly and helpful. Here is the question: {question}."
     messages = state["messages"][1:] + [HumanMessage(content=system_prompt.format(question=question))]
 
     llm = init_chat_model(config["configurable"]["model"], temperature=0)   
@@ -129,7 +138,7 @@ class Router(TypedDict):
     # final_answer: Optional[str] = Field(description="The final answer to the user's question. Keep this empty until you have all the information to answer the question.")
 
 def product_supervisor_node(state: ChatWorkflowState, config: RunnableConfig) -> Command[Literal[*get_agents()]]:
-    question = state["question"]
+    users_question = state["users_question"]
     messages = state["messages"]
 
     # Prepare messages for the LLM
@@ -150,7 +159,7 @@ def product_supervisor_node(state: ChatWorkflowState, config: RunnableConfig) ->
         system_prompt = system_prompt_template.format(
             members=get_agents(),
             agents=agents_str,
-            question=question,
+            question=users_question,
         )
         messages.append(SystemMessage(content=system_prompt))
         # messages.append(HumanMessage(content=question))
