@@ -1,0 +1,3 @@
+Orchid is the signature of Legendary, inspired by the tropical rainforests of Malaysia. Exotic Orchid For Extraordinary Soul reflects the essence of Legendary’s perfumes, crafted for those with an exceptional spirit.
+
+Orchid offers a light and fresh scent, beginning with vibrant top notes of orange, apple, and green lemon, which invigorate the senses. The heart features a floral array of pansy, magnolia, Cattleya orchid, and muguet, creating a serene garden atmosphere. It concludes with base notes of peach, amber, musk, and cedar, delivering a comforting finish. Ideally for those who love a fragrance that is both refreshing and richly layered.
