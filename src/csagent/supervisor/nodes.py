@@ -70,8 +70,14 @@ def call_location_team(state: SupervisorWorkflowState, config: RunnableConfig):
 
 def customer_service_team(state: SupervisorWorkflowState, config: RunnableConfig):
     question = state["users_question"]
-    system_prompt = "You are a customer service agent, your task is to answer the customer's question based on the given conversation. Answer the customer's question as if you are talking directly to the customer. Make sure to be concise and to the point. Whenever possible, limit your response to under 200 words. Do not end your response with a question. Be friendly and helpful. Here is the question: {question}."
-    messages = state["messages"][1:] + [HumanMessage(content=system_prompt.format(question=question))]
+
+    current_dir = Path(__file__).parent
+
+    prompt_path = f"{current_dir}/../../../resources/prompts/cs_prompt_{config['configurable']['language']}.md"
+    with open(prompt_path, "r") as f:
+        system_prompt_template = f.read()
+    system_prompt = system_prompt_template.format(question=question)
+    messages = state["messages"][1:] + [HumanMessage(content=system_prompt)]
 
     llm = init_chat_model(config["configurable"]["model"], temperature=0)   
     response = llm.invoke(messages)
