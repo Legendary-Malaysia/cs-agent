@@ -2,7 +2,8 @@
     "dockerfile_lines": [],
     "graphs": {
       "product": "src/csagent/product/graph.py:product_graph",
-      "location": "src/csagent/location/graph.py:location_graph"
+      "location": "src/csagent/location/graph.py:location_graph",
+      "supervisor": "src/csagent/supervisor/graph.py:supervisor_graph"
     },
     "env": "./.env",
     "python_version": "3.13",
