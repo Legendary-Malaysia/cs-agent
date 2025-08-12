@@ -1,3 +1,14 @@
+📍 Pavilion Kuala Lumpur - Parkson Elite
+Level 3, 168, Jalan Bukit Bintang, Bukit Bintang, 55100, Kuala Lumpur
+☎︎ 03-21432278
+
+📍 Legendary Isetan KLCC Counter
+Ground Floor, Jln Ampang, Kuala Lumpur City Centre, 50088 Kuala Lumpur, Wilayah Persekutuan Kuala Lumpur (Near Issey Miyake)
+
+📍 Pavillion Kuala Lumpur - SASA
+Lot 1.22, Level 1, Pavillion Kuala Lumpur, No.168, Jalan Bukit Bintang, 55100 Kuala Lumpur
+☎︎ 03-2388 4735
+
 📍 AEON Metro Prima Kepong Shopping Centre - SASA
 Lot G27, AEON Metro Prima Shopping Centre 1, Jalan Metro Prima, Taman Kepong, 52100 Kuala Lumpur
 ☎︎ 03-3010 8047
@@ -15,9 +26,6 @@ Lot P-5, Plaza Floor, Hartamas Shopping Centre, No.60, Jalan Sri Hartamas 1, Sri
 📍 KL East Mall - SASA
 G1-39, Ground Floor 1, KL East Mall, 823, Jalan Lingkaran Tengah 2, KL Timur, 53100 Kuala Lumpur
 ☎︎ 03-3000 6740
-
-📍 Legendary Isetan KLCC Counter
-Ground Floor, Jln Ampang, Kuala Lumpur City Centre, 50088 Kuala Lumpur, Wilayah Persekutuan Kuala Lumpur (Near Issey Miyake)
 
 📍 Lot 10 - SASA
 Lot G6 & G7, Ground Floor, Lot 10 Shopping Centre, 50, Jalan Sultan Ismalil, 50250 Kuala Lumpur
@@ -51,14 +59,6 @@ Lot L1.93.00, Level 1, Pavillion Bukit Jalil, 2 Persiaran Bukit Jalil 8, Bandar 
 📍 Pavillion Damansara Heights - SASA
 Lot No. 1.26.00, Level 1, Pavillion Damansara Heights, No.3, Jalan Damanlela, 50490 Kuala Lumpur
 ☎︎ 03-3010 8731
-
-📍 Pavillion Kuala Lumpur - SASA
-Lot 1.22, Level 1, Pavillion Kuala Lumpur, No.168, Jalan Bukit Bintang, 55100 Kuala Lumpur
-☎︎ 03-2388 4735
-
-📍 Pavilion Kuala Lumpur - Parkson Elite
-Level 3, 168, Jalan Bukit Bintang, Bukit Bintang, 55100, Kuala Lumpur
-☎︎ 03-21432278
 
 📍 Sunway Velocity Mall - SASA
 G13 & 14, Sunway Velocity, 80, Jalan Cheras, 55100 Kuala Lumpur

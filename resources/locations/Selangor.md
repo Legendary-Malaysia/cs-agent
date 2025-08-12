@@ -1,3 +1,15 @@
+📍 Eraman KLIA
+CPI-4-A01, Contact Pier International, Contact Pier Building, 64000 KLIA, Sepang, Selangor
+
+📍 Legendary KLIA2 Counter
+T2PS-S6-07, International Departure (Airside), Level 1, Sector 6 KL International Airport Terminal 2, 64000 Sepang Selangor
+☎︎ 017-351 0946
+
+📍 Malaysia Gift Shop
+Lot S2-3-L19, Departure Level
+Sector 2 Level 3, KL International Airport Terminal 2, 64000 Sepang Selangor
+☎︎ 017-351 0946
+
 📍 1 Utama - SASA
 Lot G115, Ground Floor, 1 Utama Shopping Centre, No.1, Lebuh Bandar Utama, Bandar Utama Damansara, 47800 Petaling Jaya, Selangor
 ☎︎ 03-7722 1772
@@ -33,15 +45,3 @@ Block D, F19, First Floor, Sunway Giza Mall, No.2, Jalan PJU 5/14, PJU 5, Kota D
 📍 Sunway Pyramid - SASA
 LG 1.07 & 1.08, Sunway Pyramid Shopping Mall, No.3, Jalan PJS 11/15, Bandar Sunway, 46150 Selangor
 ☎︎ 03-7499 3241
-
-📍 Eraman KLIA
-CPI-4-A01, Contact Pier International, Contact Pier Building, 64000 KLIA, Sepang, Selangor
-
-📍 Legendary KLIA2 Counter
-T2PS-S6-07, International Departure (Airside), Level 1, Sector 6 KL International Airport Terminal 2, 64000 Sepang Selangor
-☎︎ 017-351 0946
-
-📍 Malaysia Gift Shop
-Lot S2-3-L19, Departure Level
-Sector 2 Level 3, KL International Airport Terminal 2, 64000 Sepang Selangor
-☎︎ 017-351 0946
