@@ -145,7 +145,7 @@ def product_supervisor_node(state: ChatWorkflowState, config: RunnableConfig) ->
     if len(messages) == 0:
         current_dir = Path(__file__).parent
 
-        prompt_path = f"{current_dir}/../../../resources/prompts/supervisor_prompt_{config['configurable']['language']}.md"
+        prompt_path = f"{current_dir}/../../../resources/prompts/pm_prompt_{config['configurable']['language']}.md"
         with open(prompt_path, "r") as f:
             system_prompt_template = f.read()
 
