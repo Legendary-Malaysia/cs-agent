@@ -9,7 +9,11 @@ from pathlib import Path
 from langgraph.graph import END
 from langgraph.types import Command
 from pydantic import Field
+from langgraph.prebuilt import create_react_agent
+from langchain_core.tools import tool
+import logging
 
+logger = logging.getLogger(__name__)
 
 def get_locations():
     current_dir = Path(__file__).parent
@@ -35,3 +39,40 @@ def triage_location(state: LocationWorkflowState, config: RunnableConfig):
     response = llm.invoke(messages)
 
     return {"location": response["location"]}
+
+@tool(description= f"Use this tool to read location information. The available locations are: {', '.join(get_locations())}")
+def read_location(location: Literal[*get_locations()]):
+    try:
+        current_dir = Path(__file__).parent
+        locations_dir = f"{current_dir}/../../../resources/locations"
+        with open(f"{locations_dir}/{location}.md", "r", encoding="utf-8") as f:
+            return f.read()
+    except Exception as e:
+        logger.error(f"Error in read_location tool: {e}")
+        return f"Error in read_location tool: {str(e)}"
+
+def location_agent(state: LocationWorkflowState, config: RunnableConfig):
+    """
+    This is Location Agent. This agent will answer the user's question based on the location information.
+    """
+    try:
+        question = state["users_question"]
+
+        llm = init_chat_model("google_genai:gemini-2.5-flash", temperature=0)
+        tools = [read_location]
+
+        current_dir = Path(__file__).parent
+        prompt_path = f"{current_dir}/../../../resources/prompts/location_prompt_{config['configurable']['language']}.md"
+        with open(prompt_path, "r") as f:
+            system_prompt_template = f.read()
+        
+        prompt = system_prompt_template.format(locations=", ".join(get_locations()))
+        agent_executor = create_react_agent(llm, tools, prompt=prompt, name="location_agent")
+        agent_response = agent_executor.invoke({"messages": [("user", question)]})
+
+        logger.info(f"Location agent response: {agent_response['messages'][-1].content}")
+
+        return {"response": agent_response['messages'][-1].content}
+    except Exception as e:
+        logger.error(f"Error in location agent node: {e}")
+        return {"response": f"Location agent error: {str(e)}"}

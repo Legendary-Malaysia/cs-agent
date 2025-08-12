@@ -5,7 +5,7 @@ from csagent.location.state import (
     LocationWorkflowStateInput,
     LocationWorkflowStateOutput,
 )
-from csagent.location.nodes import triage_location
+from csagent.location.nodes import location_agent
 from csagent.configuration import Configuration
 
 # Build the chat graph
@@ -16,9 +16,10 @@ location_builder = StateGraph(
     config_schema=Configuration,
 )
 
-location_builder.add_node("triage_location", triage_location)
-location_builder.add_edge(START, "triage_location")
-location_builder.add_edge("triage_location", END)
+# location_builder.add_node("triage_location", triage_location)
+location_builder.add_node("location_agent", location_agent)
+location_builder.add_edge(START, "location_agent")
+location_builder.add_edge("location_agent", END)
 
 checkpointer = InMemorySaver()
 location_graph = location_builder.compile()
