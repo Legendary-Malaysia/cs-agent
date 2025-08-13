@@ -12,6 +12,8 @@ from langgraph.graph import END
 from langgraph.types import Command
 from pydantic import Field
 import inspect
+import logging
+logger = logging.getLogger(__name__)
 
 
 def _product_agent_factory(state: ChatWorkflowState, config: RunnableConfig, product: str):
@@ -172,5 +174,5 @@ def product_supervisor_node(state: ChatWorkflowState, config: RunnableConfig) ->
     # final_answer = ""
     # if response["final_answer"]:
     #     final_answer = response["final_answer"]
-
+    logger.info(f"Go to: {response['next']}, Reason: {response['reason']}")
     return Command(goto=response["next"], update={"next": response["next"], "question": response["question"]})

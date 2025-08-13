@@ -3,9 +3,10 @@
 from typing import Annotated, Literal
 from pydantic import BaseModel, Field
 import os
+from pathlib import Path
 
-
-available_langs = [file[:-5] for file in os.listdir("locales") if file.endswith(".json")]
+current_dir = Path(__file__).parent
+available_langs = [file[:-5] for file in os.listdir(f"{current_dir}/../../locales") if file.endswith(".json")]
 
 
 class Configuration(BaseModel):

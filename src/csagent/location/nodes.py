@@ -70,7 +70,7 @@ def location_agent(state: LocationWorkflowState, config: RunnableConfig):
         agent_executor = create_react_agent(llm, tools, prompt=prompt, name="location_agent")
         agent_response = agent_executor.invoke({"messages": [("user", question)]})
 
-        logger.info(f"Location agent response: {agent_response['messages'][-1].content}")
+        logger.info(f"Location agent response: {agent_response['messages'][-1].content[:50]}")
 
         return {"response": agent_response['messages'][-1].content}
     except Exception as e:
