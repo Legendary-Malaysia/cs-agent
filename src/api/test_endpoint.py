@@ -24,9 +24,9 @@ def test_run_supervisor():
             "model": "google_genai:gemini-2.5-flash"
         }
     }
-    response = client.post("/supervisor", json={"users_question": "What is the ingredient of violet?", "config": config})
+    response = client.post("/supervisor", json={"users_question": "Where can I buy spirit?", "config": config})
     print("################# response: ", response)
-    print("################# response.json(): ", response.json())
+    print("################# response.json(): ", response.json()["response"])
     # assert response.status_code == 200
     # You might want to add more specific assertions here based on the expected output
     # assert isinstance(response.json(), dict)
