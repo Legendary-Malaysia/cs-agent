@@ -2,6 +2,7 @@ from csagent.supervisor.state import SupervisorWorkflowState
 from csagent.configuration import Configuration
 from langchain_core.runnables import RunnableConfig
 from langchain.chat_models import init_chat_model
+# from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.messages import HumanMessage, AIMessage, SystemMessage,ToolMessage
 import os
 from typing import Literal, TypedDict, Optional
@@ -12,6 +13,8 @@ from pydantic import Field
 from csagent.product.graph import product_graph
 from csagent.location.graph import location_graph
 import logging
+
+# os.environ["GOOGLE_API_KEY"] = os.getenv("GOOGLE_API_KEY")
 
 logger = logging.getLogger(__name__)
 
@@ -25,11 +28,13 @@ class Router(TypedDict):
     reason: str = Field(description="The reason for routing to this team.")
 
 def supervisor_node(state: SupervisorWorkflowState, config: RunnableConfig) -> Command[Literal[*TEAMS]]:
+    logger.info("Supervisor node")
     users_question = state["users_question"]
     messages = state["messages"]
 
     # Prepare messages for the LLM
     if len(messages) == 0:
+        logger.info(f"Preparing messages for the LLM: {users_question}")
         current_dir = Path(__file__).parent
 
         prompt_path = f"{current_dir}/../../../resources/prompts/supervisor_prompt_{config['configurable']['language']}.md"
@@ -51,24 +56,33 @@ def supervisor_node(state: SupervisorWorkflowState, config: RunnableConfig) -> C
         # messages.append(HumanMessage(content=question))
     
     instruction_prompt = HumanMessage(content="Now as a supervisor, analyze the steps that have been done and think about what to do next. If you can answer the user's question using the past steps, then pass your answer to the summary agent. Otherwise, break it down into delegated tasks.")
+    # llm = ChatGoogleGenerativeAI(
+    #     google_api_key=os.getenv("GOOGLE_API_KEY"),
+    #     model="gemini-2.5-flash"
+    # ).with_structured_output(Router)
     llm = init_chat_model("google_genai:gemini-2.5-flash", temperature=0).with_structured_output(Router)
     response = llm.invoke(messages + [instruction_prompt])
-
+    logger.info(f"Response: {response['reason']}")
 
     return Command(goto=response["next"], update={"next": response["next"], "question": response["question"], "messages": AIMessage(content=response["reason"], name="supervisor")})
 
 
 def call_product_team(state: SupervisorWorkflowState, config: RunnableConfig):
+    logger.info(f"Call product team")
     response = product_graph.invoke({"users_question": state["question"]})
+    logger.info(f"Response from product team: {response['response']}")
     return Command(goto="supervisor_node", update={"messages": [AIMessage(content=response["response"], name="product_team")]})
 
 
 def call_location_team(state: SupervisorWorkflowState, config: RunnableConfig):
+    logger.info(f"Call location team")
     response = location_graph.invoke({"users_question": state["question"]})
+    logger.info(f"Response from location team: {response['response']}")
     return Command(goto="supervisor_node", update={"messages": [AIMessage(content=response["response"], name="location_team")]})
 
 
 def customer_service_team(state: SupervisorWorkflowState, config: RunnableConfig):
+    logger.info(f"Call customer service team")
     question = state["users_question"]
 
     current_dir = Path(__file__).parent
@@ -79,7 +93,12 @@ def customer_service_team(state: SupervisorWorkflowState, config: RunnableConfig
     system_prompt = system_prompt_template.format(question=question)
     messages = state["messages"][1:] + [HumanMessage(content=system_prompt)]
 
-    llm = init_chat_model(config["configurable"]["model"], temperature=0)   
+    llm = init_chat_model(config["configurable"]["model"], temperature=0) 
+    # llm = ChatGoogleGenerativeAI(
+    #     google_api_key=os.getenv("GOOGLE_API_KEY"),
+    #     model="gemini-2.5-flash"
+    # )
     response = llm.invoke(messages)
 
+    logger.info(f"Response from customer service team: {response.content}")
     return {"response": response.content}
