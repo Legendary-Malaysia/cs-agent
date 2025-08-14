@@ -1,16 +1,18 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
-from csagent.supervisor.graph import supervisor_graph
+
+# Add the 'src' directory to the Python path
 import sys
 import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from csagent.supervisor.graph import supervisor_graph
+
 import logging
 # Configure logging
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
-# Add the 'src' directory to the Python path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 app = FastAPI(
     title="Supervisor API",
