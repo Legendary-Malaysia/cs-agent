@@ -1,36 +1,42 @@
 from csagent.supervisor.state import SupervisorWorkflowState
-from csagent.configuration import Configuration
+from csagent.configuration import get_model_info
 from langchain_core.runnables import RunnableConfig
 from langchain.chat_models import init_chat_model
-# from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain_core.messages import HumanMessage, AIMessage, SystemMessage,ToolMessage
-import os
-from typing import Literal, TypedDict, Optional
+
+from langchain_core.messages import HumanMessage, AIMessage, SystemMessage, ToolMessage
+from typing import Literal, TypedDict
 from pathlib import Path
-from langgraph.graph import END
 from langgraph.types import Command
 from pydantic import Field
 from csagent.product.graph import product_graph
 from csagent.location.graph import location_graph
 import logging
 
-# os.environ["GOOGLE_API_KEY"] = os.getenv("GOOGLE_API_KEY")
-
 logger = logging.getLogger(__name__)
 
 TEAMS = ["product_team", "location_team", "customer_service_team"]
-TEAMS_DESC = ["Product Team in charge of answering questions about products. Available products are: Mahsuri, Man, Orchid, Spirit I, Spirit II, Three Wishes, Violet.", "Location Team in charge of answering questions about locations.", "Customer Service Team is the customer facing team. Send your final answer to the customer service team and the team will format the final answer and pass it to the user. Do not pass any tasks to the customer service team."]
+TEAMS_DESC = [
+    "Product Team in charge of answering questions about products. Available products are: Mahsuri, Man, Orchid, Spirit I, Spirit II, Three Wishes, Violet.",
+    "Location Team in charge of answering questions about locations.",
+    "Customer Service Team is the customer facing team. Send your final answer to the customer service team and the team will format the final answer and pass it to the user. Do not pass any tasks to the customer service team.",
+]
+
 
 class Router(TypedDict):
     """Team to route to next."""
+
     next: Literal[*TEAMS]
     question: str = Field(description="The question for this team.")
     reason: str = Field(description="The reason for routing to this team.")
 
-def supervisor_node(state: SupervisorWorkflowState, config: RunnableConfig) -> Command[Literal[*TEAMS]]:
+
+async def supervisor_node(
+    state: SupervisorWorkflowState, config: RunnableConfig
+) -> Command[Literal[*TEAMS]]:
     logger.info("Supervisor node")
     users_question = state["users_question"]
     messages = state["messages"]
+    model_info = get_model_info(config["configurable"]["model"])
 
     # Prepare messages for the LLM
     if len(messages) == 0:
@@ -53,37 +59,60 @@ def supervisor_node(state: SupervisorWorkflowState, config: RunnableConfig) -> C
             question=users_question,
         )
         messages.append(SystemMessage(content=system_prompt))
-        # messages.append(HumanMessage(content=question))
-    
-    instruction_prompt = HumanMessage(content="Now as a supervisor, analyze the steps that have been done and think about what to do next. If you can answer the user's question using the past steps, then pass your answer to the summary agent. Otherwise, break it down into delegated tasks.")
-    # llm = ChatGoogleGenerativeAI(
-    #     google_api_key=os.getenv("GOOGLE_API_KEY"),
-    #     model="gemini-2.5-flash"
-    # ).with_structured_output(Router)
-    llm = init_chat_model("google_genai:gemini-2.5-flash", temperature=0).with_structured_output(Router)
-    response = llm.invoke(messages + [instruction_prompt])
+
+    instruction_prompt = HumanMessage(
+        content="Now as a supervisor, analyze the steps that have been done and think about what to do next. If you can answer the user's question using the past steps, then pass your answer to the summary agent. Otherwise, break it down into delegated tasks."
+    )
+
+    llm = init_chat_model(
+        **model_info,
+        temperature=0,
+    ).with_structured_output(Router)
+    response = await llm.ainvoke(messages + [instruction_prompt])
     logger.info(f"Response: {response['reason']}")
 
-    return Command(goto=response["next"], update={"next": response["next"], "question": response["question"], "messages": AIMessage(content=response["reason"], name="supervisor")})
+    return Command(
+        goto=response["next"],
+        update={
+            "next": response["next"],
+            "question": response["question"],
+            "messages": AIMessage(content=response["reason"], name="supervisor"),
+        },
+    )
 
 
 def call_product_team(state: SupervisorWorkflowState, config: RunnableConfig):
     logger.info(f"Call product team")
     response = product_graph.invoke({"users_question": state["question"]})
     logger.info(f"Response from product team: {response['response']}")
-    return Command(goto="supervisor_node", update={"messages": [AIMessage(content=response["response"], name="product_team")]})
+    return Command(
+        goto="supervisor_node",
+        update={
+            "messages": [
+                HumanMessage(content=response["response"], name="product_team")
+            ]
+        },
+    )
 
 
 def call_location_team(state: SupervisorWorkflowState, config: RunnableConfig):
     logger.info(f"Call location team")
     response = location_graph.invoke({"users_question": state["question"]})
     logger.info(f"Response from location team: {response['response']}")
-    return Command(goto="supervisor_node", update={"messages": [AIMessage(content=response["response"], name="location_team")]})
+    return Command(
+        goto="supervisor_node",
+        update={
+            "messages": [
+                HumanMessage(content=response["response"], name="location_team")
+            ]
+        },
+    )
 
 
 def customer_service_team(state: SupervisorWorkflowState, config: RunnableConfig):
     logger.info(f"Call customer service team")
     question = state["users_question"]
+    model_info = get_model_info(config["configurable"]["model_small"])
 
     current_dir = Path(__file__).parent
 
@@ -93,11 +122,11 @@ def customer_service_team(state: SupervisorWorkflowState, config: RunnableConfig
     system_prompt = system_prompt_template.format(question=question)
     messages = state["messages"][1:] + [HumanMessage(content=system_prompt)]
 
-    llm = init_chat_model(config["configurable"]["model"], temperature=0) 
-    # llm = ChatGoogleGenerativeAI(
-    #     google_api_key=os.getenv("GOOGLE_API_KEY"),
-    #     model="gemini-2.5-flash"
-    # )
+    llm = init_chat_model(
+        **model_info,
+        temperature=0,
+    )
+
     response = llm.invoke(messages)
 
     logger.info(f"Response from customer service team: {response.content}")
