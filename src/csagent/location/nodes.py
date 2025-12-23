@@ -16,42 +16,17 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def get_locations():
+def get_resources_dir():
     current_dir = Path(__file__).parent
-    locations_dir = f"{current_dir}/../../../resources/locations"
+    return current_dir / "resources"
+
+
+def get_locations():
+    locations_dir = get_resources_dir() / "locations"
     locations = [
         file[:-3] for file in os.listdir(locations_dir) if file.endswith(".md")
     ]
     return locations
-
-
-class Router(TypedDict):
-    """Worker to route to next. If no workers needed, route to FINISH."""
-
-    location: Literal[*get_locations()]
-
-
-def triage_location(state: LocationWorkflowState, config: RunnableConfig):
-    """
-    This is Triage Location node. This node will triage the location based on the user's question.
-    """
-    question = state["users_question"]
-
-    # final_answer = state["final_answer"]
-    system_prompt = "You are a triage location agent, your task is to decide based on the customer's question which location information should be loaded to the next agent. Here are available locations:\n{locations}"
-    messages = [
-        SystemMessage(
-            content=system_prompt.format(locations=", ".join(get_locations()))
-        )
-    ] + [HumanMessage(content=question)]
-
-    llm = init_chat_model(
-        **get_model_info(config["configurable"]["model"]),
-        temperature=0,
-    ).with_structured_output(Router)
-    response = llm.invoke(messages)
-
-    return {"location": response["location"]}
 
 
 @tool(
@@ -59,8 +34,7 @@ def triage_location(state: LocationWorkflowState, config: RunnableConfig):
 )
 def read_location(location: Literal[*get_locations()]):
     try:
-        current_dir = Path(__file__).parent
-        locations_dir = f"{current_dir}/../../../resources/locations"
+        locations_dir = get_resources_dir() / "locations"
         with open(f"{locations_dir}/{location}.md", "r", encoding="utf-8") as f:
             return f.read()
     except Exception as e:
@@ -81,8 +55,11 @@ def location_agent(state: LocationWorkflowState, config: RunnableConfig):
         )
         tools = [read_location]
 
-        current_dir = Path(__file__).parent
-        prompt_path = f"{current_dir}/../../../resources/prompts/location_prompt_{config['configurable']['language']}.md"
+        prompt_path = (
+            get_resources_dir()
+            / "prompts"
+            / f"location_prompt_{config['configurable']['language']}.md"
+        )
         with open(prompt_path, "r") as f:
             system_prompt_template = f.read()
 
