@@ -3,14 +3,13 @@ from langgraph.graph import MessagesState
 
 
 class LocationWorkflowState(MessagesState):
-    users_question: str
-    question: str
+    task: str
     response: str
     location: str
 
 
 class LocationWorkflowStateInput(MessagesState):
-    users_question: str
+    task: str
 
 
 class LocationWorkflowStateOutput(MessagesState):

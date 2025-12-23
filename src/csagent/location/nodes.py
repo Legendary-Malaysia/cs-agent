@@ -47,7 +47,7 @@ def location_agent(state: LocationWorkflowState, config: RunnableConfig):
     This is Location Agent. This agent will answer the user's question based on the location information.
     """
     try:
-        question = state["users_question"]
+        task = state["task"]
 
         llm = init_chat_model(
             **get_model_info(config["configurable"]["model"]),
@@ -67,7 +67,9 @@ def location_agent(state: LocationWorkflowState, config: RunnableConfig):
         agent_executor = create_agent(
             llm, tools, system_prompt=prompt, name="location_agent"
         )
-        agent_response = agent_executor.invoke({"messages": [("user", question)]})
+        agent_response = agent_executor.invoke(
+            {"messages": [HumanMessage(content=f"Here is your task: {task}")]}
+        )
 
         logger.info(
             f"Location agent response: {agent_response['messages'][-1].content[:50]}"

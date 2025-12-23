@@ -18,7 +18,7 @@ TEAMS = ["product_team", "location_team", "customer_service_team"]
 TEAMS_DESC = [
     "Product Team in charge of answering questions about products. Available products are: Mahsuri, Man, Orchid, Spirit I, Spirit II, Three Wishes, Violet.",
     "Location Team in charge of answering questions about locations.",
-    "Customer Service Team is the customer facing team. Send your final answer to the customer service team and the team will format the final answer and pass it to the user. Do not pass any tasks to the customer service team.",
+    "Customer Service Team is the customer facing team. If sufficient data is available, then call the customer service team. Otherwise, delegate the task to the appropriate team.",
 ]
 
 
@@ -26,11 +26,11 @@ class Router(TypedDict):
     """Team to route to next."""
 
     next: Literal[*TEAMS]
-    question: str = Field(description="The question for this team.")
+    task: str = Field(description="The task for this team.")
     reason: str = Field(description="The reason for routing to this team.")
 
 
-async def supervisor_node(
+def supervisor_node(
     state: SupervisorWorkflowState, config: RunnableConfig
 ) -> Command[Literal[*TEAMS]]:
     logger.info("Supervisor node")
@@ -43,7 +43,12 @@ async def supervisor_node(
         logger.info(f"Preparing messages for the LLM: {users_question}")
         current_dir = Path(__file__).parent
 
-        prompt_path = f"{current_dir}/../../../resources/prompts/supervisor_prompt_{config['configurable']['language']}.md"
+        prompt_path = (
+            current_dir
+            / "resources"
+            / "prompts"
+            / f"supervisor_prompt_{config['configurable']['language']}.md"
+        )
         with open(prompt_path, "r") as f:
             system_prompt_template = f.read()
 
@@ -54,73 +59,97 @@ async def supervisor_node(
             ]
         )
 
-        system_prompt = system_prompt_template.format(
-            members=members_str,
-            question=users_question,
-        )
+        system_prompt = system_prompt_template.format(members=members_str)
         messages.append(SystemMessage(content=system_prompt))
 
     instruction_prompt = HumanMessage(
-        content="Now as a supervisor, analyze the steps that have been done and think about what to do next. If you can answer the user's question using the past steps, then pass your answer to the summary agent. Otherwise, break it down into delegated tasks."
+        content=f"""
+            Human Question:
+            <HumanQuestion>
+            {users_question}
+            </HumanQuestion>
+            
+            Now as a supervisor, analyze the steps that have been done and think about what to do next. If you have enough information to answer the user's question, then pass your answer to the customer service team. Otherwise, delegate the next task to the appropriate team.
+        """
     )
 
     llm = init_chat_model(
         **model_info,
         temperature=0,
     ).with_structured_output(Router)
-    response = await llm.ainvoke(messages + [instruction_prompt])
+    response = llm.invoke(messages + [instruction_prompt])
     logger.info(f"Response: {response['reason']}")
 
     return Command(
         goto=response["next"],
         update={
             "next": response["next"],
-            "question": response["question"],
-            "messages": AIMessage(content=response["reason"], name="supervisor"),
+            "task": response["task"],
+            # "messages": AIMessage(content=response["reason"], name="supervisor"),
         },
     )
 
 
 def call_product_team(state: SupervisorWorkflowState, config: RunnableConfig):
-    logger.info(f"Call product team")
-    response = product_graph.invoke({"users_question": state["question"]})
+    logger.info("Call product team")
+    response = product_graph.invoke({"task": state["task"]})
     logger.info(f"Response from product team: {response['response']}")
     return Command(
         goto="supervisor_node",
         update={
-            "messages": [
-                HumanMessage(content=response["response"], name="product_team")
-            ]
+            "messages": [AIMessage(content=response["response"], name="product_team")]
         },
     )
 
 
-def call_location_team(state: SupervisorWorkflowState, config: RunnableConfig):
-    logger.info(f"Call location team")
-    response = location_graph.invoke({"users_question": state["question"]})
+async def call_location_team(state: SupervisorWorkflowState, config: RunnableConfig):
+    logger.info("Call location team")
+    response = await location_graph.ainvoke({"task": state["task"]})
     logger.info(f"Response from location team: {response['response']}")
     return Command(
         goto="supervisor_node",
         update={
-            "messages": [
-                HumanMessage(content=response["response"], name="location_team")
-            ]
+            "messages": [AIMessage(content=response["response"], name="location_team")]
         },
     )
 
 
 def customer_service_team(state: SupervisorWorkflowState, config: RunnableConfig):
-    logger.info(f"Call customer service team")
-    question = state["users_question"]
+    logger.info("Call customer service team")
+    task = state["task"]
+    users_question = state["users_question"]
     model_info = get_model_info(config["configurable"]["model_small"])
 
     current_dir = Path(__file__).parent
 
-    prompt_path = f"{current_dir}/../../../resources/prompts/cs_prompt_{config['configurable']['language']}.md"
+    prompt_path = (
+        current_dir
+        / "resources"
+        / "prompts"
+        / f"cs_prompt_{config['configurable']['language']}.md"
+    )
     with open(prompt_path, "r") as f:
-        system_prompt_template = f.read()
-    system_prompt = system_prompt_template.format(question=question)
-    messages = state["messages"][1:] + [HumanMessage(content=system_prompt)]
+        system_prompt = f.read()
+
+    instruction = f"""
+        Here is the inquiries:
+        <HumanQuestion>
+        {users_question}
+        </HumanQuestion>
+
+        Your task is:
+        <AgentTask>
+        {task}
+        </AgentTask>
+    """
+
+    ai_messages = [msg for msg in state["messages"] if isinstance(msg, AIMessage)]
+    formatted_ai_messages = "\n---\n".join([f"{msg.content}" for msg in ai_messages])
+    messages = [
+        SystemMessage(content=system_prompt),
+        AIMessage(content=formatted_ai_messages, name="supervisor"),
+        HumanMessage(content=instruction),
+    ]
 
     llm = init_chat_model(
         **model_info,
@@ -130,4 +159,6 @@ def customer_service_team(state: SupervisorWorkflowState, config: RunnableConfig
     response = llm.invoke(messages)
 
     logger.info(f"Response from customer service team: {response.content}")
-    return {"response": response.content}
+    return {
+        "messages": [AIMessage(content=response.content, name="customer_service_team")]
+    }

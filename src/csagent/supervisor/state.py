@@ -3,7 +3,7 @@ from langgraph.graph import MessagesState
 
 class SupervisorWorkflowState(MessagesState):
     users_question: str
-    question: str
+    task: str
     response: str
     next: str
 
