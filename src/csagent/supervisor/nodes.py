@@ -1,9 +1,13 @@
 from csagent.supervisor.state import SupervisorWorkflowState
-from csagent.configuration import get_model_info
-from langchain_core.runnables import RunnableConfig
+from csagent.configuration import Configuration, get_model_info
 from langchain.chat_models import init_chat_model
-
-from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
+from langgraph.runtime import Runtime
+from langchain_core.messages import (
+    HumanMessage,
+    AIMessage,
+    SystemMessage,
+    get_buffer_string,
+)
 from typing import Literal, TypedDict
 from pathlib import Path
 from langgraph.types import Command
@@ -31,15 +35,17 @@ class Router(TypedDict):
 
 
 def supervisor_node(
-    state: SupervisorWorkflowState, config: RunnableConfig
+    state: SupervisorWorkflowState, runtime: Runtime[Configuration]
 ) -> Command[Literal[*TEAMS]]:
     logger.info("Supervisor node")
-    users_question = state["users_question"]
+    # users_question = state["users_question"]
+    users_question = state["messages"][-1].content
     messages = state["messages"]
-    model_info = get_model_info(config["configurable"]["model"])
 
-    # Prepare messages for the LLM
-    if len(messages) == 0:
+    model_info = get_model_info(runtime.context.model)
+
+    # 1. Check if we need to inject the system prompt
+    if not messages or not isinstance(messages[0], SystemMessage):
         logger.info(f"Preparing messages for the LLM: {users_question}")
         current_dir = Path(__file__).parent
 
@@ -47,7 +53,7 @@ def supervisor_node(
             current_dir
             / "resources"
             / "prompts"
-            / f"supervisor_prompt_{config['configurable']['language']}.md"
+            / f"supervisor_prompt_{runtime.context.language}.md"
         )
         with open(prompt_path, "r") as f:
             system_prompt_template = f.read()
@@ -59,9 +65,10 @@ def supervisor_node(
             ]
         )
 
-        system_prompt = system_prompt_template.format(members=members_str)
-        messages.append(SystemMessage(content=system_prompt))
-        messages.append(HumanMessage(content=users_question))
+        system_prompt = SystemMessage(
+            content=system_prompt_template.format(members=members_str)
+        )
+        messages.insert(0, system_prompt)
 
     notes = "\n-----\n".join(state["notes"])
     instruction_prompt = HumanMessage(
@@ -91,7 +98,7 @@ def supervisor_node(
     )
 
 
-def call_product_team(state: SupervisorWorkflowState, config: RunnableConfig):
+def call_product_team(state: SupervisorWorkflowState, runtime: Runtime[Configuration]):
     logger.info("Call product team")
     response = product_graph.invoke({"task": state["task"]})
     logger.info(f"Response from product team: {response['response']}")
@@ -105,7 +112,7 @@ def call_product_team(state: SupervisorWorkflowState, config: RunnableConfig):
     )
 
 
-def call_location_team(state: SupervisorWorkflowState, config: RunnableConfig):
+def call_location_team(state: SupervisorWorkflowState, runtime: Runtime[Configuration]):
     logger.info("Call location team")
     response = location_graph.invoke({"task": state["task"]})
     logger.info(f"Response from location team: {response['response']}")
@@ -119,11 +126,15 @@ def call_location_team(state: SupervisorWorkflowState, config: RunnableConfig):
     )
 
 
-def customer_service_team(state: SupervisorWorkflowState, config: RunnableConfig):
+def customer_service_team(
+    state: SupervisorWorkflowState, runtime: Runtime[Configuration]
+):
     logger.info("Call customer service team")
     task = state["task"]
-    users_question = state["users_question"]
-    model_info = get_model_info(config["configurable"]["model_small"])
+    # users_question = state["users_question"]
+    # users_question = state["messages"][-1].content
+    conversation = get_buffer_string(state["messages"][1:])
+    model_info = get_model_info(runtime.context.model_small)
 
     current_dir = Path(__file__).parent
 
@@ -131,7 +142,7 @@ def customer_service_team(state: SupervisorWorkflowState, config: RunnableConfig
         current_dir
         / "resources"
         / "prompts"
-        / f"cs_prompt_{config['configurable']['language']}.md"
+        / f"cs_prompt_{runtime.context.language}.md"
     )
     with open(prompt_path, "r") as f:
         system_prompt = f.read()
@@ -139,14 +150,16 @@ def customer_service_team(state: SupervisorWorkflowState, config: RunnableConfig
     notes = "\n-----\n".join(state["notes"])
 
     instruction = f"""
-        Here is the inquiries:
-        <HumanQuestion>
-        {users_question}
-        </HumanQuestion>
+        Here is the conversation so far:
+        <Conversation>
+        {conversation}
+        </Conversation>
+        ----- 
 
         Information that our team has gathered so far (if any):
+        <Information>
         {notes}
-
+        </Information>
         ----- 
 
         Your task is:

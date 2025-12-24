@@ -1,6 +1,6 @@
 from csagent.product.state import ProductWorkflowState
-from csagent.configuration import get_model_info
-from langchain_core.runnables import RunnableConfig
+from csagent.configuration import get_model_info, Configuration
+from langgraph.runtime import Runtime
 from langchain.chat_models import init_chat_model
 from langchain_core.messages import HumanMessage
 from typing import Literal
@@ -46,16 +46,14 @@ def read_product(
         return f"Error in read_product tool: {str(e)}"
 
 
-def product_agent_node(state: ProductWorkflowState, config: RunnableConfig):
+def product_agent_node(state: ProductWorkflowState, runtime: Runtime[Configuration]):
     try:
         task = state["task"]
 
         current_dir = get_resources_dir()
 
         prompt_path = (
-            current_dir
-            / "prompts"
-            / f"pm_prompt_{config['configurable']['language']}.md"
+            current_dir / "prompts" / f"pm_prompt_{runtime.context.language}.md"
         )
         with open(prompt_path, "r") as f:
             system_prompt_template = f.read()
@@ -65,7 +63,7 @@ def product_agent_node(state: ProductWorkflowState, config: RunnableConfig):
         )
 
         llm = init_chat_model(
-            **get_model_info(config["configurable"]["model"]),
+            **get_model_info(runtime.context.model),
             temperature=0,
         )
         tools = [read_product]

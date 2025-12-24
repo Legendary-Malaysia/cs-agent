@@ -45,7 +45,7 @@ class Configuration(BaseModel):
         ],
         {"__template_metadata__": {"kind": "llm"}},
     ] = Field(
-        default="google_genai:gemma-3-4b-it",
+        default="GLM-4.6V-Flash",
         description="The name of the language model to use for the agent's main interactions. "
         "Should be in the form: provider/model-name.",
     )
@@ -54,7 +54,7 @@ class Configuration(BaseModel):
         Literal[*available_langs],
         {"__template_metadata__": {"kind": "language"}},
     ] = Field(
-        default=available_langs[0],
+        default="en",
         description="The language to use for the agent's interactions. "
         "This is used to select the language for the app and user interactions.",
     )

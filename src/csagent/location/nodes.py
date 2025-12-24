@@ -1,6 +1,6 @@
 from csagent.location.state import LocationWorkflowState
-from csagent.configuration import get_model_info
-from langchain_core.runnables import RunnableConfig
+from csagent.configuration import get_model_info, Configuration
+from langgraph.runtime import Runtime
 from langchain.chat_models import init_chat_model
 from langchain_core.messages import HumanMessage
 import os
@@ -39,7 +39,7 @@ def read_location(location: Literal[*get_locations()]):
         return f"Error in read_location tool: {str(e)}"
 
 
-def location_agent_node(state: LocationWorkflowState, config: RunnableConfig):
+def location_agent_node(state: LocationWorkflowState, runtime: Runtime[Configuration]):
     """
     This is Location Agent. This agent will answer the user's question based on the location information.
     """
@@ -47,7 +47,7 @@ def location_agent_node(state: LocationWorkflowState, config: RunnableConfig):
         task = state["task"]
 
         llm = init_chat_model(
-            **get_model_info(config["configurable"]["model"]),
+            **get_model_info(runtime.context.model),
             temperature=0,
         )
         tools = [read_location]
@@ -55,7 +55,7 @@ def location_agent_node(state: LocationWorkflowState, config: RunnableConfig):
         prompt_path = (
             get_resources_dir()
             / "prompts"
-            / f"location_prompt_{config['configurable']['language']}.md"
+            / f"location_prompt_{runtime.context.language}.md"
         )
         with open(prompt_path, "r") as f:
             system_prompt_template = f.read()
