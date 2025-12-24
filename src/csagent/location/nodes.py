@@ -32,7 +32,7 @@ def get_locations():
 def read_location(location: Literal[*get_locations()]):
     try:
         locations_dir = get_resources_dir() / "locations"
-        with open(f"{locations_dir}/{location}.md", "r", encoding="utf-8") as f:
+        with open(locations_dir / f"{location}.md", "r", encoding="utf-8") as f:
             return f.read()
     except Exception as e:
         logger.error(f"Error in read_location tool: {e}")

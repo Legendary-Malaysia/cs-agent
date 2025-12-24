@@ -98,7 +98,9 @@ def call_product_team(state: SupervisorWorkflowState, config: RunnableConfig):
     return Command(
         goto="supervisor_node",
         update={
-            "messages": [AIMessage(content=response["response"], name="product_team")]
+            "notes": [
+                f"Product Team Task: {state['task']}\n  Product Team Response: {response['response']}"
+            ]
         },
     )
 
@@ -110,7 +112,9 @@ def call_location_team(state: SupervisorWorkflowState, config: RunnableConfig):
     return Command(
         goto="supervisor_node",
         update={
-            "notes": [f"Location Team Task: {state['task']}\n  Location Team Response: {response['response']}"]
+            "notes": [
+                f"Location Team Task: {state['task']}\n  Location Team Response: {response['response']}"
+            ]
         },
     )
 

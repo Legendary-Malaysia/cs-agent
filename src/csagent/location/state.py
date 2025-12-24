@@ -4,7 +4,6 @@ from langgraph.graph import MessagesState
 class LocationWorkflowState(MessagesState):
     task: str
     response: str
-    location: str
 
 
 class LocationWorkflowStateInput(MessagesState):
@@ -13,4 +12,3 @@ class LocationWorkflowStateInput(MessagesState):
 
 class LocationWorkflowStateOutput(MessagesState):
     response: str
-    location: str

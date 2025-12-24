@@ -15,7 +15,6 @@ location_builder = StateGraph(
     context_schema=Configuration,
 )
 
-# location_builder.add_node("triage_location", triage_location)
 location_builder.add_node("location_agent_node", location_agent_node)
 location_builder.add_edge(START, "location_agent_node")
 location_builder.add_edge("location_agent_node", END)
