@@ -4,11 +4,16 @@ from pydantic import BaseModel
 # Add the 'src' directory to the Python path
 import sys
 import os
+import logging
+from fastapi.middleware.cors import CORSMiddleware
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from csagent.supervisor.graph import supervisor_graph
+from csagent.configuration import Configuration
+from dotenv import load_dotenv
 
-import logging
+load_dotenv()
+
 
 # Configure logging
 logging.basicConfig(
@@ -22,6 +27,14 @@ app = FastAPI(
     description="API for the supervisor graph",
 )
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Or ["http://localhost:3000"]
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 @app.get("/")
 async def health_check():
@@ -29,8 +42,7 @@ async def health_check():
 
 
 class UserRequest(BaseModel):
-    users_question: str
-    config: dict
+    messages: str
 
 
 @app.post("/supervisor")
@@ -38,8 +50,10 @@ async def run_supervisor(request: UserRequest):
     """
     Runs the supervisor graph with the user's question.
     """
-    result = supervisor_graph.invoke(
-        {"users_question": request.users_question}, request.config
+
+    result = await supervisor_graph.ainvoke(
+        {"messages": [{"role": "user", "content": request.messages}]},
+        context=Configuration(),
     )
     return result
 

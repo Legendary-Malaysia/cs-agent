@@ -1,7 +1,6 @@
-from langgraph.graph import START, StateGraph, END
+from langgraph.graph import START, StateGraph, MessagesState, END
 from csagent.supervisor.state import (
     SupervisorWorkflowState,
-    SupervisorWorkflowStateInput,
     SupervisorWorkflowStateOutput,
 )
 from csagent.supervisor.nodes import (
@@ -15,7 +14,7 @@ from csagent.configuration import Configuration
 # Build the chat graph
 supervisor_builder = StateGraph(
     SupervisorWorkflowState,
-    input_schema=SupervisorWorkflowStateInput,
+    input_schema=MessagesState,
     output_schema=SupervisorWorkflowStateOutput,
     context_schema=Configuration,
 )

@@ -7,7 +7,7 @@ import pytest
 
 # Add the 'src' directory to the Python path to resolve csagent module
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-BASE_URL = "https://cs-agent-phi.vercel.app"
+BASE_URL = os.getenv("BASE_URL")
 
 client = TestClient(app)
 
@@ -37,12 +37,12 @@ def test_run_supervisor():
         "configurable": {
             "thread_id": "test_thread_id",
             "language": "en",
-            "model": "google_genai:gemini-2.5-flash",
+            "model": "LongCat-Flash-Chat",
         }
     }
     response = client.post(
         "/supervisor",
-        json={"users_question": "Where can I buy spirit?", "config": config},
+        json={"messages": "Where can I buy spirit?", "config": config},
     )
     print("################# response: ", response)
     print("################# response.json(): ", response.json()["response"])
@@ -58,12 +58,15 @@ def test_run_supervisor_deployed():
         "configurable": {
             "thread_id": "test_thread_id",
             "language": "en",
-            "model": "google_genai:gemini-2.5-flash",
+            "model": "LongCat-Flash-Chat",
         }
     }
     response = requests.post(
         f"{BASE_URL}/supervisor",
-        json={"users_question": "Where can I buy spirit?", "config": config},
+        json={
+            "messages": [{"role": "user", "content": "Where can I buy spirit?"}],
+            "config": config,
+        },
     )
     print("################# response: ", response)
     print("################# response.json(): ", response.json()["response"])
@@ -73,4 +76,4 @@ if __name__ == "__main__":
     # test_health_check()
     test_health_check_deployed()
     # test_run_supervisor()
-    test_run_supervisor_deployed()
+    # test_run_supervisor_deployed()

@@ -29,7 +29,7 @@ TEAMS_DESC = [
 class Router(TypedDict):
     """Team to route to next."""
 
-    next: Literal[*TEAMS]
+    next_step: Literal[*TEAMS]
     task: str = Field(description="The task for this team.")
     reason: str = Field(description="The reason for routing to this team.")
 
@@ -90,9 +90,9 @@ def supervisor_node(
     logger.info(f"Response: {response['reason']}")
 
     return Command(
-        goto=response["next"],
+        goto=response["next_step"],
         update={
-            "next": response["next"],
+            "next_step": response["next_step"],
             "task": response["task"],
         },
     )

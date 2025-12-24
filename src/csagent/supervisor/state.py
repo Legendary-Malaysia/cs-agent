@@ -8,11 +8,7 @@ class SupervisorWorkflowState(MessagesState):
     task: str
     response: str
     notes: Annotated[List[str], operator.add]
-    next: str
-
-
-class SupervisorWorkflowStateInput(MessagesState):
-    users_question: str
+    next_step: str
 
 
 class SupervisorWorkflowStateOutput(MessagesState):

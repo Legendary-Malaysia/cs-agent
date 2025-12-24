@@ -11,22 +11,22 @@ Instructions:
 For example:
 
 - {{
-  "next": "product_team",
+  "next_step": "product_team",
   "task": "Find the price of Mahsuri",
   "reason": "The user is asking about Mahsuri which is one of our products so it should be delegated to the product team"
   }}
 - {{
-  "next": "location_team",
+  "next_step": "location_team",
   "task": "Find store location in KL",
   "reason": "The user is asking about where they can find Orchid in KL so it should be delegated to the location team"
   }}
 - {{
-  "next": "customer_service_team",
+  "next_step": "customer_service_team",
   "task": "Provide an answer to the user's question by synthesizing the information collected by the other teams",
   "reason": "The teams have already gathered sufficient data, so the focus now is on using that information to deliver a clear response for the user"
   }}
 - {{
-  "next": "customer_service_team",
+  "next_step": "customer_service_team",
   "task": "Decline to answer this question politely and steer the user to ask about our brand",
   "reason": "The question has nothing to do with our brand"
   }}
