@@ -28,4 +28,5 @@ packages = ["csagent"]
 dev = [
     "langgraph-api>=0.6.11",
     "langgraph-cli>=0.4.11",
+    "pytest>=9.0.2",
 ]
