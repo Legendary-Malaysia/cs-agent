@@ -1,7 +1,7 @@
 """Define the configurable parameters for the agent."""
 
 from typing import Annotated, Literal
-from pydantic import BaseModel, Field, computed_field
+from pydantic import BaseModel, Field
 import os
 from pathlib import Path
 
@@ -24,16 +24,13 @@ class Configuration(BaseModel):
 
     model: Annotated[
         Literal[
-            "google_genai:gemma-3-4b-it",
-            "google_genai:gemma-3-12b-it",
-            "google_genai:gemma-3-27b-it",
             "LongCat-Flash-Chat",
             "GLM-4.6V-Flash",
             "mimo-v2-flash",
         ],
         {"__template_metadata__": {"kind": "llm"}},
     ] = Field(
-        default="google_genai:gemma-3-12b-it",
+        default="LongCat-Flash-Chat",
         description="The name of the language model to use for the agent's main interactions. "
         "Should be in the form: provider/model-name.",
     )
@@ -44,10 +41,11 @@ class Configuration(BaseModel):
             "google_genai:gemma-3-12b-it",
             "google_genai:gemma-3-27b-it",
             "GLM-4.6V-Flash",
+            "mimo-v2-flash",
         ],
         {"__template_metadata__": {"kind": "llm"}},
     ] = Field(
-        default="google_genai:gemma-3-12b-it",
+        default="google_genai:gemma-3-4b-it",
         description="The name of the language model to use for the agent's main interactions. "
         "Should be in the form: provider/model-name.",
     )
@@ -94,6 +92,4 @@ def get_model_info(model: str) -> dict:
             "model": model,
             "api_key": os.getenv("GOOGLE_API_KEY"),
         }
-    return {
-        "model": model 
-    }
+    return {"model": model}

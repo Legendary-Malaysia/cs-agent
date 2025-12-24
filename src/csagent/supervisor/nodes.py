@@ -3,7 +3,7 @@ from csagent.configuration import get_model_info
 from langchain_core.runnables import RunnableConfig
 from langchain.chat_models import init_chat_model
 
-from langchain_core.messages import HumanMessage, AIMessage, SystemMessage, ToolMessage
+from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
 from typing import Literal, TypedDict
 from pathlib import Path
 from langgraph.types import Command
@@ -61,15 +61,17 @@ def supervisor_node(
 
         system_prompt = system_prompt_template.format(members=members_str)
         messages.append(SystemMessage(content=system_prompt))
+        messages.append(HumanMessage(content=users_question))
 
+    notes = "\n-----\n".join(state["notes"])
     instruction_prompt = HumanMessage(
         content=f"""
-            Human Question:
-            <HumanQuestion>
-            {users_question}
-            </HumanQuestion>
+            Information that our team has gathered so far (if any):
+            {notes}
             
-            Now as a supervisor, analyze the steps that have been done and think about what to do next. If you have enough information to answer the user's question, then pass your answer to the customer service team. Otherwise, delegate the next task to the appropriate team.
+            -----
+
+            Now as a supervisor, analyze the information and think about what to do next. If you have enough information to answer the user's question, then pass your answer to the customer service team. Otherwise, delegate the next task to the appropriate team.
         """
     )
 
@@ -85,7 +87,6 @@ def supervisor_node(
         update={
             "next": response["next"],
             "task": response["task"],
-            # "messages": AIMessage(content=response["reason"], name="supervisor"),
         },
     )
 
@@ -102,14 +103,14 @@ def call_product_team(state: SupervisorWorkflowState, config: RunnableConfig):
     )
 
 
-async def call_location_team(state: SupervisorWorkflowState, config: RunnableConfig):
+def call_location_team(state: SupervisorWorkflowState, config: RunnableConfig):
     logger.info("Call location team")
-    response = await location_graph.ainvoke({"task": state["task"]})
+    response = location_graph.invoke({"task": state["task"]})
     logger.info(f"Response from location team: {response['response']}")
     return Command(
         goto="supervisor_node",
         update={
-            "messages": [AIMessage(content=response["response"], name="location_team")]
+            "notes": [f"Location Team Task: {state['task']}\n  Location Team Response: {response['response']}"]
         },
     )
 
@@ -131,23 +132,25 @@ def customer_service_team(state: SupervisorWorkflowState, config: RunnableConfig
     with open(prompt_path, "r") as f:
         system_prompt = f.read()
 
+    notes = "\n-----\n".join(state["notes"])
+
     instruction = f"""
         Here is the inquiries:
         <HumanQuestion>
         {users_question}
         </HumanQuestion>
 
+        Information that our team has gathered so far (if any):
+        {notes}
+
+        ----- 
+
         Your task is:
-        <AgentTask>
         {task}
-        </AgentTask>
     """
 
-    ai_messages = [msg for msg in state["messages"] if isinstance(msg, AIMessage)]
-    formatted_ai_messages = "\n---\n".join([f"{msg.content}" for msg in ai_messages])
     messages = [
-        SystemMessage(content=system_prompt),
-        AIMessage(content=formatted_ai_messages, name="supervisor"),
+        HumanMessage(content=system_prompt),
         HumanMessage(content=instruction),
     ]
 

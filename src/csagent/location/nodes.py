@@ -2,13 +2,10 @@ from csagent.location.state import LocationWorkflowState
 from csagent.configuration import get_model_info
 from langchain_core.runnables import RunnableConfig
 from langchain.chat_models import init_chat_model
-from langchain_core.messages import HumanMessage, AIMessage, SystemMessage, ToolMessage
+from langchain_core.messages import HumanMessage
 import os
-from typing import Literal, TypedDict, Optional
+from typing import Literal
 from pathlib import Path
-from langgraph.graph import END
-from langgraph.types import Command
-from pydantic import Field
 from langchain.agents import create_agent
 from langchain_core.tools import tool
 import logging
@@ -42,7 +39,7 @@ def read_location(location: Literal[*get_locations()]):
         return f"Error in read_location tool: {str(e)}"
 
 
-def location_agent(state: LocationWorkflowState, config: RunnableConfig):
+def location_agent_node(state: LocationWorkflowState, config: RunnableConfig):
     """
     This is Location Agent. This agent will answer the user's question based on the location information.
     """
