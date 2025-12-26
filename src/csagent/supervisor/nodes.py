@@ -4,7 +4,6 @@ from langchain.chat_models import init_chat_model
 from langgraph.runtime import Runtime
 from langchain_core.messages import (
     HumanMessage,
-    AIMessage,
     SystemMessage,
     get_buffer_string,
 )
@@ -82,10 +81,7 @@ def supervisor_node(
         """
     )
 
-    llm = init_chat_model(
-        **model_info,
-        temperature=0,
-    ).with_structured_output(Router)
+    llm = init_chat_model(**model_info, temperature=0).with_structured_output(Router)
     response = llm.invoke(messages + [instruction_prompt])
     logger.info(f"Response: {response['reason']}")
 
@@ -179,6 +175,6 @@ def customer_service_team(
     response = llm.invoke(messages)
 
     logger.info(f"Response from customer service team: {response.content}")
-    return {
-        "messages": [AIMessage(content=response.content, name="customer_service_team")]
-    }
+
+    response.name = "customer_service_team"
+    return {"messages": [response]}
