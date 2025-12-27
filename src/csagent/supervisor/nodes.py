@@ -10,6 +10,7 @@ from langchain_core.messages import (
 from typing import Literal, TypedDict
 from pathlib import Path
 from langgraph.types import Command
+from langgraph.config import get_stream_writer
 from pydantic import Field
 from csagent.product.graph import product_graph
 from csagent.location.graph import location_graph
@@ -37,7 +38,7 @@ def supervisor_node(
     state: SupervisorWorkflowState, runtime: Runtime[Configuration]
 ) -> Command[Literal[*TEAMS]]:
     logger.info("Supervisor node")
-    # users_question = state["users_question"]
+
     users_question = state["messages"][-1].content
     messages = state["messages"]
 
@@ -81,7 +82,9 @@ def supervisor_node(
         """
     )
 
-    llm = init_chat_model(**model_info, temperature=0).with_structured_output(Router)
+    llm = init_chat_model(
+        **model_info, temperature=0, streaming=False
+    ).with_structured_output(Router)
     response = llm.invoke(messages + [instruction_prompt])
     logger.info(f"Response: {response['reason']}")
 
@@ -96,8 +99,14 @@ def supervisor_node(
 
 def call_product_team(state: SupervisorWorkflowState, runtime: Runtime[Configuration]):
     logger.info("Call product team")
+    writer = get_stream_writer()
+    writer({"custom_key": "Looking up product details..."})
+
     response = product_graph.invoke({"task": state["task"]})
+
     logger.info(f"Response from product team: {response['response']}")
+    writer({"custom_key": "Product details found"})
+
     return Command(
         goto="supervisor_node",
         update={
@@ -110,8 +119,14 @@ def call_product_team(state: SupervisorWorkflowState, runtime: Runtime[Configura
 
 def call_location_team(state: SupervisorWorkflowState, runtime: Runtime[Configuration]):
     logger.info("Call location team")
+    writer = get_stream_writer()
+    writer({"custom_key": "Looking up location details..."})
+
     response = location_graph.invoke({"task": state["task"]})
+
     logger.info(f"Response from location team: {response['response']}")
+    writer({"custom_key": "Location details found"})
+
     return Command(
         goto="supervisor_node",
         update={
@@ -126,9 +141,10 @@ def customer_service_team(
     state: SupervisorWorkflowState, runtime: Runtime[Configuration]
 ):
     logger.info("Call customer service team")
+    writer = get_stream_writer()
+    writer({"custom_key": "Finalizing answer..."})
+
     task = state["task"]
-    # users_question = state["users_question"]
-    # users_question = state["messages"][-1].content
     conversation = get_buffer_string(state["messages"][1:])
     model_info = get_model_info(runtime.context.model_small)
 

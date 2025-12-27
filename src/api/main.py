@@ -52,30 +52,27 @@ class UserRequest(BaseModel):
 async def run_supervisor(request: UserRequest):
     async def event_generator():
         # Use astream for async iteration in FastAPI
-        async for namespace, data in supervisor_graph.astream(
+        async for namespace, mode, data in supervisor_graph.astream(
             {"messages": [{"role": "user", "content": request.messages}]},
-            stream_mode="messages",
+            stream_mode=["messages", "custom"],
             subgraphs=True,
             # context=request.config,
             context=Configuration(),
         ):
-            token, metadata = data
-            print(namespace)
-            print("token", token)
-            print("metadata", metadata)
-            # Extract content from the message chunk
-            # Most providers use .content; content_blocks is provider-specific
-            content = token.content if hasattr(token, "content") else str(token)
+            if mode == "custom":
+                yield f"data: {json.dumps({'node': 'custom', 'content': data.get('custom_key')})}\n\n"
+            elif mode == "messages":
+                message_chunk, metadata = data
 
-            # Format as Server-Sent Events (SSE) if using text/event-stream
-            if metadata["langgraph_node"] == "supervisor_node":
-                yield f"data: {json.dumps({'node': metadata['langgraph_node'], 'content': ''})}\n\n"
-            else:
-                yield f"data: {json.dumps({'node': metadata['langgraph_node'], 'content': content})}\n\n"
+                # Extract content from the message chunk
+                content = (
+                    message_chunk.content
+                    if hasattr(message_chunk, "content")
+                    else str(message_chunk)
+                )
+
+                # Format as Server-Sent Events (SSE) if using text/event-stream
+                if metadata["langgraph_node"] == "customer_service_team":
+                    yield f"data: {json.dumps({'node': metadata['langgraph_node'], 'content': content})}\n\n"
 
     return StreamingResponse(event_generator(), media_type="text/event-stream")
-
-
-# if __name__ == "__main__":
-#     import uvicorn
-#     uvicorn.run(app, host="0.0.0.0", port=8001)

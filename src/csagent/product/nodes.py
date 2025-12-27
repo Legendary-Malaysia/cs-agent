@@ -8,6 +8,7 @@ import os
 from pathlib import Path
 from langchain.agents import create_agent
 from langchain_core.tools import tool
+from langgraph.config import get_stream_writer
 import logging
 
 logger = logging.getLogger(__name__)
@@ -35,6 +36,8 @@ def get_products():
 def read_product(
     product: Literal[*get_products()], language: Literal["en", "jp", "zh"]
 ) -> str:
+    writer = get_stream_writer()
+    writer({"custom_key": "Gathering information about " + product})
     try:
         products_dir = get_resources_dir() / "products"
         with open(
@@ -65,6 +68,7 @@ def product_agent_node(state: ProductWorkflowState, runtime: Runtime[Configurati
         llm = init_chat_model(
             **get_model_info(runtime.context.model),
             temperature=0,
+            streaming=False,
         )
         tools = [read_product]
 

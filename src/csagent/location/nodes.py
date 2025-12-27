@@ -8,6 +8,7 @@ from typing import Literal
 from pathlib import Path
 from langchain.agents import create_agent
 from langchain_core.tools import tool
+from langgraph.config import get_stream_writer
 import logging
 
 logger = logging.getLogger(__name__)
@@ -30,6 +31,8 @@ def get_locations():
     description=f"Use this tool to read location information. The available locations are: {', '.join(get_locations())}"
 )
 def read_location(location: Literal[*get_locations()]):
+    writer = get_stream_writer()
+    writer({"custom_key": "Gathering information about " + location})
     try:
         locations_dir = get_resources_dir() / "locations"
         with open(locations_dir / f"{location}.md", "r", encoding="utf-8") as f:
@@ -47,8 +50,7 @@ def location_agent_node(state: LocationWorkflowState, runtime: Runtime[Configura
         task = state["task"]
 
         llm = init_chat_model(
-            **get_model_info(runtime.context.model),
-            temperature=0,
+            **get_model_info(runtime.context.model), temperature=0, streaming=False
         )
         tools = [read_location]
 
@@ -65,7 +67,8 @@ def location_agent_node(state: LocationWorkflowState, runtime: Runtime[Configura
             llm, tools, system_prompt=prompt, name="location_agent"
         )
         agent_response = agent_executor.invoke(
-            {"messages": [HumanMessage(content=f"Here is your task: {task}")]}
+            {"messages": [HumanMessage(content=f"Here is your task: {task}")]},
+            config={"tags": ["location_team"]},
         )
 
         logger.info(
