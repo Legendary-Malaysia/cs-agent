@@ -38,6 +38,8 @@ def supervisor_node(
     state: SupervisorWorkflowState, runtime: Runtime[Configuration]
 ) -> Command[Literal[*TEAMS]]:
     logger.info("Supervisor node")
+    writer = get_stream_writer()
+    writer({"custom_key": "One moment..."})
 
     users_question = state["messages"][-1].content
     messages = state["messages"]

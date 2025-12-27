@@ -8,6 +8,7 @@ import logging
 from fastapi.middleware.cors import CORSMiddleware
 import json
 from fastapi.responses import StreamingResponse
+from typing import List, Dict
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from csagent.supervisor.graph import supervisor_graph
@@ -44,7 +45,7 @@ async def health_check():
 
 
 class UserRequest(BaseModel):
-    messages: str
+    messages: List[Dict[str, str]]
     # config: Configuration
 
 
@@ -53,7 +54,7 @@ async def run_supervisor(request: UserRequest):
     async def event_generator():
         # Use astream for async iteration in FastAPI
         async for namespace, mode, data in supervisor_graph.astream(
-            {"messages": [{"role": "user", "content": request.messages}]},
+            {"messages": request.messages},
             stream_mode=["messages", "custom"],
             subgraphs=True,
             # context=request.config,
@@ -72,7 +73,7 @@ async def run_supervisor(request: UserRequest):
                 )
 
                 # Format as Server-Sent Events (SSE) if using text/event-stream
-                if metadata["langgraph_node"] == "customer_service_team":
+                if metadata["langgraph_node"] == "customer_service_team" and content:
                     yield f"data: {json.dumps({'node': metadata['langgraph_node'], 'content': content})}\n\n"
 
     return StreamingResponse(event_generator(), media_type="text/event-stream")

@@ -6,7 +6,6 @@ import os
 import pytest
 import json
 import httpx
-import asyncio
 
 # Add the 'src' directory to the Python path to resolve csagent module
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
@@ -65,7 +64,7 @@ async def test_run_supervisor_stream():
             "POST",
             "http://localhost:8000/supervisor",
             json={
-                "messages": "Where can I buy spirit?",
+                "messages": "Where can I buy spirit in Genting?",
                 "config": Configuration().model_dump(),
             },
             timeout=30.0,
@@ -76,6 +75,37 @@ async def test_run_supervisor_stream():
                     json_str = line.replace("data: ", "")
                     data = json.loads(json_str)
                     print(f"Node: {data['node']} | Content: {data['content']}")
+
+
+@pytest.mark.skip(reason="Run this test manually")
+def test_run_supervisor_stream_conversation():
+    url = "http://127.0.0.1:8000/supervisor"
+    payload = {
+        "messages": [
+            {"role": "user", "content": "Hello, how are you? My name is John Doe"},
+            {
+                "role": "assistant",
+                "content": "I'm doing well, thank you! How can I help you today?",
+            },
+            {"role": "user", "content": "What is my name?"},
+        ]
+    }
+
+    try:
+        response = requests.post(url, json=payload, stream=True)
+        response.raise_for_status()
+
+        for line in response.iter_lines():
+            if line:
+                decoded_line = line.decode("utf-8")
+                if decoded_line.startswith("data: "):
+                    content = json.loads(decoded_line[6:])
+                    print(
+                        f"Node: {content.get('node')}, Content: {content.get('content')}"
+                    )
+
+    except requests.exceptions.RequestException as e:
+        print(f"Error: {e}")
 
 
 @pytest.mark.skip(reason="Run this test manually")
@@ -105,4 +135,8 @@ if __name__ == "__main__":
     # test_run_supervisor()
     # test_run_supervisor_deployed()
     # test_run_supervisor_stream()
-    asyncio.run(test_run_supervisor_stream())
+
+    # import asyncio
+    # asyncio.run(test_run_supervisor_stream())
+
+    test_run_supervisor_stream_conversation()
