@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
 # Add the 'src' directory to the Python path
@@ -8,6 +8,7 @@ import logging
 from fastapi.middleware.cors import CORSMiddleware
 import json
 from fastapi.responses import StreamingResponse
+from fastapi import Request
 from typing import List, Dict
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
@@ -44,36 +45,84 @@ async def health_check():
     return "The health check is successful."
 
 
+class Message(BaseModel):
+    role: str
+    content: str
+
+
 class UserRequest(BaseModel):
-    messages: List[Dict[str, str]]
-    # config: Configuration
+    messages: List[Message]
+    config: Dict[str, str]
 
 
 @app.post("/supervisor")
-async def run_supervisor(request: UserRequest):
+async def run_supervisor(request: UserRequest, raw_request: Request):
+    if not request.messages:
+        raise HTTPException(status_code=400, detail="Messages are required")
+    try:
+        config = Configuration(**request.config)
+    except ValueError as e:
+        logger.warning(f"Invalid config, using defaults: {str(e)}")
+        config = Configuration()
+    except Exception as e:
+        logger.error(f"Unexpected error in config: {str(e)}", exc_info=True)
+        raise HTTPException(status_code=500, detail="Configuration error")
+
     async def event_generator():
-        # Use astream for async iteration in FastAPI
-        async for namespace, mode, data in supervisor_graph.astream(
-            {"messages": request.messages},
-            stream_mode=["messages", "custom"],
-            subgraphs=True,
-            # context=request.config,
-            context=Configuration(),
-        ):
-            if mode == "custom":
-                yield f"data: {json.dumps({'node': 'custom', 'content': data.get('custom_key')})}\n\n"
-            elif mode == "messages":
-                message_chunk, metadata = data
+        try:
+            async for namespace, mode, data in supervisor_graph.astream(
+                {"messages": [msg.model_dump() for msg in request.messages]},
+                stream_mode=["messages", "custom"],
+                subgraphs=True,
+                context=config,
+            ):
+                # Check for client disconnection
+                if await raw_request.is_disconnected():
+                    logger.info("Client disconnected")
+                    break
 
-                # Extract content from the message chunk
-                content = (
-                    message_chunk.content
-                    if hasattr(message_chunk, "content")
-                    else str(message_chunk)
-                )
+                if mode == "custom":
+                    custom_data = {
+                        "node": "custom",
+                        "content": data.get("custom_key"),
+                    }
+                    try:
+                        yield f"data: {json.dumps(custom_data)}\n\n"
+                    except TypeError as e:
+                        logger.error(f"JSON serialization error: {e}")
 
-                # Format as Server-Sent Events (SSE) if using text/event-stream
-                if metadata["langgraph_node"] == "customer_service_team" and content:
-                    yield f"data: {json.dumps({'node': metadata['langgraph_node'], 'content': content})}\n\n"
+                elif mode == "messages":
+                    message_chunk, metadata = data
 
-    return StreamingResponse(event_generator(), media_type="text/event-stream")
+                    # Extract content safely
+                    if hasattr(message_chunk, "content"):
+                        content = message_chunk.content
+                    else:
+                        content = str(message_chunk)
+                        logger.warning(f"No content attribute: {type(message_chunk)}")
+
+                    # Get node name safely
+                    node_name = metadata.get("langgraph_node")
+
+                    # Format as Server-Sent Events (SSE) if using text/event-stream
+                    if node_name == "customer_service_team" and content:
+                        response_data = {"node": node_name, "content": content}
+                        try:
+                            yield f"data: {json.dumps(response_data)}\n\n"
+                        except TypeError as e:
+                            logger.error(f"JSON serialization error: {e}")
+            # Signal completion
+            yield f"data: {json.dumps({'event': 'done'})}\n\n"
+        except Exception as e:
+            logger.error(f"Error during streaming: {str(e)}", exc_info=True)
+            yield f"event: error\ndata: {json.dumps({'error': str(e)})}\n\n"
+
+    return StreamingResponse(
+        event_generator(),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "X-Accel-Buffering": "no",
+        },
+    )
