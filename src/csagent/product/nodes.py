@@ -21,6 +21,9 @@ def get_resources_dir():
 
 def get_products():
     products_dir = get_resources_dir() / "products"
+    if not products_dir.exists():
+        logger.warning(f"Products directory not found: {products_dir}")
+        return []
     # Get unique product names and remove the language suffix
     products = {
         file.rsplit("_", 1)[0]
@@ -30,14 +33,15 @@ def get_products():
     return list(products)
 
 
-@tool(
-    description=f"Use this tool to read product information. The available products are: {', '.join(get_products())}"
-)
-def read_product(
-    product: Literal[*get_products()], language: Literal["en", "jp", "zh"]
-) -> str:
+@tool(description="Use this tool to read product information.")
+def read_product(product: str, language: Literal["en", "jp", "zh"]) -> str:
     writer = get_stream_writer()
     writer({"custom_key": "Gathering information about " + product})
+
+    available_products = get_products()
+    if product not in available_products:
+        return f"Product '{product}' not found. Available products: {', '.join(available_products)}"
+
     try:
         products_dir = get_resources_dir() / "products"
         with open(

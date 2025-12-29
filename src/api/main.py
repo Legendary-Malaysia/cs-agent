@@ -86,7 +86,9 @@ async def run_supervisor(
             messages = request.messages
             if len(messages) > 11:
                 messages = messages[-11:]
-                logger.info(f"Only last 11 messages sent to supervisor: {messages}")
+                logger.info(
+                    "Messages trimmed. Only last 11 messages sent to supervisor"
+                )
             async for namespace, mode, data in supervisor_graph.astream(
                 {"messages": [msg.model_dump() for msg in messages]},
                 stream_mode=["messages", "custom"],

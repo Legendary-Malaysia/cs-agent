@@ -3,14 +3,6 @@
 from typing import Annotated, Literal
 from pydantic import BaseModel, Field
 import os
-from pathlib import Path
-
-current_dir = Path(__file__).parent
-available_langs = [
-    file[:-5]
-    for file in os.listdir(f"{current_dir}/../../locales")
-    if file.endswith(".json")
-]
 
 
 class Configuration(BaseModel):
@@ -46,12 +38,12 @@ class Configuration(BaseModel):
         {"__template_metadata__": {"kind": "llm"}},
     ] = Field(
         default="google_genai:gemma-3-4b-it",
-        description="The name of the language model to use for the agent's main interactions. "
+        description="The name of the smaller language model to use for lightweight tasks. "
         "Should be in the form: provider/model-name.",
     )
 
     language: Annotated[
-        Literal[*available_langs],
+        Literal["en"],
         {"__template_metadata__": {"kind": "language"}},
     ] = Field(
         default="en",
