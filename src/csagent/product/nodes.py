@@ -58,6 +58,8 @@ def product_agent_node(state: ProductWorkflowState, runtime: Runtime[Configurati
         prompt_path = (
             current_dir / "prompts" / f"pm_prompt_{runtime.context.language}.md"
         )
+        if not prompt_path.exists():
+            raise FileNotFoundError(f"Prompt file not found: {prompt_path}")
         with open(prompt_path, "r") as f:
             system_prompt_template = f.read()
 
@@ -79,10 +81,10 @@ def product_agent_node(state: ProductWorkflowState, runtime: Runtime[Configurati
             {"messages": [HumanMessage(content=f"Here is your task: {task}")]}
         )
         logger.info(
-            f"Location agent response: {agent_response['messages'][-1].content[:50]}"
+            f"Product agent response: {agent_response['messages'][-1].content[:50]}"
         )
 
         return {"response": agent_response["messages"][-1].content}
     except Exception as e:
-        logger.error(f"Error in product supervisor node: {e}")
-        return {"response": f"Product supervisor error: {str(e)}"}
+        logger.error(f"Error in product agent node: {e}")
+        return {"response": f"Product agent error: {str(e)}"}

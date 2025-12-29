@@ -1,5 +1,8 @@
-from csagent.supervisor.state import SupervisorWorkflowState
-from csagent.configuration import Configuration, get_model_info
+import logging
+from typing import Literal
+
+from pathlib import Path
+
 from langchain.chat_models import init_chat_model
 from langgraph.runtime import Runtime
 from langchain_core.messages import (
@@ -7,14 +10,15 @@ from langchain_core.messages import (
     SystemMessage,
     get_buffer_string,
 )
-from typing import Literal, TypedDict
-from pathlib import Path
 from langgraph.types import Command
 from langgraph.config import get_stream_writer
-from pydantic import Field
+from pydantic import BaseModel, Field
+
+from csagent.supervisor.state import SupervisorWorkflowState
+from csagent.configuration import Configuration, get_model_info
 from csagent.product.graph import product_graph
 from csagent.location.graph import location_graph
-import logging
+
 
 logger = logging.getLogger(__name__)
 
@@ -26,7 +30,7 @@ TEAMS_DESC = [
 ]
 
 
-class Router(TypedDict):
+class Router(BaseModel):
     """Team to route to next."""
 
     next_step: Literal[*TEAMS]
@@ -41,14 +45,17 @@ def supervisor_node(
     writer = get_stream_writer()
     writer({"custom_key": "One moment..."})
 
-    users_question = state["messages"][-1].content
+    if not state["messages"]:
+        raise ValueError("No messages in state")
+
     messages = state["messages"]
 
     model_info = get_model_info(runtime.context.model)
 
-    # 1. Check if we need to inject the system prompt
-    if not messages or not isinstance(messages[0], SystemMessage):
-        logger.info(f"Preparing messages for the LLM: {users_question}")
+    system_prompt = None  # Initialize to avoid NameError
+    # Check if we need to inject the system prompt
+    if not isinstance(messages[0], SystemMessage):
+        logger.info("Preparing SystemMessage Supervisor:")
         current_dir = Path(__file__).parent
 
         prompt_path = (
@@ -70,7 +77,6 @@ def supervisor_node(
         system_prompt = SystemMessage(
             content=system_prompt_template.format(members=members_str)
         )
-        messages.insert(0, system_prompt)
 
     notes = "\n-----\n".join(state["notes"])
     instruction_prompt = HumanMessage(
@@ -87,14 +93,19 @@ def supervisor_node(
     llm = init_chat_model(
         **model_info, temperature=0, streaming=False
     ).with_structured_output(Router)
-    response = llm.invoke(messages + [instruction_prompt])
-    logger.info(f"Response: {response['reason']}")
+    final_prompt = (
+        [system_prompt] + messages + [instruction_prompt]
+        if system_prompt
+        else messages + [instruction_prompt]
+    )
+    response = llm.invoke(final_prompt)
+    logger.info(f"Response: {response.reason}")
 
     return Command(
-        goto=response["next_step"],
+        goto=response.next_step,
         update={
-            "next_step": response["next_step"],
-            "task": response["task"],
+            "next_step": response.next_step,
+            "task": response.task,
         },
     )
 
@@ -147,7 +158,7 @@ def customer_service_team(
     writer({"custom_key": "Finalizing answer..."})
 
     task = state["task"]
-    conversation = get_buffer_string(state["messages"][1:])
+    conversation = get_buffer_string(state["messages"])
     model_info = get_model_info(runtime.context.model_small)
 
     current_dir = Path(__file__).parent
@@ -181,6 +192,7 @@ def customer_service_team(
     """
 
     messages = [
+        # Using HumanMessage to support Gemma model
         HumanMessage(content=system_prompt),
         HumanMessage(content=instruction),
     ]
