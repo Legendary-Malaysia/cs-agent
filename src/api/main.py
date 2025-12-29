@@ -1,11 +1,11 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Security, Depends
+from fastapi.security import APIKeyHeader
 from pydantic import BaseModel
 
 # Add the 'src' directory to the Python path
 import sys
 import os
 import logging
-from fastapi.middleware.cors import CORSMiddleware
 import json
 from fastapi.responses import StreamingResponse
 from fastapi import Request
@@ -17,7 +17,7 @@ from csagent.configuration import Configuration
 from dotenv import load_dotenv
 
 load_dotenv()
-
+API_KEY = os.getenv("CSAGENT_API_KEY")
 
 # Configure logging
 logging.basicConfig(
@@ -31,13 +31,24 @@ app = FastAPI(
     description="API for the supervisor graph",
 )
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],  # Or ["http://localhost:3000"]
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+# Define API Key security scheme
+api_key_header = APIKeyHeader(name="X-API-Key", auto_error=False)
+
+
+async def verify_api_key(api_key: str = Security(api_key_header)):
+    """Verify the API key from the request header."""
+    if not API_KEY:
+        logger.error("API_KEY not configured in environment")
+        raise HTTPException(status_code=500, detail="API key not configured on server")
+
+    if not api_key:
+        raise HTTPException(status_code=401, detail="API key is missing")
+
+    if api_key != API_KEY:
+        logger.warning("Invalid API key attempt")
+        raise HTTPException(status_code=403, detail="Invalid API key")
+
+    return api_key
 
 
 @app.get("/")
@@ -56,7 +67,9 @@ class UserRequest(BaseModel):
 
 
 @app.post("/supervisor")
-async def run_supervisor(request: UserRequest, raw_request: Request):
+async def run_supervisor(
+    request: UserRequest, raw_request: Request, api_key: str = Depends(verify_api_key)
+):
     if not request.messages:
         raise HTTPException(status_code=400, detail="Messages are required")
     try:
