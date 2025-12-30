@@ -17,14 +17,22 @@ from csagent.configuration import Configuration
 from dotenv import load_dotenv
 
 load_dotenv()
-API_KEY = os.getenv("CSAGENT_API_KEY")
-MAX_MESSAGES = os.getenv("MAX_MESSAGES")
 
 # Configure logging
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
+
+API_KEY = os.getenv("CSAGENT_API_KEY")
+max_messages_str = os.getenv("MAX_MESSAGES", "11")
+try:
+    MAX_MESSAGES = int(max_messages_str)
+except ValueError:
+    logger.warning(
+        f"Failed to parse MAX_MESSAGES '{max_messages_str}' as integer, defaulting to 11"
+    )
+    MAX_MESSAGES = 11
 
 app = FastAPI(
     title="Supervisor API",
@@ -33,7 +41,7 @@ app = FastAPI(
 )
 
 # Define API Key security scheme
-api_key_header = APIKeyHeader(name="X-API-Key", auto_error=False)
+api_key_header = APIKeyHeader(name="X-API-KEY", auto_error=False)
 
 
 async def verify_api_key(api_key: str = Security(api_key_header)):
@@ -135,7 +143,7 @@ async def run_supervisor(
             yield f"data: {json.dumps({'event': 'done'})}\n\n"
         except Exception as e:
             logger.exception("Error during streaming")
-            yield f"event: error\ndata: {json.dumps({'error': str(e)})}\n\n"
+            yield f"data: {json.dumps({'error': str(e)})}\n\n"
 
     return StreamingResponse(
         event_generator(),
