@@ -7,6 +7,7 @@ from langchain.chat_models import init_chat_model
 from langgraph.runtime import Runtime
 from langchain_core.messages import (
     HumanMessage,
+    AIMessage,
     SystemMessage,
     get_buffer_string,
 )
@@ -45,69 +46,79 @@ def supervisor_node(
     writer = get_stream_writer()
     writer({"custom_key": "One moment..."})
 
-    if not state["messages"]:
-        raise ValueError("No messages in state")
+    try:
+        if not state["messages"]:
+            raise ValueError("No messages in state")
 
-    messages = state["messages"]
+        messages = state["messages"]
 
-    model_info = get_model_info(runtime.context.model)
+        model_info = get_model_info(runtime.context.model)
 
-    system_prompt = None  # Initialize to avoid NameError
-    # Check if we need to inject the system prompt
-    if not isinstance(messages[0], SystemMessage):
-        logger.info("Preparing SystemMessage Supervisor:")
-        current_dir = Path(__file__).parent
+        system_prompt = None  # Initialize to avoid NameError
+        # Check if we need to inject the system prompt
+        if not isinstance(messages[0], SystemMessage):
+            logger.info("Preparing SystemMessage Supervisor:")
+            current_dir = Path(__file__).parent
 
-        prompt_path = (
-            current_dir
-            / "resources"
-            / "prompts"
-            / f"supervisor_prompt_{runtime.context.language}.md"
+            prompt_path = (
+                current_dir
+                / "resources"
+                / "prompts"
+                / f"supervisor_prompt_{runtime.context.language}.md"
+            )
+            with open(prompt_path, "r") as f:
+                system_prompt_template = f.read()
+
+            members_str = "\n---\n".join(
+                [
+                    f"Team: {team_name}\nDescription: {desc}"
+                    for team_name, desc in zip(TEAMS, TEAMS_DESC)
+                ]
+            )
+
+            system_prompt = SystemMessage(
+                content=system_prompt_template.format(members=members_str)
+            )
+
+        notes = "\n-----\n".join(state["notes"])
+        instruction_prompt = HumanMessage(
+            content=f"""
+                Information that our team has gathered so far (if any):
+                {notes}
+                
+                -----
+
+                Now as a supervisor, analyze the information and think about what to do next. If you have enough information to answer the user's question, then pass your answer to the customer service team. Otherwise, delegate the next task to the appropriate team.
+            """
         )
-        with open(prompt_path, "r") as f:
-            system_prompt_template = f.read()
 
-        members_str = "\n---\n".join(
-            [
-                f"Team: {team_name}\nDescription: {desc}"
-                for team_name, desc in zip(TEAMS, TEAMS_DESC)
-            ]
+        llm = init_chat_model(
+            **model_info, temperature=0, streaming=False
+        ).with_structured_output(Router)
+        final_prompt = (
+            [system_prompt, *messages, instruction_prompt]
+            if system_prompt
+            else [*messages, instruction_prompt]
         )
+        response = llm.invoke(final_prompt)
+        logger.info(f"Response: {response.reason}")
 
-        system_prompt = SystemMessage(
-            content=system_prompt_template.format(members=members_str)
+        return Command(
+            goto=response.next_step,
+            update={
+                "next_step": response.next_step,
+                "task": response.task,
+            },
         )
-
-    notes = "\n-----\n".join(state["notes"])
-    instruction_prompt = HumanMessage(
-        content=f"""
-            Information that our team has gathered so far (if any):
-            {notes}
-            
-            -----
-
-            Now as a supervisor, analyze the information and think about what to do next. If you have enough information to answer the user's question, then pass your answer to the customer service team. Otherwise, delegate the next task to the appropriate team.
-        """
-    )
-
-    llm = init_chat_model(
-        **model_info, temperature=0, streaming=False
-    ).with_structured_output(Router)
-    final_prompt = (
-        [system_prompt] + messages + [instruction_prompt]
-        if system_prompt
-        else messages + [instruction_prompt]
-    )
-    response = llm.invoke(final_prompt)
-    logger.info(f"Response: {response.reason}")
-
-    return Command(
-        goto=response.next_step,
-        update={
-            "next_step": response.next_step,
-            "task": response.task,
-        },
-    )
+    except Exception:
+        logger.exception("Error in supervisor node")
+        return Command(
+            goto="customer_service_team",
+            update={
+                "next_step": "customer_service_team",
+                "task": "Unexpected error occurred. Please try again later.",
+            },
+        )
 
 
 def call_product_team(state: SupervisorWorkflowState, runtime: Runtime[Configuration]):
@@ -115,19 +126,30 @@ def call_product_team(state: SupervisorWorkflowState, runtime: Runtime[Configura
     writer = get_stream_writer()
     writer({"custom_key": "Looking up product details..."})
 
-    response = product_graph.invoke({"task": state["task"]})
+    try:
+        response = product_graph.invoke({"task": state["task"]})
 
-    logger.info(f"Response from product team: {response['response']}")
-    writer({"custom_key": "Product details found"})
+        logger.info(f"Response from product team: {response['response']}")
+        writer({"custom_key": "Product details found"})
 
-    return Command(
-        goto="supervisor_node",
-        update={
-            "notes": [
-                f"Product Team Task: {state['task']}\n  Product Team Response: {response['response']}"
-            ]
-        },
-    )
+        return Command(
+            goto="supervisor_node",
+            update={
+                "notes": [
+                    f"Product Team Task: {state['task']}\n  Product Team Response: {response['response']}"
+                ]
+            },
+        )
+    except Exception:
+        logger.exception("Error in product team node")
+        return Command(
+            goto="supervisor_node",
+            update={
+                "notes": [
+                    f"Product Team Task: {state['task']}\n  Product Team Response: Error in product team node"
+                ]
+            },
+        )
 
 
 def call_location_team(state: SupervisorWorkflowState, runtime: Runtime[Configuration]):
@@ -135,19 +157,30 @@ def call_location_team(state: SupervisorWorkflowState, runtime: Runtime[Configur
     writer = get_stream_writer()
     writer({"custom_key": "Looking up location details..."})
 
-    response = location_graph.invoke({"task": state["task"]})
+    try:
+        response = location_graph.invoke({"task": state["task"]})
 
-    logger.info(f"Response from location team: {response['response']}")
-    writer({"custom_key": "Location details found"})
+        logger.info(f"Response from location team: {response['response']}")
+        writer({"custom_key": "Location details found"})
 
-    return Command(
-        goto="supervisor_node",
-        update={
-            "notes": [
-                f"Location Team Task: {state['task']}\n  Location Team Response: {response['response']}"
-            ]
-        },
-    )
+        return Command(
+            goto="supervisor_node",
+            update={
+                "notes": [
+                    f"Location Team Task: {state['task']}\n  Location Team Response: {response['response']}"
+                ]
+            },
+        )
+    except Exception:
+        logger.exception("Error in location team node")
+        return Command(
+            goto="supervisor_node",
+            update={
+                "notes": [
+                    f"Location Team Task: {state['task']}\n  Location Team Response: Error in location team node"
+                ]
+            },
+        )
 
 
 def customer_service_team(
@@ -157,54 +190,65 @@ def customer_service_team(
     writer = get_stream_writer()
     writer({"custom_key": "Finalizing answer..."})
 
-    task = state["task"]
-    conversation = get_buffer_string(state["messages"])
-    model_info = get_model_info(runtime.context.model_small)
+    try:
+        task = state["task"]
+        conversation = get_buffer_string(state["messages"])
+        model_info = get_model_info(runtime.context.model_small)
 
-    current_dir = Path(__file__).parent
+        current_dir = Path(__file__).parent
 
-    prompt_path = (
-        current_dir
-        / "resources"
-        / "prompts"
-        / f"cs_prompt_{runtime.context.language}.md"
-    )
-    with open(prompt_path, "r") as f:
-        system_prompt = f.read()
+        prompt_path = (
+            current_dir
+            / "resources"
+            / "prompts"
+            / f"cs_prompt_{runtime.context.language}.md"
+        )
+        with open(prompt_path, "r") as f:
+            system_prompt = f.read()
 
-    notes = "\n-----\n".join(state["notes"])
+        notes = "\n-----\n".join(state["notes"])
 
-    instruction = f"""
-        Here is the conversation so far:
-        <Conversation>
-        {conversation}
-        </Conversation>
-        ----- 
+        instruction = f"""
+            Here is the conversation so far:
+            <Conversation>
+            {conversation}
+            </Conversation>
+            ----- 
 
-        Information that our team has gathered so far (if any):
-        <Information>
-        {notes}
-        </Information>
-        ----- 
+            Information that our team has gathered so far (if any):
+            <Information>
+            {notes}
+            </Information>
+            ----- 
 
-        Your task is:
-        {task}
-    """
+            Your task is:
+            {task}
+        """
 
-    messages = [
-        # Using HumanMessage to support Gemma model
-        HumanMessage(content=system_prompt),
-        HumanMessage(content=instruction),
-    ]
+        messages = [
+            # Using HumanMessage to support Gemma model
+            HumanMessage(content=system_prompt),
+            HumanMessage(content=instruction),
+        ]
 
-    llm = init_chat_model(
-        **model_info,
-        temperature=0,
-    )
+        llm = init_chat_model(
+            **model_info,
+            temperature=0,
+        )
 
-    response = llm.invoke(messages)
+        response = llm.invoke(messages)
 
-    logger.info(f"Response from customer service team: {response.content}")
+        logger.info(f"Response from customer service team: {response.content}")
 
-    response.name = "customer_service_team"
-    return {"messages": [response]}
+        response.name = "customer_service_team"
+        return {"messages": [response]}
+    except Exception:
+        logger.exception("Error in customer service team node")
+        return {
+            "messages": [
+                AIMessage(
+                    content="Unexpected error occurred. Please try again later.",
+                    name="customer_service_team",
+                )
+            ]
+        }

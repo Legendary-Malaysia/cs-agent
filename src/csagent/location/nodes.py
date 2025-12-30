@@ -4,7 +4,6 @@ from langgraph.runtime import Runtime
 from langchain.chat_models import init_chat_model
 from langchain_core.messages import HumanMessage
 import os
-from typing import Literal
 from pathlib import Path
 from langchain.agents import create_agent
 from langchain_core.tools import tool
@@ -27,18 +26,21 @@ def get_locations():
     return locations
 
 
-@tool(
-    description=f"Use this tool to read location information. The available locations are: {', '.join(get_locations())}"
-)
-def read_location(location: Literal[*get_locations()]):
+@tool(description="Use this tool to read location information")
+def read_location(location: str):
     writer = get_stream_writer()
     writer({"custom_key": "Gathering information about " + location})
+
+    available_locations = get_locations()
+    if location not in available_locations:
+        return f"Location {location} not found. Available locations: {', '.join(available_locations)}"
+
     try:
         locations_dir = get_resources_dir() / "locations"
         with open(locations_dir / f"{location}.md", "r", encoding="utf-8") as f:
             return f.read()
     except Exception as e:
-        logger.error(f"Error in read_location tool: {e}")
+        logger.exception("Error in read_location tool")
         return f"Error in read_location tool: {str(e)}"
 
 
@@ -59,6 +61,8 @@ def location_agent_node(state: LocationWorkflowState, runtime: Runtime[Configura
             / "prompts"
             / f"location_prompt_{runtime.context.language}.md"
         )
+        if not prompt_path.exists():
+            raise FileNotFoundError(f"Prompt file not found: {prompt_path}")
         with open(prompt_path, "r") as f:
             system_prompt_template = f.read()
 
@@ -77,5 +81,5 @@ def location_agent_node(state: LocationWorkflowState, runtime: Runtime[Configura
 
         return {"response": agent_response["messages"][-1].content}
     except Exception as e:
-        logger.error(f"Error in location agent node: {e}")
+        logger.exception("Error in location agent node")
         return {"response": f"Location agent error: {str(e)}"}

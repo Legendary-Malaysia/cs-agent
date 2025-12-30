@@ -55,7 +55,7 @@ def test_run_supervisor_stream_conversation():
     }
 
     try:
-        response = requests.post(url, json=payload, stream=True)
+        response = requests.post(url, json=payload, stream=True, timeout=30)
         response.raise_for_status()
 
         for line in response.iter_lines():

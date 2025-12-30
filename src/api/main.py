@@ -18,6 +18,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 API_KEY = os.getenv("CSAGENT_API_KEY")
+MAX_MESSAGES = os.getenv("MAX_MESSAGES")
 
 # Configure logging
 logging.basicConfig(
@@ -78,18 +79,18 @@ async def run_supervisor(
         logger.warning(f"Invalid config, using defaults: {str(e)}")
         config = Configuration()
     except Exception as e:
-        logger.error(f"Unexpected error in config: {str(e)}", exc_info=True)
-        raise HTTPException(status_code=500, detail="Configuration error")
+        logger.exception("Unexpected error in config")
+        raise HTTPException(status_code=500, detail="Configuration error") from e
 
     async def event_generator():
         try:
             messages = request.messages
-            if len(messages) > 11:
-                messages = messages[-11:]
+            if len(messages) > MAX_MESSAGES:
+                messages = messages[-MAX_MESSAGES:]
                 logger.info(
-                    "Messages trimmed. Only last 11 messages sent to supervisor"
+                    f"Messages trimmed. Only last {MAX_MESSAGES} messages sent to supervisor"
                 )
-            async for namespace, mode, data in supervisor_graph.astream(
+            async for _namespace, mode, data in supervisor_graph.astream(
                 {"messages": [msg.model_dump() for msg in messages]},
                 stream_mode=["messages", "custom"],
                 subgraphs=True,
@@ -107,8 +108,8 @@ async def run_supervisor(
                     }
                     try:
                         yield f"data: {json.dumps(custom_data)}\n\n"
-                    except TypeError as e:
-                        logger.error(f"JSON serialization error: {e}")
+                    except TypeError:
+                        logger.exception("JSON serialization error")
 
                 elif mode == "messages":
                     message_chunk, metadata = data
@@ -128,12 +129,12 @@ async def run_supervisor(
                         response_data = {"node": node_name, "content": content}
                         try:
                             yield f"data: {json.dumps(response_data)}\n\n"
-                        except TypeError as e:
-                            logger.error(f"JSON serialization error: {e}")
+                        except TypeError:
+                            logger.exception("JSON serialization error")
             # Signal completion
             yield f"data: {json.dumps({'event': 'done'})}\n\n"
         except Exception as e:
-            logger.error(f"Error during streaming: {str(e)}", exc_info=True)
+            logger.exception("Error during streaming")
             yield f"event: error\ndata: {json.dumps({'error': str(e)})}\n\n"
 
     return StreamingResponse(

@@ -34,7 +34,7 @@ def get_products():
 
 
 @tool(description="Use this tool to read product information.")
-def read_product(product: str, language: Literal["en", "jp", "zh"]) -> str:
+def read_product(product: str, language: Literal["en"]) -> str:
     writer = get_stream_writer()
     writer({"custom_key": "Gathering information about " + product})
 
@@ -49,7 +49,7 @@ def read_product(product: str, language: Literal["en", "jp", "zh"]) -> str:
         ) as f:
             return f.read()
     except Exception as e:
-        logger.error(f"Error in read_product tool: {e}")
+        logger.exception("Error in read_product tool")
         return f"Error in read_product tool: {str(e)}"
 
 
@@ -90,5 +90,5 @@ def product_agent_node(state: ProductWorkflowState, runtime: Runtime[Configurati
 
         return {"response": agent_response["messages"][-1].content}
     except Exception as e:
-        logger.error(f"Error in product agent node: {e}")
+        logger.exception("Error in product agent node")
         return {"response": f"Product agent error: {str(e)}"}
