@@ -96,4 +96,4 @@ def get_model_info(model: str) -> dict:
             "model": model,
             "api_key": api_key,
         }
-    return {"model": model}
+    raise ValueError(f"Unknown model: {model}")

@@ -127,7 +127,9 @@ def call_product_team(state: SupervisorWorkflowState, runtime: Runtime[Configura
     writer({"custom_key": "Looking up product details..."})
 
     try:
-        response = product_graph.invoke({"task": state["task"]})
+        response = product_graph.invoke(
+            {"task": state["task"]}, context=runtime.context
+        )
 
         logger.info(f"Response from product team: {response['response']}")
         writer({"custom_key": "Product details found"})
@@ -158,7 +160,9 @@ def call_location_team(state: SupervisorWorkflowState, runtime: Runtime[Configur
     writer({"custom_key": "Looking up location details..."})
 
     try:
-        response = location_graph.invoke({"task": state["task"]})
+        response = location_graph.invoke(
+            {"task": state["task"]}, context=runtime.context
+        )
 
         logger.info(f"Response from location team: {response['response']}")
         writer({"custom_key": "Location details found"})
