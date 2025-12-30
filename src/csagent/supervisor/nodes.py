@@ -66,13 +66,15 @@ def supervisor_node(
                 / "prompts"
                 / f"supervisor_prompt_{runtime.context.language}.md"
             )
+            if not prompt_path.exists():
+                raise FileNotFoundError(f"Prompt file not found: {prompt_path}")
             with open(prompt_path, "r") as f:
                 system_prompt_template = f.read()
 
             members_str = "\n---\n".join(
                 [
                     f"Team: {team_name}\nDescription: {desc}"
-                    for team_name, desc in zip(TEAMS, TEAMS_DESC)
+                    for team_name, desc in zip(TEAMS, TEAMS_DESC, strict=True)
                 ]
             )
 
@@ -207,6 +209,8 @@ def customer_service_team(
             / "prompts"
             / f"cs_prompt_{runtime.context.language}.md"
         )
+        if not prompt_path.exists():
+            raise FileNotFoundError(f"Prompt file not found: {prompt_path}")
         with open(prompt_path, "r") as f:
             system_prompt = f.read()
 

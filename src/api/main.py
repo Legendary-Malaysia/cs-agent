@@ -141,9 +141,9 @@ async def run_supervisor(
                             logger.exception("JSON serialization error")
             # Signal completion
             yield f"data: {json.dumps({'event': 'done'})}\n\n"
-        except Exception as e:
+        except Exception:
             logger.exception("Error during streaming")
-            yield f"data: {json.dumps({'error': str(e)})}\n\n"
+            yield f"data: {json.dumps({'error': 'An unexpected error occurred'})}\n\n"
 
     return StreamingResponse(
         event_generator(),
