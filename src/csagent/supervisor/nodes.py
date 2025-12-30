@@ -1,104 +1,262 @@
-from csagent.supervisor.state import SupervisorWorkflowState
-from csagent.configuration import Configuration
-from langchain_core.runnables import RunnableConfig
-from langchain.chat_models import init_chat_model
-# from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain_core.messages import HumanMessage, AIMessage, SystemMessage,ToolMessage
-import os
-from typing import Literal, TypedDict, Optional
+import logging
+from typing import Literal
+
 from pathlib import Path
-from langgraph.graph import END
+
+from langchain.chat_models import init_chat_model
+from langgraph.runtime import Runtime
+from langchain_core.messages import (
+    HumanMessage,
+    AIMessage,
+    SystemMessage,
+    get_buffer_string,
+)
 from langgraph.types import Command
-from pydantic import Field
+from langgraph.config import get_stream_writer
+from pydantic import BaseModel, Field
+
+from csagent.supervisor.state import SupervisorWorkflowState
+from csagent.configuration import Configuration, get_model_info
 from csagent.product.graph import product_graph
 from csagent.location.graph import location_graph
-import logging
 
-# os.environ["GOOGLE_API_KEY"] = os.getenv("GOOGLE_API_KEY")
 
 logger = logging.getLogger(__name__)
 
 TEAMS = ["product_team", "location_team", "customer_service_team"]
-TEAMS_DESC = ["Product Team in charge of answering questions about products. Available products are: Mahsuri, Man, Orchid, Spirit I, Spirit II, Three Wishes, Violet.", "Location Team in charge of answering questions about locations.", "Customer Service Team is the customer facing team. Send your final answer to the customer service team and the team will format the final answer and pass it to the user. Do not pass any tasks to the customer service team."]
+TEAMS_DESC = [
+    "Product Team in charge of answering questions about products. Available products are: Mahsuri, Man, Orchid, Spirit I, Spirit II, Three Wishes, Violet.",
+    "Location Team in charge of answering questions about locations.",
+    "Customer Service Team is the customer facing team. If sufficient data is available, then call the customer service team. Otherwise, delegate the task to the appropriate team.",
+]
 
-class Router(TypedDict):
+
+class Router(BaseModel):
     """Team to route to next."""
-    next: Literal[*TEAMS]
-    question: str = Field(description="The question for this team.")
+
+    next_step: Literal[*TEAMS]
+    task: str = Field(description="The task for this team.")
     reason: str = Field(description="The reason for routing to this team.")
 
-def supervisor_node(state: SupervisorWorkflowState, config: RunnableConfig) -> Command[Literal[*TEAMS]]:
-    logger.info("Supervisor node")
-    users_question = state["users_question"]
-    messages = state["messages"]
 
-    # Prepare messages for the LLM
-    if len(messages) == 0:
-        logger.info(f"Preparing messages for the LLM: {users_question}")
+def supervisor_node(
+    state: SupervisorWorkflowState, runtime: Runtime[Configuration]
+) -> Command[Literal[*TEAMS]]:
+    logger.info("Supervisor node")
+    writer = get_stream_writer()
+    writer({"custom_key": "One moment..."})
+
+    try:
+        if not state["messages"]:
+            raise ValueError("No messages in state")
+
+        messages = state["messages"]
+
+        model_info = get_model_info(runtime.context.model)
+
+        system_prompt = None  # Initialize to avoid NameError
+        # Check if we need to inject the system prompt
+        if not isinstance(messages[0], SystemMessage):
+            logger.info("Preparing SystemMessage Supervisor:")
+            current_dir = Path(__file__).parent
+
+            prompt_path = (
+                current_dir
+                / "resources"
+                / "prompts"
+                / f"supervisor_prompt_{runtime.context.language}.md"
+            )
+            if not prompt_path.exists():
+                raise FileNotFoundError(f"Prompt file not found: {prompt_path}")
+            with open(prompt_path, "r") as f:
+                system_prompt_template = f.read()
+
+            members_str = "\n---\n".join(
+                [
+                    f"Team: {team_name}\nDescription: {desc}"
+                    for team_name, desc in zip(TEAMS, TEAMS_DESC, strict=True)
+                ]
+            )
+
+            system_prompt = SystemMessage(
+                content=system_prompt_template.format(members=members_str)
+            )
+
+        notes = "\n-----\n".join(state["notes"])
+        instruction_prompt = HumanMessage(
+            content=f"""
+                Information that our team has gathered so far (if any):
+                {notes}
+                
+                -----
+
+                Now as a supervisor, analyze the information and think about what to do next. If you have enough information to answer the user's question, then pass your answer to the customer service team. Otherwise, delegate the next task to the appropriate team.
+            """
+        )
+
+        llm = init_chat_model(
+            **model_info, temperature=0, streaming=False
+        ).with_structured_output(Router)
+        final_prompt = (
+            [system_prompt, *messages, instruction_prompt]
+            if system_prompt
+            else [*messages, instruction_prompt]
+        )
+        response = llm.invoke(final_prompt)
+        logger.info(f"Response: {response.reason}")
+
+        return Command(
+            goto=response.next_step,
+            update={
+                "next_step": response.next_step,
+                "task": response.task,
+            },
+        )
+    except Exception:
+        logger.exception("Error in supervisor node")
+        return Command(
+            goto="customer_service_team",
+            update={
+                "next_step": "customer_service_team",
+                "task": "Unexpected error occurred. Please try again later.",
+            },
+        )
+
+
+def call_product_team(state: SupervisorWorkflowState, runtime: Runtime[Configuration]):
+    logger.info("Call product team")
+    writer = get_stream_writer()
+    writer({"custom_key": "Looking up product details..."})
+
+    try:
+        response = product_graph.invoke(
+            {"task": state["task"]}, context=runtime.context
+        )
+
+        logger.info(f"Response from product team: {response['response']}")
+        writer({"custom_key": "Product details found"})
+
+        return Command(
+            goto="supervisor_node",
+            update={
+                "notes": [
+                    f"Product Team Task: {state['task']}\n  Product Team Response: {response['response']}"
+                ]
+            },
+        )
+    except Exception:
+        logger.exception("Error in product team node")
+        return Command(
+            goto="supervisor_node",
+            update={
+                "notes": [
+                    f"Product Team Task: {state['task']}\n  Product Team Response: Error in product team node"
+                ]
+            },
+        )
+
+
+def call_location_team(state: SupervisorWorkflowState, runtime: Runtime[Configuration]):
+    logger.info("Call location team")
+    writer = get_stream_writer()
+    writer({"custom_key": "Looking up location details..."})
+
+    try:
+        response = location_graph.invoke(
+            {"task": state["task"]}, context=runtime.context
+        )
+
+        logger.info(f"Response from location team: {response['response']}")
+        writer({"custom_key": "Location details found"})
+
+        return Command(
+            goto="supervisor_node",
+            update={
+                "notes": [
+                    f"Location Team Task: {state['task']}\n  Location Team Response: {response['response']}"
+                ]
+            },
+        )
+    except Exception:
+        logger.exception("Error in location team node")
+        return Command(
+            goto="supervisor_node",
+            update={
+                "notes": [
+                    f"Location Team Task: {state['task']}\n  Location Team Response: Error in location team node"
+                ]
+            },
+        )
+
+
+def customer_service_team(
+    state: SupervisorWorkflowState, runtime: Runtime[Configuration]
+):
+    logger.info("Call customer service team")
+    writer = get_stream_writer()
+    writer({"custom_key": "Finalizing answer..."})
+
+    try:
+        task = state["task"]
+        conversation = get_buffer_string(state["messages"])
+        model_info = get_model_info(runtime.context.model_small)
+
         current_dir = Path(__file__).parent
 
-        prompt_path = f"{current_dir}/../../../resources/prompts/supervisor_prompt_{config['configurable']['language']}.md"
+        prompt_path = (
+            current_dir
+            / "resources"
+            / "prompts"
+            / f"cs_prompt_{runtime.context.language}.md"
+        )
+        if not prompt_path.exists():
+            raise FileNotFoundError(f"Prompt file not found: {prompt_path}")
         with open(prompt_path, "r") as f:
-            system_prompt_template = f.read()
+            system_prompt = f.read()
 
-        members_str = "\n---\n".join(
-            [
-                f"Team: {team_name}\nDescription: {desc}"
-                for team_name, desc in zip(TEAMS, TEAMS_DESC)
+        notes = "\n-----\n".join(state["notes"])
+
+        instruction = f"""
+            Here is the conversation so far:
+            <Conversation>
+            {conversation}
+            </Conversation>
+            ----- 
+
+            Information that our team has gathered so far (if any):
+            <Information>
+            {notes}
+            </Information>
+            ----- 
+
+            Your task is:
+            {task}
+        """
+
+        messages = [
+            # Using HumanMessage to support Gemma model
+            HumanMessage(content=system_prompt),
+            HumanMessage(content=instruction),
+        ]
+
+        llm = init_chat_model(
+            **model_info,
+            temperature=0,
+        )
+
+        response = llm.invoke(messages)
+
+        logger.info(f"Response from customer service team: {response.content}")
+
+        response.name = "customer_service_team"
+        return {"messages": [response]}
+    except Exception:
+        logger.exception("Error in customer service team node")
+        return {
+            "messages": [
+                AIMessage(
+                    content="Unexpected error occurred. Please try again later.",
+                    name="customer_service_team",
+                )
             ]
-        )
-
-        system_prompt = system_prompt_template.format(
-            members=members_str,
-            question=users_question,
-        )
-        messages.append(SystemMessage(content=system_prompt))
-        # messages.append(HumanMessage(content=question))
-    
-    instruction_prompt = HumanMessage(content="Now as a supervisor, analyze the steps that have been done and think about what to do next. If you can answer the user's question using the past steps, then pass your answer to the summary agent. Otherwise, break it down into delegated tasks.")
-    # llm = ChatGoogleGenerativeAI(
-    #     google_api_key=os.getenv("GOOGLE_API_KEY"),
-    #     model="gemini-2.5-flash"
-    # ).with_structured_output(Router)
-    llm = init_chat_model("google_genai:gemini-2.5-flash", temperature=0).with_structured_output(Router)
-    response = llm.invoke(messages + [instruction_prompt])
-    logger.info(f"Response: {response['reason']}")
-
-    return Command(goto=response["next"], update={"next": response["next"], "question": response["question"], "messages": AIMessage(content=response["reason"], name="supervisor")})
-
-
-def call_product_team(state: SupervisorWorkflowState, config: RunnableConfig):
-    logger.info(f"Call product team")
-    response = product_graph.invoke({"users_question": state["question"]})
-    logger.info(f"Response from product team: {response['response']}")
-    return Command(goto="supervisor_node", update={"messages": [AIMessage(content=response["response"], name="product_team")]})
-
-
-def call_location_team(state: SupervisorWorkflowState, config: RunnableConfig):
-    logger.info(f"Call location team")
-    response = location_graph.invoke({"users_question": state["question"]})
-    logger.info(f"Response from location team: {response['response']}")
-    return Command(goto="supervisor_node", update={"messages": [AIMessage(content=response["response"], name="location_team")]})
-
-
-def customer_service_team(state: SupervisorWorkflowState, config: RunnableConfig):
-    logger.info(f"Call customer service team")
-    question = state["users_question"]
-
-    current_dir = Path(__file__).parent
-
-    prompt_path = f"{current_dir}/../../../resources/prompts/cs_prompt_{config['configurable']['language']}.md"
-    with open(prompt_path, "r") as f:
-        system_prompt_template = f.read()
-    system_prompt = system_prompt_template.format(question=question)
-    messages = state["messages"][1:] + [HumanMessage(content=system_prompt)]
-
-    llm = init_chat_model(config["configurable"]["model"], temperature=0) 
-    # llm = ChatGoogleGenerativeAI(
-    #     google_api_key=os.getenv("GOOGLE_API_KEY"),
-    #     model="gemini-2.5-flash"
-    # )
-    response = llm.invoke(messages)
-
-    logger.info(f"Response from customer service team: {response.content}")
-    return {"response": response.content}
+        }

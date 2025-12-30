@@ -1,17 +1,14 @@
-from typing import Dict
 from langgraph.graph import MessagesState
 
 
-class ChatWorkflowState(MessagesState):
-    users_question: str
-    question: str
+class ProductWorkflowState(MessagesState):
+    task: str
     response: str
-    # final_answer: str
 
 
-class ChatWorkflowStateInput(MessagesState):
-    users_question: str
+class ProductWorkflowStateInput(MessagesState):
+    task: str
 
 
-class ChatWorkflowStateOutput(MessagesState):
+class ProductWorkflowStateOutput(MessagesState):
     response: str
