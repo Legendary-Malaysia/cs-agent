@@ -20,6 +20,9 @@ def get_resources_dir():
 
 def get_locations():
     locations_dir = get_resources_dir() / "locations"
+    if not locations_dir.exists():
+        logger.warning(f"Locations directory not found: {locations_dir}")
+        return []
     locations = [
         file[:-3] for file in os.listdir(locations_dir) if file.endswith(".md")
     ]

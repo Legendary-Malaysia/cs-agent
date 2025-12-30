@@ -44,9 +44,10 @@ def read_product(product: str, language: Literal["en"]) -> str:
 
     try:
         products_dir = get_resources_dir() / "products"
-        with open(
-            products_dir / f"{product}_{language}.md", "r", encoding="utf-8"
-        ) as f:
+        file_path = products_dir / f"{product}_{language}.md"
+        if not file_path.exists():
+            return f"Product information for '{product}' not available in language '{language}'"
+        with open(file_path, "r", encoding="utf-8") as f:
             return f.read()
     except Exception as e:
         logger.exception("Error in read_product tool")
