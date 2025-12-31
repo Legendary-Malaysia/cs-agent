@@ -1,0 +1,182 @@
+[
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "Hi! Can you tell me what Orchid fragrance is all about?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Hello! I'd be happy to tell you about Orchid! It's Legendary's signature fragrance, inspired by the tropical rainforests of Malaysia. Orchid is a beautiful blend of floral and fruity notes that feels fresh, elegant, and sophisticated—perfect for everyday wear. Our tagline is \"Exotic Orchid for Extraordinary Soul.\" It's designed for anyone who wants a scent that's uplifting yet comforting, without being overpowering. 🌸"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "What does Orchid actually smell like?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Great question! Orchid takes you on a lovely scent journey. When you first spray it, you'll get bright, refreshing citrus notes of orange, green lemon, and apple—super energizing! As it settles, the heart reveals a soft floral bouquet with pansy, magnolia, cattleya orchid, and muguet—like walking through a blooming garden. Finally, it finishes with warm, comforting base notes of peach, amber, musk, and cedar that stay close to your skin. It's fresh at first, elegant in the middle, and cozy all day long!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "Is Orchid halal certified?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Yes, Orchid is halal certified! It's approved for Muslim consumers and fully compliant with halal standards, so you can purchase with complete confidence."
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "How long does Orchid fragrance last?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Orchid has been upgraded to contain 25% fragrance oil (up from 20%), which means it lasts longer than before! You'll notice the scent stays on both your skin and clothing for an extended time. The higher concentration gives you a richer, more lasting scent experience throughout the day."
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "I noticed Orchid fragrance looks a bit yellowish. Is that normal?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Yes, that's completely normal and actually a good sign! The slight yellow tint comes from the increased fragrance oil in our enhanced formula. The natural oils give it that warmer color. It doesn't affect the quality or performance at all—in fact, it shows the formula is richer and more concentrated. It's a sign of enhancement, not a defect!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "Is Orchid fragrance too strong? I don't like overpowering scents."
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Not at all! Orchid is fresh and noticeable, but it's soft and elegant—definitely not overpowering. It's designed to be easy to wear every day without being too heavy. Many customers love it specifically because it's sophisticated yet subtle, making it perfect for the office, casual outings, or really any occasion where you want to smell lovely without overwhelming a room."
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "What occasions would Orchid be suitable for?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Orchid is wonderfully versatile! It's perfect for daily wear, office and professional settings, and casual outings. Because it's fresh, elegant, and universally appealing, it's also an excellent choice for gifting. Really, you can wear it anywhere—it's that kind of effortless, all-occasion fragrance that works beautifully whether you're at work, running errands, or meeting friends."
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "Does Orchid contain alcohol?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Yes, it does contain alcohol, but it is halal certified and approved under halal standards. The alcohol used complies with halal certification requirements."
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "What makes Orchid different from other perfumes?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Orchid stands out for a few key reasons! First, it's Legendary's signature scent—our most iconic fragrance. It features a unique Malaysian-inspired story, drawing from tropical rainforest beauty. We've also enhanced it with 25% fragrance oil for superior longevity. The blend of fresh citrus opening, elegant floral heart, and warm comforting base creates a perfectly balanced experience. Plus, compared to stronger or heavier scents, Orchid is lighter, fresher, and more universally suitable—making it ideal as your first Legendary fragrance or your everyday signature scent."
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "Who would love Orchid fragrance?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Orchid is perfect for anyone who loves fresh floral fragrances that are soft, elegant, and wearable! It's ideal if you want a signature daily fragrance, appreciate beautiful storytelling, or prefer scents that aren't overpowering. It suits all ages and is especially great for those new to perfume. Whether you're a minimalist who wants one versatile scent or someone with refined, calm confidence who appreciates natural elegance, Orchid is a beautiful choice!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "What size bottles do you offer for Orchid?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "That's a great question! I don't have the specific bottle size information available in my current resources. For details about available sizes and packaging options, I'd recommend visiting our official website or stopping by one of our physical stores. Our team there will be happy to show you all the options!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "How much does Orchid cost?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "I appreciate your interest in the pricing! Unfortunately, I don't have access to current pricing information. For the most accurate and up-to-date prices, please visit our official website or contact one of our stores directly. They'll be able to help you with pricing and any current promotions too!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "Can I return or exchange Orchid if I don't like it?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "That's an important question! I don't have information about our return and exchange policies at the moment. For details about our purchase policies, returns, or exchanges, I'd warmly suggest reaching out through our official website or visiting one of our physical stores. The team there will walk you through all the options available to you."
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "Do you offer sample sizes or testers of Orchid?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "I'd love to help with that, but I don't currently have information about sample sizes or testers. This would be a perfect question for our official website or our store team! They can let you know what testing or sampling options are available so you can try before you buy."
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "Is Orchid safe for sensitive skin?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "That's a thoughtful question about skin sensitivity! Unfortunately, I don't have specific information about ingredients or skin safety considerations. For questions about sensitive skin, allergies, or specific ingredient concerns, I'd suggest visiting our official website or speaking with our store team. They can provide detailed ingredient information and guidance based on your needs."
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "Can men wear Orchid, or is it only for women?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "While the document describes Orchid as having \"refined femininity,\" I don't have specific guidance about whether it's marketed for men as well. For questions about fragrance suitability and who it's designed for, our official website or store team would be the best resource. Fragrance is personal, and they can help you find the perfect scent for anyone!"
+    }
+  },
+  {
+    "inputs":  {"messages":[{
+      "role": "human",
+      "content": "Do you ship internationally?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "I don't have information about international shipping availability, I'm afraid. For details about shipping options—whether domestic or international—please visit our official website or contact our customer service team directly. They'll be able to help with all your shipping questions!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "Are there any gift sets or special packaging options for Orchid?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "What a lovely idea for gifting! Unfortunately, I don't have information about gift sets or special packaging options in my current resources. Since Orchid is described as perfect for gifting, there may well be special options available! I'd warmly encourage you to check our official website or visit one of our stores to see what beautiful gift presentations might be available."
+    }
+  }
+]
