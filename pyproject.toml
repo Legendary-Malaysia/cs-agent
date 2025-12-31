@@ -26,6 +26,7 @@ packages = ["csagent"]
 
 [dependency-groups]
 dev = [
+    "jupyter>=1.1.1",
     "langgraph-api>=0.6.11",
     "langgraph-cli>=0.4.11",
     "pytest>=9.0.2",
