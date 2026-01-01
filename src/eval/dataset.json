@@ -1,0 +1,813 @@
+[
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "Hi! Can you tell me what Orchid fragrance is all about?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Hello! I'd be happy to tell you about Orchid! It's Legendary's signature fragrance, inspired by the tropical rainforests of Malaysia. Orchid is a beautiful blend of floral and fruity notes that feels fresh, elegant, and sophisticated—perfect for everyday wear. Our tagline is \"Exotic Orchid for Extraordinary Soul.\" It's designed for anyone who wants a scent that's uplifting yet comforting, without being overpowering. 🌸"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "What does Orchid actually smell like?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Great question! Orchid takes you on a lovely scent journey. When you first spray it, you'll get bright, refreshing citrus notes of orange, green lemon, and apple—super energizing! As it settles, the heart reveals a soft floral bouquet with pansy, magnolia, cattleya orchid, and muguet—like walking through a blooming garden. Finally, it finishes with warm, comforting base notes of peach, amber, musk, and cedar that stay close to your skin. It's fresh at first, elegant in the middle, and cozy all day long!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "Is Orchid halal certified?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Yes, Orchid is halal certified! It's approved for Muslim consumers and fully compliant with halal standards, so you can purchase with complete confidence."
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "How long does Orchid fragrance last?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Orchid has been upgraded to contain 25% fragrance oil (up from 20%), which means it lasts longer than before! You'll notice the scent stays on both your skin and clothing for 4-7 hours. The higher concentration gives you a richer, more lasting scent experience throughout the day."
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "I noticed Orchid fragrance looks a bit yellowish. Is that normal?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Yes, that's completely normal and actually a good sign! The slight yellow tint comes from the increased fragrance oil in our enhanced formula. The natural oils give it that warmer color. It doesn't affect the quality or performance at all—in fact, it shows the formula is richer and more concentrated. It's a sign of enhancement, not a defect!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "Is Orchid fragrance too strong? I don't like overpowering scents."
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Not at all! Orchid is fresh and noticeable, but it's soft and elegant—definitely not overpowering. It's designed to be easy to wear every day without being too heavy. Many customers love it specifically because it's sophisticated yet subtle, making it perfect for the office, casual outings, or really any occasion where you want to smell lovely without overwhelming a room."
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "What occasions would Orchid be suitable for?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Orchid is wonderfully versatile! It's perfect for daily wear, office and professional settings, and casual outings. Because it's fresh, elegant, and universally appealing, it's also an excellent choice for gifting. Really, you can wear it anywhere—it's that kind of effortless, all-occasion fragrance that works beautifully whether you're at work, running errands, or meeting friends."
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "Does Orchid contain alcohol?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Yes, it does contain alcohol, but it is halal certified and approved under halal standards. The alcohol used complies with halal certification requirements."
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "What makes Orchid different from other perfumes?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Orchid stands out for a few key reasons! First, it's Legendary's signature scent—our most iconic fragrance. It features a unique Malaysian-inspired story, drawing from tropical rainforest beauty. We've also enhanced it with 25% fragrance oil for superior longevity. The blend of fresh citrus opening, elegant floral heart, and warm comforting base creates a perfectly balanced experience. Plus, compared to stronger or heavier scents, Orchid is lighter, fresher, and more universally suitable—making it ideal as your first Legendary fragrance or your everyday signature scent."
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "Who would love Orchid fragrance?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Orchid is perfect for anyone who loves fresh floral fragrances that are soft, elegant, and wearable! It's ideal if you want a signature daily fragrance, appreciate beautiful storytelling, or prefer scents that aren't overpowering. It suits all ages and is especially great for those new to perfume. Whether you're a minimalist who wants one versatile scent or someone with refined, calm confidence who appreciates natural elegance, Orchid is a beautiful choice!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "What size bottles do you offer for Orchid?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "It is available in 30 ml bottles."
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "How much does Orchid cost?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "I appreciate your interest in the pricing! Unfortunately, I don't have access to current pricing information. For the most accurate and up-to-date prices, please visit our official website or contact one of our stores directly. They'll be able to help you with pricing and any current promotions too!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "Hi! Can you tell me about Mahsuri perfume?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Hello! I'd be delighted to tell you about Mahsuri! It's a beautiful floral fragrance inspired by one of Malaysia's most iconic legends. Mahsuri represents grace, purity, and unwavering courage, translated into an elegant yet emotionally powerful scent. It's designed not just to smell beautiful, but to tell a meaningful story, making it perfect for anyone who values heritage and individuality in their perfume choices."
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "What kind of fragrance family does Mahsuri belong to?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Mahsuri is a floral fragrance! It has an elegant, graceful, and feminine character that's quietly powerful. The mood is soft at first but leaves an emotionally memorable and timeless impression."
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "What are the scent notes in Mahsuri?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Great question! Mahsuri has a beautiful composition:\n\n• Top Notes: Peach and Grapefruit - creating a fresh, luminous, and gently sweet opening\n• Heart Notes: Rose and Muguet - adding classic floral elegance and femininity\n• Base Notes: Musk and Cedarwood - leaving a clean, warm, and confident trail\n\nIn simple terms, it opens fresh and soft, blooms into elegant florals, and settles into a warm, graceful finish!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "What's the story behind this Mahsuri fragrance?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Mahsuri is inspired by the legendary tale of Mahsuri, a symbol of grace under adversity, inner strength, purity of spirit, and timeless feminine courage. This Malaysian legend gives the fragrance emotional depth and cultural meaning. It's not just a perfume - it captures the spirit of a legendary woman known for her grace, purity, and strength in a modern, elegant way."
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "Does Mahsuri have an Eau de Parfum or Eau de Toilette concentration?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Mahsuri has an Eau de Parfum concentration"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "Who is Mahsuri perfume ideal for?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Mahsuri is perfect for customers who appreciate floral fragrances with depth and enjoy perfumes with stories and cultural meaning. It's ideal for those who prefer elegant, graceful scents over overly loud or sharp profiles and want a signature scent that feels timeless and personal. \n\nIt's especially great for working professionals, women who enjoy classic florals with a modern touch, and as a meaningful gift for birthdays, anniversaries, or special milestones!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "What occasions is Mahsuri suitable for?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Mahsuri is wonderfully versatile! It's recommended for daily wear like office settings, meetings, and daytime events. It's also perfect for elegant dinners or formal gatherings. Additionally, it makes a meaningful gift for special occasions like birthdays, anniversaries, and important milestones. The fragrance is travel-friendly too, making it ideal to carry with you wherever you go!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "I'm worried it might be too strong. Is Mahsuri overpowering?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Not at all! Mahsuri is soft and elegant - it doesn't overpower, but it leaves a beautiful, graceful impression. It's designed to be quietly powerful rather than loud, so you can wear it comfortably without worrying about it being too strong."
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "What makes Mahsuri unique compared to other perfumes?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Mahsuri has several unique qualities! First, it's a story-driven fragrance inspired by a local Malaysian legend, which connects emotionally with customers who value heritage and storytelling. It balances soft femininity with inner strength, giving it a refined yet characterful identity. The travel-friendly design makes it practical for modern lifestyles. Plus, Mahsuri was featured as the cover feature of AirAsia's inflight magazine in February 2025, placing it in front of a wide regional and international audience - a testament to its recognition and appeal!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "How should I apply Mahsuri for best results?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Mahsuri works beautifully on its own and is best sprayed on pulse points for a soft but lasting presence. This allows the fragrance to develop naturally on your skin and project in a graceful, elegant way throughout the day!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "I'm looking for something unique - would Mahsuri fit?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Absolutely! Mahsuri is inspired by a Malaysian legend, so it carries a story and identity that's truly distinctive. It's not a generic fragrance - it has soul and meaning behind it, making it a unique choice for someone who wants their perfume to reflect their appreciation for heritage, grace, and individuality."
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "What's the price of Mahsuri perfume?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "I appreciate your interest! Unfortunately, I don't have pricing information available right now. I'd recommend visiting our official website or stopping by our physical store where our team can provide you with current pricing details and any ongoing promotions. They'll be happy to help!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "What size bottles does Mahsuri come in?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "It is available in 30 ml bottles."
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "Is Mahsuri tested on animals? Is it cruelty-free?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "That's an important question! Unfortunately, I don't have information about animal testing policies or cruelty-free certification for Mahsuri. For these details, I'd warmly suggest checking our official website or contacting our customer service team directly - they'll be able to provide you with clear information about our ethical practices and certifications!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "Hi! What is Three Wishes?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Hello! Three Wishes is a luxurious 3-in-1 self-care fragrance collection created to support a journey of self-love, awareness, and fulfillment. What makes it special is that it's non-alcoholic, water-based, and skin-friendly, so you can use it safely on your skin, hair, and clothes. It combines beautiful emotional storytelling with functional benefits—making it both a fragrance and a self-care ritual!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "Why is Three Wishes non-alcoholic? What are the benefits?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Great question! Three Wishes has a 0% alcohol formulation, which makes it incredibly gentle on sensitive skin. It won't dry out your skin or cause irritation, and it's safe for daily, repeated use. This is perfect if you've experienced dryness or discomfort with traditional alcohol-based perfumes. Plus, it actually moisturizes your skin instead of drying it out!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "How does the water-based formula work in Three Wishes? Does it last long?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Yes, it does! Three Wishes uses encapsulation technology—an oil and water-based formula combined using nano-technology. This creates a slower evaporation rate, so the fragrance actually lasts longer throughout the day compared to typical water-based perfumes. You get a long-lasting scent without the heaviness of traditional perfumes, and it has a light, luxurious milky texture that feels wonderful on the skin!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "Does Three Wishes have any skincare benefits?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Absolutely! Three Wishes is infused with skin-conditioning ingredients that moisturize and nourish your skin. It contains Glycerin for hydration, Butylene Glycol for smoothness, and coconut-derived ingredients for softness. Your skin feels moisturized and pampered after application—it's like a fragrance and skincare hybrid in one bottle!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "Can I use Three Wishes on my hair and clothes, or just skin?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "You can use it on all three! Three Wishes is safe for skin, hair, and clothes. It won't stain fabric, so you can spray it on your favorite outfits without worry. It's perfect for reapplication anytime, anywhere—truly one bottle with many uses as your everyday self-care companion!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "What does each 'wish' represent? Can you explain the concept?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "I'd love to! Each wish represents a meaningful stage of self-love:\n\n• Wish I - The Beginning of Self-Love: Your permission to love yourself. It's light, fresh, cheerful, and graceful—perfect for daytime wear.\n\n• Wish II - Self-Awareness & Commitment: Represents awareness, maturity, and sensuality. It's more intense, mesmerizing, and confident—ideal for evening and romantic occasions.\n\n• Wish III - Fulfilment & Pampering: The completion of your self-love journey. It's joyful, warm, comforting, and indulgent—perfect for relaxed days and self-care routines.\n\nThree Wishes isn't just a fragrance—it's a daily reminder to care for yourself, one wish at a time!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "What about Wish II? When should I wear it?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Wish II is more intense and sophisticated! It features Orange Blossom, Osmanthus, and Bergamot at the top, with a heart of Musk and Amber, and a base of Vetiver, Vanilla, and Patchouli. The scent is unique, mesmerizing, and sensual with floral brightness, warmth, and a sophisticated woody undertone. It's ideal for evening wear, romantic occasions, or anyone who enjoys elegant, deeper fragrances. It truly represents awareness, maturity, and confident expression!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "Who is Three Wishes ideal for?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Three Wishes is perfect for several types of customers! It's ideal for those with sensitive skin, anyone who prefers non-alcoholic fragrances, self-care and wellness-focused individuals, and those looking for a gentle everyday fragrance. It's also wonderful for gifting—the emotional storytelling behind each wish makes it meaningful and special. If you want something that's both beautiful and caring, Three Wishes is the perfect choice!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "Is Three Wishes vegan and cruelty-free?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "That's an important question! Unfortunately, I don't have information about vegan or cruelty-free certifications for Three Wishes. For details about the ethical practices, ingredient sourcing, and any certifications, I'd warmly suggest checking our official website or contacting our customer service team—they'll be able to provide you with clear information about our values and practices!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "What is the shelf life of Three Wishes? How long can I keep it?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "For details on how long you can keep the product and best storage practices, I'd suggest checking the product packaging when you receive it, or you can contact our store or check our official website for guidance. They'll make sure you know how to keep your Three Wishes collection fresh!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "Hi! Can you tell me about the Nyonya Series?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Hello! I'd love to tell you about the Nyonya Series! It's a fragrance collection inspired by Malaysia's rich Peranakan (Nyonya) heritage, blending cultural storytelling with modern perfumery. Each scent reflects a different aspect of Nyonya life—attire, cuisine, and traditions—resulting in a collection that feels nostalgic yet contemporary. It's heritage captured in scent, designed for those who value culture, craftsmanship, and meaningful stories behind what they wear!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "How many fragrances are in the Nyonya Series?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "The Nyonya Series consists of three distinct scents: Kebaya Blooms (elegant and floral), Nyonya Aromatic (fresh and spicy), and Ondeh Delights (warm and sweet). Each one tells a different cultural story and offers a unique scent personality, making it a beautifully curated trio that's perfect for different occasions, moods, and preferences!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "Tell me about Kebaya Blooms. What does it smell like?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Kebaya Blooms is absolutely elegant! It's inspired by the floral motifs of traditional Nyonya kebaya and has a soft, graceful, timelessly elegant character. The notes are:\n\n• Top: Ambrette, Leafy Notes, Lemon\n• Heart: Orange Blossom, Violet, Ylang Ylang\n• Base: Musk, Powdery Vetiver\n\nIt's floral and refined with clean elegance and a gentle powdery finish. Perfect for daytime wear, office or formal settings, and ideal if you love classic, graceful floral scents. It's like wearing a beautifully embroidered kebaya in scent form!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "What's special about Nyonya Aromatic?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Nyonya Aromatic is wonderfully fresh and sophisticated! It's inspired by herbs and spices found in traditional Nyonya cuisine, creating a warm, aromatic, and uplifting fragrance with citrus freshness. The notes include:\n\n• Top: Bergamot, Black Pepper, Lemongrass\n• Heart: Osmanthus, Rose, Violet\n• Base: Musk, Labdanum, Amber\n\nIt has a citrus-floral character with a spicy edge that's energetic yet refined. Perfect for day-to-night transition and ideal for those who like fresh scents with character. It feels like stepping into a Nyonya kitchen—aromatic, lively, and full of character, yet still very elegant!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "What makes the Nyonya Series unique?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "The Nyonya Series has several unique qualities! First, it features deep cultural storytelling—each scent is inspired by Malaysian Nyonya heritage and tells a different cultural story. It's a versatile trio with three different scent personalities suitable for various occasions and moods. The collection is artisanal and thoughtfully crafted with carefully balanced notes that feel nostalgic yet modern. Plus, it has a travel-friendly design that's compact and easy to carry, perfect for daily use and on-the-go lifestyles. It's a beautifully curated trio that's cultural, versatile, and easy to carry anywhere!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "Who would the Nyonya Series be perfect for?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "The Nyonya Series is ideal for several types of customers! It's perfect for those who appreciate heritage and storytelling, local and international buyers looking for a Malaysia-inspired gift, fragrance users who enjoy variety rather than a single scent, and customers seeking meaningful souvenirs or premium cultural products. It's especially wonderful as a gift since each scent represents a different side of Nyonya culture—elegant, aromatic, and comforting!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "I'm looking for a unique Malaysian gift. Would Nyonya Series work?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Absolutely! The Nyonya Series is perfect as a Malaysian-inspired gift. It's a cultural tribute that's not mainstream—the heritage inspiration with dessert and floral concepts makes it truly distinctive. This set is very popular as a gift because each scent represents a different side of Nyonya culture—elegant, aromatic, and comforting. It's more than fragrance—it's Malaysian heritage reimagined in scent, offering elegance, warmth, and versatility in one beautifully curated collection!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "Can I try all three Nyonya Series scents before deciding which one to buy?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "That's definitely the best approach! I'd encourage you to try all three scents since each offers such a different personality. The beauty of this collection is the variety—you might find you love them for different occasions! I'd recommend visiting our store where you can experience all three and see which ones resonate with you most!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "How much does the Nyonya Series cost?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "I don't have pricing information available at the moment. For current pricing on the Nyonya Series—whether you're interested in individual bottles or the complete set—I'd recommend visiting our official website or stopping by our physical store. The team there will be happy to help you with pricing details and let you know about any special offers!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "What size are the bottles in the Nyonya Series?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Each fragrance in the Nyonya Series is presented in a 30 ml bottle."
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "Hi! What is Spirit I?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Hello! Spirit I is a thoughtfully curated perfume set featuring three distinct fragrances: Hope, Love, and Confidence. Each scent represents a core element of life and personal growth, allowing you to express your mood, intention, or occasion through fragrance. The philosophy is simple: Shine with Hope, Do with Love, and Strive with Confidence. It's designed for versatility, emotional connection, and everyday elegance—making it a meaningful fragrance set rather than a single-scent purchase!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "Tell me about the Hope fragrance. What does it smell like?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Hope is absolutely lovely! It has a fresh, joyful, and uplifting mood with a Green Leaves and Floral profile. The scent journey includes:\n\n• Top notes: Bellflower, Dewdrop, Cloves\n• Heart notes: Persimmon, Peach\n• Base notes: Musk, Rouge Powder\n\nHope evokes the feeling of a fresh morning—light, airy, and optimistic. It's perfect for starting the day with positivity and clarity, then settles into a warm, comforting embrace with Musk and Rouge Powder. It's ideal for daytime wear, work or casual outings, and perfect if you prefer clean, fresh scents. This is the scent you wear when you want to feel refreshed and positive—like a fresh start every morning!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "What makes Spirit I different from other perfumes?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Spirit I has several unique features! First, it gives you a scent for every moment—three perfumes in one set, each suited to different moods or occasions. You get mix and match versatility, like having a mini fragrance wardrobe. It also has a shimmering glow effect—the formula is infused with skin-safe glitter that leaves a subtle, elegant shine on your skin, especially beautiful for evenings or special occasions. Plus, the compact bottle design is easy to carry and travel-friendly, perfect for touch-ups on the go. You don't need to choose just one—Spirit I gives you options for every day and every mood!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "Who is Spirit I ideal for?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Spirit I appeals to customers who enjoy variety instead of committing to one scent, believe fragrance reflects emotion and mood, and want perfumes suitable for different occasions. It's ideal for young professionals, first-time fragrance buyers, customers looking for meaningful gifts, and those who enjoy layering or rotating perfumes. It's perfect if you appreciate thoughtful gifting with symbolic meaning and prefer elegant, modern scents that are easy to wear!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "I'm worried the shimmer in Spirit Collection might be too sparkly. How noticeable is it?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Not to worry! The shimmer is very subtle—just a soft, elegant glow that catches the light beautifully. It's not overly sparkly or obvious at all. It's designed to enhance the overall wearing experience and add a gentle, sophisticated shimmer to your skin, especially lovely for evenings or special occasions!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "I'm thinking of giving Spirit I as a gift. Would it work well?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Absolutely! Spirit I makes a wonderful gift! It has strong symbolic meaning with Hope, Love, and Confidence—you're not just giving perfume, you're giving emotions and intentions. It's an elegant and thoughtful gift option, suitable for birthdays, celebrations, or self-care gifts. The fact that it comes with three scents makes it feel generous and versatile, giving the recipient options for different moods and occasions. It's truly a meaningful gift!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "Is the glitter in the formula safe for sensitive skin?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "The glitter in Spirit I is formulated to be skin-safe."
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "Hi! What is Spirit II?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Hello! Spirit II is the evolution of the original Spirit collection, designed to reflect attitude, emotion, and personal expression in everyday life. It celebrates how different moments call for different energies—whether it's passion, dreams, or life itself. The philosophy is: 'Passion Ignites, Dreams Take Flight, and Life Begins.' It's a three-in-one perfume collection perfect for those who enjoy variety, choose scents based on mood or occasion, and appreciate meaningful storytelling behind their products!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "What are the three fragrances in Spirit II?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Spirit II consists of three distinct fragrances, each representing a mindset and emotional state:\n\n• Passion - Energy, warmth, and joyful vibrancy\n• Dream - Sophistication, elegance, and aspiration\n• Life - Positivity, wisdom, and vitality\n\nTogether, they offer a complete scent journey, encouraging you to wear, layer, or switch fragrances depending on how you feel or where you're going. Think of it as three moods for modern life!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "Tell me about the Passion fragrance!"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Passion is wonderful! It has a bright, warm, joyful, and expressive mood. The notes are:\n\n• Top Notes: Red Berries, Blackcurrant\n• Heart Notes: Rose, Muguet, Ylang-Ylang\n• Base Notes: Vanilla, Musk\n\nThe fragrance character is lively, confident, and perfect for moments when you want to stand out. Passion is ideal for nights out, celebrations, or whenever you want your presence to be felt before you even speak. It's a scent that truly ignites the spark of passion!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "What makes Spirit II special compared to other perfumes?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Spirit II has some wonderful unique features! First, it gives you a scent for every moment—three different fragrances designed to match your mood, occasion, or time of day. One set, endless possibilities! It also has a shimmering glow effect—the formula is infused with skin-safe glitter that leaves a subtle, elegant shimmer on your skin. It's not just a perfume—it gives your skin a beautiful, radiant glow! Plus, it's compact and easy to carry, perfect for handbags, travel, and touch-ups. Made to move with you, wherever your day takes you!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "Who is Spirit II designed for?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Spirit II is perfect for young professionals, modern women who value versatility, customers who enjoy switching scents rather than committing to just one, and gift buyers looking for something meaningful and premium. It's ideal if you want fragrance options for different moods, enjoy expressive story-driven products, and appreciate beautiful design, the glow effect, and practicality. Some days you feel bold, some days calm, some days reflective—Spirit II gives you a scent for every version of yourself!"
+    }
+  },
+  
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "Can I use Spirit II fragrances for travel?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Absolutely! Spirit II is designed for convenience and portability. The compact design is perfect for handbags, travel, and touch-ups throughout the day. It matches modern, on-the-go lifestyles perfectly. You can easily take all three scents with you and switch based on your mood or occasion while traveling. Made to move with you, wherever your day takes you!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "What's the difference between Spirit I and Spirit II?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Great question! Spirit II is the evolution of the original Spirit collection. The primary difference between the two collections lies in their thematic inspiration and fragrance profiles. Spirit I is built around the themes of Hope, Confidence, and Love, offering moods that are fresh, romantic, and elegant through main notes of green leaves, florals, and wood. In contrast, Spirit II focuses on the themes of Passion, Dream, and Life, providing scents that evoke a bright, warm, and nostalgic feeling using notes like amber, red berries, and incense. While both sets share the same functional benefits, such as a compact design and skin-safe glitter for a shimmering glow, they cater to different emotional atmospheres."
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "Hi! Tell me about Violet perfume."
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Hello! Violet is a mysterious, elegant, and deeply feminine fragrance that blends floral, fruity, and musky-woody elements into a beautifully layered scent experience. It represents timeless romance, sophistication, and allure—designed for women who embrace both softness and strength. The fragrance evolves gracefully on the skin, revealing different layers over time, making it feel personal, expressive, and unforgettable. It's not just a perfume—it's an experience of mystery, romance, and elegance!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "What does Violet smell like? What are the notes?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Violet has a Fruity & Floral character with Musky-Woody depth. Here's the beautiful scent journey:\n\n• Top Notes: Bergamot, Rose, Ozone Green - creating a fresh, feminine, and uplifting opening\n• Heart Notes: Mimosa, Magnolia, Violet, Muguet, Iris - a rich floral bouquet that feels soft, romantic, and irresistibly elegant\n• Base Notes: Musk, Amber, Cedar, Vetiver, Vanilla - providing warmth, sensuality, and depth that lingers beautifully on the skin\n\nViolet is not a one-dimensional perfume—it changes beautifully throughout the day as these layers evolve!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "What's the story behind Violet?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Violet is inspired by the classic symbol of love, devotion, and mystique. It captures the delicate beauty of blooming violets while adding depth and sensuality through warm musky and woody undertones. With just one spritz, Violet envelops you in luscious femininity, subtle mystery, and effortless elegance. It's perfect for romantic date nights, girls' night out, evening events, and moments when confidence and charm matter most!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "How long does Violet last?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Violet has excellent longevity! It lasts approximately 4 to 7 hours and leaves a memorable scent trail without being overpowering. This is a fragrance that stays with you from day to evening, evolving beautifully as the hours pass. The layered composition ensures it develops new nuances throughout the wear time!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "What makes Violet special or unique?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Violet has several wonderful unique qualities! First, it's a unique, multi-layered scent—a sophisticated blend of floral, fruity, and musky/woody notes that evolves over time, revealing new layers the longer it's worn. It feels personal and different on every wearer! Second, it offers long-lasting performance of 4-7 hours. Third, it's easy to carry with its compact, travel-friendly bottle that's perfect for handbags, travel, or touch-ups anytime. Perfect for women on the go—easy to bring, easy to love!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "Who is Violet ideal for?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Violet is perfect for women who love romantic and elegant fragrances, customers who enjoy floral scents with depth, those looking for a signature evening or date-night perfume, and customers who want a scent that feels feminine but not overly sweet. It's designed for women who embrace both softness and strength, and who appreciate a fragrance that's mysterious, sophisticated, and timeless!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "I have a date night coming up. Would Violet be good for that?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Absolutely! Violet is perfect for date nights! If you're looking for something romantic and mysterious, Violet is ideal. It's soft, elegant, and very alluring—exactly what you want for a romantic evening. The fragrance creates an aura of mystery and sophistication that's both feminine and confident. It's one of the perfect occasions for wearing Violet!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "How should I apply Violet for best results?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "For best results, apply Violet on pulse points—your wrists, neck, and behind your ears. It's ideal for evening wear, special occasions, or when dressing up. One to two sprays are sufficient due to its layered depth and long-lasting nature. The warmth of your pulse points will help the fragrance evolve beautifully throughout the evening!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "I usually wear light floral perfumes. How does Violet compare?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Compared to light florals, Violet is deeper and more sensual. While it has a beautiful floral heart with mimosa and magnolia, it's balanced with warm musky notes so it's not too light. It offers more complexity and sophistication than typical light florals, with woody and vanilla undertones that give it richness and staying power. If you enjoy florals but want something with more depth and character, Violet would be a wonderful choice!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "When is the best time to wear Violet?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Violet is ideal for evening wear, special occasions, or when dressing up. It's perfect for romantic date nights, girls' night out, evening events, and moments when confidence and charm matter most. While it can be worn during the day, its mysterious, sophisticated character really shines in evening settings where its depth and sensuality can make a memorable impression!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "Does Violet contain any allergens I should know about?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "I don't have detailed ingredient or allergen information for Violet. If you have specific allergy concerns, I'd strongly recommend checking our official website for complete ingredient listings or speaking with our store staff directly. They can provide detailed information about the formulation and help determine if it would be safe for your specific sensitivities!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "Hi! Tell me about the Man fragrance."
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Hello! Man is a versatile masculine fragrance designed for the modern gentleman—elegant, charismatic, and effortlessly sophisticated. It balances fresh citrus brightness, refined florals, and warm woody undertones, creating a confident scent that transitions seamlessly from day to night. This fragrance embodies timeless masculinity and is suitable as a signature scent for any occasion. It's for men who want to leave a lasting impression without trying too hard—naturally confident, refined, and timeless!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "What does Man smell like? What are the notes?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Man has a Green Fougère fragrance family with a beautiful scent journey:\n\n• Top Notes: Grapefruit, Lemon - creating an immediate burst of freshness that feels clean, energetic, and uplifting\n• Heart Notes: Apple, Raspberry, Orange Flower, Muguet, Jasmine - adding depth with a balanced blend of fruity freshness and subtle florals, enhancing sophistication and approachability\n• Base Notes: Cedarwood, Musk, Sandalwood, Vanilla - delivering a smooth, woody warmth that lingers, creating a strong masculine signature with a soft, elegant finish\n\nIt captures the harmony between strength and warmth perfectly!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "What makes Man special or unique?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Man has several wonderful unique qualities! It's a versatile all-occasion fragrance suitable for work, casual outings, formal events, and evening occasions—easily transitioning from daytime freshness to nighttime warmth. It offers balanced masculinity that's strong but never too loud, combining citrus freshness, refined florals, and woody warmth without being overpowering. It has modern and timeless appeal that works for both younger professionals and mature men. Plus, it's long-lasting, designed to leave a noticeable yet refined scent trail throughout the day. And importantly, Man is HALAL certified, making it suitable for customers who prioritize halal-compliant lifestyle choices!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "Who is Man ideal for?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Man is ideal for modern working professionals, men who prefer clean, elegant, and versatile scents, and customers looking for a daily signature fragrance. It's perfect for office wear, business meetings, social events, dinner dates, and evening gatherings. From invigorating citrus notes to deep woody accords, the fragrance reflects a man who is confident yet approachable, polished yet natural—designed for the modern man who values style, presence, and refinement!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "Can I wear Man both during the day and at night?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Absolutely! That's one of Man's key strengths—it's designed to transition seamlessly from day to night. The fresh citrus notes make it perfect for daytime freshness, while the warm woody base notes provide nighttime warmth. If you're looking for a fragrance that feels fresh during the day and warm at night, Man is an excellent choice. It's elegant, masculine, and works for any occasion!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "I'm looking for one perfume that I can wear anywhere. Would Man work?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Man is absolutely ideal for that! If you're looking for one perfume that can be worn anywhere, Man is a perfect recommendation. It's versatile enough for work, casual outings, formal events, and evening occasions. It adapts effortlessly from professional settings to social occasions. The balanced profile makes it a safe yet distinctive choice that's masculine without being overpowering or heavy. It's the perfect signature scent for men who want to look sharp, feel confident, and leave a lasting impression—anytime, anywhere!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "Would Man make a good gift?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Yes, Man is a strong gifting option! It has a universally appealing masculine profile, suitable for husbands, partners, colleagues, and friends. It feels premium, elegant, and easy to wear. Recommended occasions include birthdays, anniversaries, corporate gifts, and festive seasons. It's a safe and thoughtful gift choice because of its balanced, versatile nature that reduces the risk of someone not liking it. Plus, the halal certification adds an extra layer of consideration for recipients who value that!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "What's the story behind Man fragrance?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Man captures the harmony between strength and warmth. From invigorating citrus notes to deep woody accords, the fragrance reflects a man who is confident yet approachable, polished yet natural. It's designed for the modern man who values style, presence, and refinement—a scent that adapts effortlessly from professional settings to social occasions. It's elegant without being overpowering and masculine without being aggressive. It's not just a fragrance—it's a statement of effortless sophistication!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "How does Man compare to other men's fragrances?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "Man has a unique balanced position! It's more versatile than heavy woody or spicy men's fragrances, and more refined than overly sporty citrus scents. The balanced profile combines the best of both worlds—fresh enough for daily wear but sophisticated enough for special occasions. It's strong but never too loud, making it approachable and distinctive at the same time. This balance is exactly what makes it such a reliable choice!"
+    }
+  },
+  {
+    "inputs": {"messages":[{
+      "role": "human",
+      "content": "How much does Man cost?"
+    }]},
+    "outputs": {
+      "role": "assistant",
+      "content": "I don't have pricing information available at the moment. For current pricing details on Man, I'd recommend visiting our official website or stopping by our physical store. The team there will be happy to help you with pricing and let you know about any special offers or promotions!"
+    }
+  }
+]
