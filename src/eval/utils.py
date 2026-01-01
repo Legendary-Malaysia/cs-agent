@@ -51,8 +51,8 @@ def create_langsmith_dataset_from_json(
 
     try:
         all_items = load_data_from_json(file_path)
-    except (FileNotFoundError, json.JSONDecodeError) as e:
-        logger.exception(f"Failed to load data from {file_path}: {str(e)}")
+    except (FileNotFoundError, json.JSONDecodeError):
+        logger.exception(f"Failed to load data from {file_path}")
         return
 
     client = Client()
@@ -67,7 +67,7 @@ def run_langsmith_eval(
     target_function: Callable, dataset_name: str, evaluators: list, model: str
 ):
     """
-    Run langsmith evaluation pipeline to evaluate resume score for a given resume dataset.
+    Run langsmith evaluation pipeline for the specified dataset.
     """
 
     client = Client()
