@@ -8,6 +8,7 @@ from csagent.supervisor.nodes import (
     customer_service_team,
     call_product_team,
     call_location_team,
+    call_profile_team,
 )
 from csagent.configuration import Configuration
 
@@ -22,10 +23,12 @@ supervisor_builder = StateGraph(
 supervisor_builder.add_node("supervisor_node", supervisor_node)
 supervisor_builder.add_node("product_team", call_product_team)
 supervisor_builder.add_node("location_team", call_location_team)
+supervisor_builder.add_node("profile_team", call_profile_team)
 supervisor_builder.add_node("customer_service_team", customer_service_team)
 supervisor_builder.add_edge(START, "supervisor_node")
 supervisor_builder.add_edge("product_team", "supervisor_node")
 supervisor_builder.add_edge("location_team", "supervisor_node")
+supervisor_builder.add_edge("profile_team", "supervisor_node")
 supervisor_builder.add_edge("customer_service_team", END)
 
 supervisor_graph = supervisor_builder.compile()

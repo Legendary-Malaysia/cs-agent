@@ -3,10 +3,11 @@
     "graphs": {
       "product": "src/csagent/product/graph.py:product_graph",
       "location": "src/csagent/location/graph.py:location_graph",
-      "supervisor": "src/csagent/supervisor/graph.py:supervisor_graph"
+      "supervisor": "src/csagent/supervisor/graph.py:supervisor_graph",
+      "profile": "src/csagent/profile/graph.py:profile_graph"
     },
     "env": "./.env",
-    "python_version": "3.13",
+    "python_version": "3.12",
     "dependencies": [
       "."
     ]

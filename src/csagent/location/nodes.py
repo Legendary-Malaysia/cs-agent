@@ -52,7 +52,7 @@ def location_agent_node(state: LocationWorkflowState, runtime: Runtime[Configura
     This is Location Agent. This agent will answer the user's question based on the location information.
     """
     try:
-        task = state["task"]
+        task = state.get("task")
 
         llm = init_chat_model(
             **get_model_info(runtime.context.model), temperature=0, streaming=False

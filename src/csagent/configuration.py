@@ -27,6 +27,21 @@ class Configuration(BaseModel):
         "Should be in the form: provider/model-name.",
     )
 
+    model_medium: Annotated[
+        Literal[
+            "google_genai:gemma-3-4b-it",
+            "google_genai:gemma-3-12b-it",
+            "google_genai:gemma-3-27b-it",
+            "GLM-4.6V-Flash",
+            "mimo-v2-flash",
+        ],
+        {"__template_metadata__": {"kind": "llm"}},
+    ] = Field(
+        default="GLM-4.6V-Flash",
+        description="The name of the medium language model to use for medium-weight tasks. "
+        "Should be in the form: provider/model-name.",
+    )
+
     model_small: Annotated[
         Literal[
             "google_genai:gemma-3-4b-it",

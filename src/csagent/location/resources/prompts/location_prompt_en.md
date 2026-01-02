@@ -13,8 +13,23 @@ Main Locations:
 - Legendary KLIA2 Counter
   T2PS-S6-07, International Departure (Airside), Level 1, Sector 6 KL International Airport Terminal 2, 64000 Sepang Selangor
 
+
+Retail & Business Partners Across Malaysia
+
+- Sasa
+- Parkson
+- Isetan
+- Beauty Scent
+- AirAsia: Our perfumes are available for purchase on all AirAsia flights.
+- Star Glory
+- Just Parfum
+- Eraman
+
 Available City/Location:
 {locations}
+
+- We have an online shop at www.legendary.com and offer shipping across Malaysia. Currently, we do not have physical stores outside Malaysia and do not provide international shipping.
+
 
 Response Rules:
 

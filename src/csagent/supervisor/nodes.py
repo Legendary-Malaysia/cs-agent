@@ -19,16 +19,12 @@ from csagent.supervisor.state import SupervisorWorkflowState
 from csagent.configuration import Configuration, get_model_info
 from csagent.product.graph import product_graph
 from csagent.location.graph import location_graph
+from csagent.profile.graph import profile_graph
 
 
 logger = logging.getLogger(__name__)
 
-TEAMS = ["product_team", "location_team", "customer_service_team"]
-TEAMS_DESC = [
-    "Product Team in charge of answering questions about products. Available products are: Mahsuri, Man, Orchid, Spirit I, Spirit II, Three Wishes, Violet.",
-    "Location Team in charge of answering questions about locations.",
-    "Customer Service Team is the customer facing team. If sufficient data is available, then call the customer service team. Otherwise, delegate the task to the appropriate team.",
-]
+TEAMS = ["product_team", "location_team", "profile_team", "customer_service_team"]
 
 
 class Router(BaseModel):
@@ -71,16 +67,7 @@ def supervisor_node(
             with open(prompt_path, "r") as f:
                 system_prompt_template = f.read()
 
-            members_str = "\n---\n".join(
-                [
-                    f"Team: {team_name}\nDescription: {desc}"
-                    for team_name, desc in zip(TEAMS, TEAMS_DESC, strict=True)
-                ]
-            )
-
-            system_prompt = SystemMessage(
-                content=system_prompt_template.format(members=members_str)
-            )
+            system_prompt = SystemMessage(content=system_prompt_template)
 
         notes = "\n-----\n".join(state["notes"])
         instruction_prompt = HumanMessage(
@@ -188,6 +175,37 @@ def call_location_team(state: SupervisorWorkflowState, runtime: Runtime[Configur
             },
         )
 
+def call_profile_team(state: SupervisorWorkflowState, runtime: Runtime[Configuration]):
+    logger.info("Call profile team")
+    writer = get_stream_writer()
+    writer({"custom_key": "Looking up profile details..."})
+
+    try:
+        response = profile_graph.invoke(
+            {"task": state["task"]}, context=runtime.context
+        )
+
+        logger.info(f"Response from profile team: {response['response']}")
+        writer({"custom_key": "Profile details found"})
+
+        return Command(
+            goto="supervisor_node",
+            update={
+                "notes": [
+                    f"Profile Team Task: {state['task']}\n  Profile Team Response: {response['response']}"
+                ]
+            },
+        )
+    except Exception:
+        logger.exception("Error in profile team node")
+        return Command(
+            goto="supervisor_node",
+            update={
+                "notes": [
+                    f"Profile Team Task: {state['task']}\n  Profile Team Response: Error in profile team node"
+                ]
+            },
+        )
 
 def customer_service_team(
     state: SupervisorWorkflowState, runtime: Runtime[Configuration]

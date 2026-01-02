@@ -3,6 +3,7 @@ Level 3, 168, Jalan Bukit Bintang, Bukit Bintang, 55100, Kuala Lumpur
 ☎︎ 03-21432278
 
 📍 Legendary Isetan KLCC Counter
+With a refreshed and more visually captivating setup, enhancing the customer experience in one of Kuala Lumpur’s most iconic retail destinations.
 Ground Floor, Jln Ampang, Kuala Lumpur City Centre, 50088 Kuala Lumpur, Wilayah Persekutuan Kuala Lumpur (Near Issey Miyake)
 
 📍 Pavillion Kuala Lumpur - SASA
