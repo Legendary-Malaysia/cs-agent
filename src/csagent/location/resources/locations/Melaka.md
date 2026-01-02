@@ -1,4 +1,5 @@
 📍 Legendary Melaka Jonker Street
+Our flagship store, the boutique is designed with a unique blend of golden charm and heritage-inspired details, offering a warm and nostalgic ambiance.
 3, Jalan Hang Lekir, 75200 Melaka
 ☎︎ 011-6767 5888
 
