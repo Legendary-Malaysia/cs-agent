@@ -1,4 +1,4 @@
-# Legendary Perfume
+# Legendary Perfume Malaysia Company Profile
 
 **The Legend of Scent**
 
@@ -42,13 +42,13 @@ To craft exquisite and authentic fragrances that capture the true essence of Mal
 
 To become the **global ambassador of Malaysia’s authentic essence**, showcasing its rich and exotic heritage to the world through the power of scent — transforming every fragrance into a cherished memory.
 
-> _Bringing Malaysia’s Heritage to the Global Stage Through the Power of Scent_
+*Bringing Malaysia’s Heritage to the Global Stage Through the Power of Scent*
 
 ---
 
 ## Values & Commitment
 
-Legendary® is guided by five core pillars:
+Legendary is guided by five core pillars:
 
 ### High-Quality Materials
 
@@ -146,4 +146,4 @@ Social media: @legendary.global
 
 ---
 
-**Legendary® — Where Heritage Becomes a Scent**
+**Legendary — Where Heritage Becomes a Scent**
