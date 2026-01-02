@@ -15,10 +15,10 @@ logger = logging.getLogger(__name__)
 def profile_team_node(state: ProfileWorkflowState, runtime: Runtime[Configuration]):
     logger.info("Call profile team")
     writer = get_stream_writer()
-    writer({"custom_key": "Checking company profile..."})
+    writer({"custom_key": "Unveiling our fragrance..."})
 
     try:
-        task = state["task"]
+        task = state.get("task")
         model_info = get_model_info(runtime.context.model_medium)
 
         current_dir = Path(__file__).parent
@@ -45,7 +45,7 @@ def profile_team_node(state: ProfileWorkflowState, runtime: Runtime[Configuratio
         with open(profile_path, "r") as f:
             profile = f.read()
 
-        instruction = f"""Your task is:{task}"""
+        instruction = f"""Your task is: {task}"""
 
         messages = [
             # Using HumanMessage to support Gemma model

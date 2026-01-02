@@ -56,7 +56,7 @@ def read_product(product: str, language: Literal["en"]) -> str:
 
 def product_agent_node(state: ProductWorkflowState, runtime: Runtime[Configuration]):
     try:
-        task = state["task"]
+        task = state.get("task")
 
         current_dir = get_resources_dir()
 
