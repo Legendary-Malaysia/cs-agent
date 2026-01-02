@@ -38,11 +38,37 @@ def get_or_create_langsmith_dataset(
         return dataset
 
 
-def add_new_examples_to_dataset(client: Client, dataset_id: str, all_items: list[dict]) -> None:
+def add_new_examples_to_dataset(
+    client: Client, dataset_id: str, all_items: list[dict]
+) -> None:
     """Adds new examples to the specified dataset."""
 
-    client.create_examples(dataset_id=dataset_id, examples=all_items)
-    logger.info("Added %d examples to dataset.", len(all_items))
+    # 1. Fetch existing examples (inputs) to compare
+    # Note: list_examples returns an iterator of Example objects
+    existing_examples = client.list_examples(dataset_id=dataset_id)
+
+    # 2. Create a set of "fingerprints" for existing items
+    # We use a JSON string of the inputs as a unique key
+    existing_fingerprints = {
+        json.dumps(ex.inputs, sort_keys=True) for ex in existing_examples
+    }
+
+    # 3. Filter all_items to find truly new items
+    new_items = []
+    for item in all_items:
+        # 'item' should match the structure {"inputs": {...}, "outputs": {...}}
+        fingerprint = json.dumps(item["inputs"], sort_keys=True)
+        if fingerprint not in existing_fingerprints:
+            new_items.append(item)
+            # Add to set immediately to prevent duplicates within the new batch itself
+            existing_fingerprints.add(fingerprint)
+
+    # 4. Add only the filtered items
+    if new_items:
+        client.create_examples(dataset_id=dataset_id, examples=new_items)
+        logger.info("Added %d new examples to dataset.", len(new_items))
+    else:
+        logger.info("No new unique examples to add.")
 
 
 def create_langsmith_dataset_from_json(
@@ -64,6 +90,7 @@ def create_langsmith_dataset_from_json(
     logger.info("Dataset operation complete for %s.", dataset_name)
 
     return True
+
 
 def run_langsmith_eval(
     target_function: Callable, dataset_name: str, evaluators: list, model: str
@@ -87,4 +114,4 @@ def run_langsmith_eval(
         # upload_results=False,
     )
 
-    print("Evaluation operation complete:", experiment_results_workflow)
+    logger.info("Evaluation operation complete: %s", experiment_results_workflow)
