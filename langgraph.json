@@ -3,8 +3,10 @@
     "graphs": {
       "product": "src/csagent/product/graph.py:product_graph",
       "location": "src/csagent/location/graph.py:location_graph",
+      "profile": "src/csagent/profile/graph.py:profile_graph",
+      
       "supervisor": "src/csagent/supervisor/graph.py:supervisor_graph",
-      "profile": "src/csagent/profile/graph.py:profile_graph"
+      "router_agent": "src/csagent/router_agent/graph.py:router_graph"
     },
     "env": "./.env",
     "python_version": "3.12",

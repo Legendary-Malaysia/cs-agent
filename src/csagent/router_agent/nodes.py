@@ -1,0 +1,209 @@
+import logging
+from pathlib import Path
+
+from langchain.chat_models import init_chat_model
+from langgraph.runtime import Runtime
+from langchain_core.messages import (
+    HumanMessage,
+    AIMessage,
+    SystemMessage,
+    get_buffer_string,
+)
+from langgraph.types import Send
+from langgraph.config import get_stream_writer
+
+from csagent.router_agent.state import RouterWorkflowState, ClassificationResult, TeamInput
+from csagent.configuration import Configuration, get_model_info
+from csagent.product.graph import product_graph
+from csagent.location.graph import location_graph
+from csagent.profile.graph import profile_graph
+
+
+logger = logging.getLogger(__name__)
+
+
+def classifier_node(
+    state: RouterWorkflowState, runtime: Runtime[Configuration]
+) -> dict:
+    logger.info("Classifier node")
+    writer = get_stream_writer()
+    writer({"custom_key": "Understanding your query..."})
+
+    try:
+        if not state["messages"]:
+            raise ValueError("No messages in state")
+
+        messages = state["messages"]
+
+        model_info = get_model_info(runtime.context.model)
+
+        system_prompt = None  # Initialize to avoid NameError
+        # Check if we need to inject the system prompt
+        if not isinstance(messages[0], SystemMessage):
+            logger.info("Preparing SystemMessage Classifier:")
+            current_dir = Path(__file__).parent
+
+            prompt_path = (
+                current_dir
+                / "resources"
+                / "prompts"
+                / f"classifier_prompt_{runtime.context.language}.md"
+            )
+            if not prompt_path.exists():
+                raise FileNotFoundError(f"Prompt file not found: {prompt_path}")
+            with open(prompt_path, "r") as f:
+                system_prompt_template = f.read()
+
+            system_prompt = SystemMessage(content=system_prompt_template)
+
+        llm = init_chat_model(
+            **model_info, temperature=0, streaming=False
+        ).with_structured_output(ClassificationResult)
+        final_prompt = [system_prompt, *messages] if system_prompt else messages
+        response = llm.invoke(final_prompt)
+        logger.info(f"Response: {response}")
+
+        return {"classification": response.classifications}
+    except Exception:
+        logger.exception("Error in classifier node")
+        return {
+            "classification": [
+                {
+                    "team": "profile_team",
+                    "query": "Unexpected error occurred. Please try again later.",
+                }
+            ]
+        }
+
+
+def route_to_teams(state: RouterWorkflowState) -> list[Send]:
+    """Fan out to agents based on classifications."""
+    print("##################state classification", state["classification"])
+    return [Send(c["team"], {"query": c["query"]}) for c in state["classification"]]
+
+
+def call_product_team(state: TeamInput, runtime: Runtime[Configuration]) -> dict:
+    logger.info("Call product team")
+    writer = get_stream_writer()
+    writer({"custom_key": "Looking up product details..."})
+
+    try:
+        response = product_graph.invoke(
+            {"task": state["query"]}, context=runtime.context
+        )
+
+        logger.info(f"Response from product team: {response['response']}")
+        writer({"custom_key": "Product details found"})
+
+        return {"results": [response["response"]]}
+    except Exception:
+        logger.exception("Error in product team node")
+        return {"results": ["Product team encounter unexpected error"]}
+
+
+def call_location_team(state: RouterWorkflowState, runtime: Runtime[Configuration]):
+    logger.info("Call location team")
+    writer = get_stream_writer()
+    writer({"custom_key": "Looking up location details..."})
+
+    try:
+        response = location_graph.invoke(
+            {"task": state["query"]}, context=runtime.context
+        )
+
+        logger.info(f"Response from location team: {response['response']}")
+        writer({"custom_key": "Location details found"})
+
+        return {"results": [response["response"]]}
+    except Exception:
+        logger.exception("Error in location team node")
+        return {"results": ["Location team encounter unexpected error"]}
+
+
+def call_profile_team(state: RouterWorkflowState, runtime: Runtime[Configuration]):
+    logger.info("Call profile team")
+    writer = get_stream_writer()
+    writer({"custom_key": "Looking up profile details..."})
+
+    try:
+        response = profile_graph.invoke(
+            {"task": state["query"]}, context=runtime.context
+        )
+
+        logger.info(f"Response from profile team: {response['response']}")
+        writer({"custom_key": "Profile details found"})
+
+        return {"results": [response["response"]]}
+    except Exception:
+        logger.exception("Error in profile team node")
+        return {"results": ["Profile team encounter unexpected error"]}
+
+
+def customer_service_team(state: RouterWorkflowState, runtime: Runtime[Configuration]):
+    logger.info("Call customer service team")
+    writer = get_stream_writer()
+    writer({"custom_key": "Finalizing answer..."})
+
+    try:
+        results = state["results"]
+        conversation = get_buffer_string(state["messages"])
+        model_info = get_model_info(runtime.context.model_small)
+
+        current_dir = Path(__file__).parent
+
+        prompt_path = (
+            current_dir
+            / "resources"
+            / "prompts"
+            / f"cs_prompt_{runtime.context.language}.md"
+        )
+        if not prompt_path.exists():
+            raise FileNotFoundError(f"Prompt file not found: {prompt_path}")
+        with open(prompt_path, "r") as f:
+            system_prompt = f.read()
+
+        results = "\n-----\n".join(state["results"])
+
+        instruction = f"""
+            Here is the conversation so far:
+            <Conversation>
+            {conversation}
+            </Conversation>
+            ----- 
+
+            Information that our team has gathered so far (if any):
+            <Information>
+            {results}
+            </Information>
+            ----- 
+
+            Your task is to combine information from multiple sources without redundancy. Keep the response concise and well-organized.
+        """
+
+        messages = [
+            # Using HumanMessage to support Gemma model
+            HumanMessage(content=system_prompt),
+            HumanMessage(content=instruction),
+        ]
+
+        llm = init_chat_model(
+            **model_info,
+            temperature=0.8,
+        )
+
+        response = llm.invoke(messages)
+
+        logger.info(f"Response from customer service team: {response.content}")
+
+        response.name = "customer_service_team"
+        return {"messages": [response]}
+    except Exception:
+        logger.exception("Error in customer service team node")
+        return {
+            "messages": [
+                AIMessage(
+                    content="Unexpected error occurred. Please try again later.",
+                    name="customer_service_team",
+                )
+            ]
+        }
