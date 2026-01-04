@@ -41,7 +41,6 @@ def classifier_node(
 
         model_info = get_model_info(runtime.context.model)
 
-        system_prompt = None  # Initialize to avoid NameError
         # Check if we need to inject the system prompt
         if isinstance(messages[0], SystemMessage):
             final_prompt = messages
