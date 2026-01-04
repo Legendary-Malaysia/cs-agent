@@ -152,7 +152,6 @@ def customer_service_team(
     writer({"custom_key": "Blending the scents into symphony..."})
 
     try:
-        results = state["results"]
         conversation = get_buffer_string(state["messages"])
         model_info = get_model_info(runtime.context.model_small)
 
@@ -169,7 +168,7 @@ def customer_service_team(
         with open(prompt_path, "r") as f:
             system_prompt = f.read()
 
-        results = "\n-----\n".join(state["results"])
+        results_text = "\n-----\n".join(state["results"])
 
         instruction = f"""
             Here is the conversation so far:
@@ -180,7 +179,7 @@ def customer_service_team(
 
             Information that our team has gathered so far (if any):
             <Information>
-            {results}
+            {results_text}
             </Information>
             ----- 
 
