@@ -12,7 +12,11 @@ from langchain_core.messages import (
 from langgraph.types import Send
 from langgraph.config import get_stream_writer
 
-from csagent.router_agent.state import RouterWorkflowState, ClassificationResult, TeamInput
+from csagent.router_agent.state import (
+    RouterWorkflowState,
+    ClassificationResult,
+    TeamInput,
+)
 from csagent.configuration import Configuration, get_model_info
 from csagent.product.graph import product_graph
 from csagent.location.graph import location_graph
@@ -78,7 +82,6 @@ def classifier_node(
 
 def route_to_teams(state: RouterWorkflowState) -> list[Send]:
     """Fan out to agents based on classifications."""
-    print("##################state classification", state["classification"])
     return [Send(c["team"], {"query": c["query"]}) for c in state["classification"]]
 
 
@@ -98,7 +101,7 @@ def call_product_team(state: TeamInput, runtime: Runtime[Configuration]) -> dict
         return {"results": [response["response"]]}
     except Exception:
         logger.exception("Error in product team node")
-        return {"results": ["Product team encounter unexpected error"]}
+        return {"results": ["Product team encountered unexpected error"]}
 
 
 def call_location_team(state: RouterWorkflowState, runtime: Runtime[Configuration]):
@@ -117,7 +120,7 @@ def call_location_team(state: RouterWorkflowState, runtime: Runtime[Configuratio
         return {"results": [response["response"]]}
     except Exception:
         logger.exception("Error in location team node")
-        return {"results": ["Location team encounter unexpected error"]}
+        return {"results": ["Location team encountered unexpected error"]}
 
 
 def call_profile_team(state: RouterWorkflowState, runtime: Runtime[Configuration]):
@@ -136,7 +139,7 @@ def call_profile_team(state: RouterWorkflowState, runtime: Runtime[Configuration
         return {"results": [response["response"]]}
     except Exception:
         logger.exception("Error in profile team node")
-        return {"results": ["Profile team encounter unexpected error"]}
+        return {"results": ["Profile team encountered unexpected error"]}
 
 
 def customer_service_team(state: RouterWorkflowState, runtime: Runtime[Configuration]):

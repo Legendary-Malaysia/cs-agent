@@ -13,6 +13,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 BASE_URL = os.getenv("BASE_URL")
+ACTIVE_GRAPH = os.getenv("ACTIVE_GRAPH")
 
 client = TestClient(app)
 
@@ -37,7 +38,7 @@ def test_health_check_deployed():
 
 @pytest.mark.skip(reason="Run this test manually")
 def test_run_supervisor_stream_conversation(payload: dict):
-    url = f"{BASE_URL}/supervisor"
+    url = f"{BASE_URL}/{ACTIVE_GRAPH}"
     headers = {
         "X-API-KEY": os.getenv("CSAGENT_API_KEY", ""),
     }

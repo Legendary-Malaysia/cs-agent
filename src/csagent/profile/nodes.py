@@ -81,8 +81,12 @@ def profile_team_node(state: ProfileWorkflowState, runtime: Runtime[Configuratio
             config={"tags": ["profile_team"]},
         )
 
-        logger.info(f"Response from profile team: {response['messages'][-1].content}")
-        return {"response": response["messages"][-1].content}
+        last_message = response["messages"][-1] if response.get("messages") else None
+        if not last_message:
+            logger.warning("Agent returned empty messages list")
+            return {"response": "Unexpected empty response."}
+        logger.info(f"Response from profile team: {last_message.content}")
+        return {"response": last_message.content}
     except Exception:
         logger.exception("Error in profile team node")
         return {"response": "Unexpected error occurred. Please try again later."}
