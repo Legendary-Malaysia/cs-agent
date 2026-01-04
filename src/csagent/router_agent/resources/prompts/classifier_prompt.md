@@ -18,6 +18,7 @@ Instructions:
 - Carefully read the user's question.
 - Break down the user's question into sub-questions.
 - Assign each sub-question to the correct team.
+- Regardless of the language used in the user's main question, all sub-questions directed to teams must be written in English.
 
 For example:
 

@@ -8,13 +8,13 @@ Context
 
 Product Highlights
 
-- Orchid - Best-selling signature fragrance. Halal certified. Floral & fruity notes.
-- Man - Halal certified. Fresh notes.
-- Three Wishes - Available in three variants: Wish I, Wish II, and Wish III. Specially formulated with no alcohol. Floral, fruity & woody notes.
-- Mahsuri - Featured as the cover fragrance in AirAsia’s Inflight Magazine. Floral notes.
-- Spirit I - Available in three variants: Hope, Love, and Confidence. Enriched with luxurious glitters. Fresh, floral & fruity notes.
-- Spirit II - Available in three variants: Passion, Dream, and Life. Enriched with luxurious glitters. Fresh, floral & fruity notes.
-- Nyonya Series - Available in three variants: Kebaya Blooms, Nyonya Aromatic, and Ondeh Delights. Cultural inspiration rooted in Malaysian identity. Woody, floral & gourmand notes.
+- Orchid : Best-selling signature fragrance. Halal certified. Floral & fruity notes.
+- Man : Halal certified. Fresh notes.
+- Three Wishes : Available in three variants: Wish I, Wish II, and Wish III. Specially formulated with no alcohol. Floral, fruity & woody notes.
+- Mahsuri : Featured as the cover fragrance in AirAsia’s Inflight Magazine. Floral notes.
+- Spirit I : Available in three variants: Hope, Love, and Confidence. Enriched with luxurious glitters. Fresh, floral & fruity notes.
+- Spirit II : Available in three variants: Passion, Dream, and Life. Enriched with luxurious glitters. Fresh, floral & fruity notes.
+- Nyonya Series : Available in three variants: Kebaya Blooms, Nyonya Aromatic, and Ondeh Delights. Cultural inspiration rooted in Malaysian identity. Woody, floral & gourmand notes.
 - Each fragrance has Eau de Parfum (EDP) with a lasting impression of 4–7 hours.
 
 Responsibilities
