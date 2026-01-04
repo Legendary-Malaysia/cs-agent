@@ -48,12 +48,7 @@ def classifier_node(
             logger.info("Preparing SystemMessage Classifier:")
             current_dir = Path(__file__).parent
 
-            prompt_path = (
-                current_dir
-                / "resources"
-                / "prompts"
-                / "classifier_prompt.md"
-            )
+            prompt_path = current_dir / "resources" / "prompts" / "classifier_prompt.md"
             if not prompt_path.exists():
                 raise FileNotFoundError(f"Prompt file not found: {prompt_path}")
             with open(prompt_path, "r") as f:
@@ -149,6 +144,9 @@ def customer_service_team(
     logger.info("Call customer service team")
     writer = get_stream_writer()
     writer({"custom_key": "Blending the scents into symphony..."})
+    target_language = (
+        "English" if runtime.context.language == "en" else "Bahasa Indonesia"
+    )
 
     try:
         conversation = get_buffer_string(state["messages"])
@@ -156,12 +154,7 @@ def customer_service_team(
 
         current_dir = Path(__file__).parent
 
-        prompt_path = (
-            current_dir
-            / "resources"
-            / "prompts"
-            / "cs_prompt.md"
-        )
+        prompt_path = current_dir / "resources" / "prompts" / "cs_prompt.md"
         if not prompt_path.exists():
             raise FileNotFoundError(f"Prompt file not found: {prompt_path}")
         with open(prompt_path, "r") as f:
@@ -182,7 +175,7 @@ def customer_service_team(
             </Information>
             ----- 
 
-            Your task is to combine information from multiple sources without redundancy. Keep the response concise and well-organized.
+            Your task is to combine information from multiple sources without redundancy. Keep the response concise and well-organized. Make sure to reply in {target_language}.
         """
 
         messages = [
