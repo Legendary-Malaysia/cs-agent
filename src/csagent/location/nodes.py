@@ -66,7 +66,7 @@ def location_agent_node(state: LocationWorkflowState, runtime: Runtime[Configura
         prompt_path = (
             get_resources_dir()
             / "prompts"
-            / f"location_prompt_{runtime.context.language}.md"
+            / "location_prompt.md"
         )
         if not prompt_path.exists():
             raise FileNotFoundError(f"Prompt file not found: {prompt_path}")

@@ -27,7 +27,7 @@ def get_products():
         return []
     # Get unique product names and remove the language suffix
     products = {
-        file.rsplit("_", 1)[0]
+        file.rsplit(".", 1)[0]
         for file in os.listdir(products_dir)
         if file.endswith(".md")
     }
@@ -38,7 +38,7 @@ PRODUCTS = get_products()
 
 
 @tool(description="Use this tool to read product information.")
-def read_product(product: Literal[*PRODUCTS], language: Literal["en"]) -> str:
+def read_product(product: Literal[*PRODUCTS]) -> str:
     writer = get_stream_writer()
     writer({"custom_key": "A fresh fragrance emerges from " + product})
 
@@ -49,9 +49,9 @@ def read_product(product: Literal[*PRODUCTS], language: Literal["en"]) -> str:
 
     try:
         products_dir = get_resources_dir() / "products"
-        file_path = products_dir / f"{product}_{language}.md"
+        file_path = products_dir / f"{product}.md"
         if not file_path.exists():
-            return f"Product information for '{product}' not available in language '{language}'"
+            return f"Product information for '{product}' not available"
         with open(file_path, "r", encoding="utf-8") as f:
             return f.read()
     except Exception as e:
@@ -65,9 +65,7 @@ def product_agent_node(state: ProductWorkflowState, runtime: Runtime[Configurati
 
         current_dir = get_resources_dir()
 
-        prompt_path = (
-            current_dir / "prompts" / f"pm_prompt_{runtime.context.language}.md"
-        )
+        prompt_path = current_dir / "prompts" / "pm_prompt.md"
         if not prompt_path.exists():
             raise FileNotFoundError(f"Prompt file not found: {prompt_path}")
         with open(prompt_path, "r") as f:

@@ -52,7 +52,7 @@ def classifier_node(
                 current_dir
                 / "resources"
                 / "prompts"
-                / f"classifier_prompt_{runtime.context.language}.md"
+                / "classifier_prompt.md"
             )
             if not prompt_path.exists():
                 raise FileNotFoundError(f"Prompt file not found: {prompt_path}")
@@ -160,7 +160,7 @@ def customer_service_team(
             current_dir
             / "resources"
             / "prompts"
-            / f"cs_prompt_{runtime.context.language}.md"
+            / "cs_prompt.md"
         )
         if not prompt_path.exists():
             raise FileNotFoundError(f"Prompt file not found: {prompt_path}")

@@ -58,7 +58,7 @@ class Configuration(BaseModel):
     )
 
     language: Annotated[
-        Literal["en"],
+        Literal["en", "id"],
         {"__template_metadata__": {"kind": "language"}},
     ] = Field(
         default="en",

@@ -30,7 +30,7 @@ def profile_team_node(state: ProfileWorkflowState, runtime: Runtime[Configuratio
             current_dir
             / "resources"
             / "prompts"
-            / f"prompts_{runtime.context.language}.md"
+            / "prompts.md"
         )
         if not prompt_path.exists():
             raise FileNotFoundError(f"Prompt file not found: {prompt_path}")
@@ -41,7 +41,7 @@ def profile_team_node(state: ProfileWorkflowState, runtime: Runtime[Configuratio
             current_dir
             / "resources"
             / "profiles"
-            / f"company_profile_{runtime.context.language}.md"
+            / "company_profile.md"
         )
         if not profile_path.exists():
             raise FileNotFoundError(f"Profile file not found: {profile_path}")
