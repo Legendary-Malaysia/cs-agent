@@ -7,6 +7,7 @@ from typing import Literal
 import os
 from pathlib import Path
 from langchain.agents import create_agent
+from langchain.agents.middleware import ToolCallLimitMiddleware
 from langchain_core.tools import tool
 from langgraph.config import get_stream_writer
 import logging
@@ -32,15 +33,15 @@ def get_products():
     }
     return list(products)
 
+PRODUCTS = get_products()
 
 @tool(description="Use this tool to read product information.")
-def read_product(product: str, language: Literal["en"]) -> str:
+def read_product(product: Literal[*PRODUCTS], language: Literal["en"]) -> str:
     writer = get_stream_writer()
-    writer({"custom_key": "Gathering information about " + product})
+    writer({"custom_key": "A fresh fragrance emerges from " + product})
 
-    available_products = get_products()
-    if product not in available_products:
-        return f"Product '{product}' not found. Available products: {', '.join(available_products)}"
+    if product not in PRODUCTS:
+        return f"Product '{product}' not found. Available products: {', '.join(PRODUCTS)}"
 
     try:
         products_dir = get_resources_dir() / "products"
@@ -69,7 +70,7 @@ def product_agent_node(state: ProductWorkflowState, runtime: Runtime[Configurati
             system_prompt_template = f.read()
 
         system_prompt = system_prompt_template.format(
-            products=get_products(),
+            products=PRODUCTS,
         )
 
         llm = init_chat_model(
@@ -80,7 +81,11 @@ def product_agent_node(state: ProductWorkflowState, runtime: Runtime[Configurati
         tools = [read_product]
 
         agent_executor = create_agent(
-            llm, tools, system_prompt=system_prompt, name="product_agent"
+            llm,
+            tools,
+            system_prompt=system_prompt,
+            name="product_agent",
+            middleware=[ToolCallLimitMiddleware(run_limit=3)],
         )
         agent_response = agent_executor.invoke(
             {"messages": [HumanMessage(content=f"Here is your task: {task}")]}

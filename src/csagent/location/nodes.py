@@ -6,6 +6,7 @@ from langchain_core.messages import HumanMessage
 import os
 from pathlib import Path
 from langchain.agents import create_agent
+from langchain.agents.middleware import ToolCallLimitMiddleware
 from langchain_core.tools import tool
 from langgraph.config import get_stream_writer
 import logging
@@ -32,7 +33,7 @@ def get_locations():
 @tool(description="Use this tool to read location information")
 def read_location(location: str):
     writer = get_stream_writer()
-    writer({"custom_key": "Gathering information about " + location})
+    writer({"custom_key": "Anchoring the scent into location..."})
 
     available_locations = get_locations()
     if location not in available_locations:
@@ -71,7 +72,11 @@ def location_agent_node(state: LocationWorkflowState, runtime: Runtime[Configura
 
         prompt = system_prompt_template.format(locations=", ".join(get_locations()))
         agent_executor = create_agent(
-            llm, tools, system_prompt=prompt, name="location_agent"
+            llm,
+            tools,
+            system_prompt=prompt,
+            name="location_agent",
+            middleware=[ToolCallLimitMiddleware(run_limit=3)],
         )
         agent_response = agent_executor.invoke(
             {"messages": [HumanMessage(content=f"Here is your task: {task}")]},
