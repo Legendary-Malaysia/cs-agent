@@ -43,7 +43,9 @@ def classifier_node(
 
         system_prompt = None  # Initialize to avoid NameError
         # Check if we need to inject the system prompt
-        if not isinstance(messages[0], SystemMessage):
+        if isinstance(messages[0], SystemMessage):
+            final_prompt = messages
+        else:
             logger.info("Preparing SystemMessage Classifier:")
             current_dir = Path(__file__).parent
 
@@ -59,11 +61,11 @@ def classifier_node(
                 system_prompt_template = f.read()
 
             system_prompt = SystemMessage(content=system_prompt_template)
+            final_prompt = [system_prompt, *messages]
 
         llm = init_chat_model(
             **model_info, temperature=0, streaming=False
         ).with_structured_output(ClassificationResult)
-        final_prompt = [system_prompt, *messages] if system_prompt else messages
         response = llm.invoke(final_prompt)
         logger.info(f"Response: {response}")
 
@@ -104,7 +106,7 @@ def call_product_team(state: TeamInput, runtime: Runtime[Configuration]) -> dict
         return {"results": ["Product team encountered unexpected error"]}
 
 
-def call_location_team(state: RouterWorkflowState, runtime: Runtime[Configuration]):
+def call_location_team(state: TeamInput, runtime: Runtime[Configuration]) -> dict:
     logger.info("Call location team")
     writer = get_stream_writer()
     writer({"custom_key": "Unfolding the map..."})
@@ -123,7 +125,7 @@ def call_location_team(state: RouterWorkflowState, runtime: Runtime[Configuratio
         return {"results": ["Location team encountered unexpected error"]}
 
 
-def call_profile_team(state: RouterWorkflowState, runtime: Runtime[Configuration]):
+def call_profile_team(state: TeamInput, runtime: Runtime[Configuration]) -> dict:
     logger.info("Call profile team")
     writer = get_stream_writer()
     writer({"custom_key": "An aura of presence unfolds..."})
@@ -142,7 +144,9 @@ def call_profile_team(state: RouterWorkflowState, runtime: Runtime[Configuration
         return {"results": ["Profile team encountered unexpected error"]}
 
 
-def customer_service_team(state: RouterWorkflowState, runtime: Runtime[Configuration]):
+def customer_service_team(
+    state: RouterWorkflowState, runtime: Runtime[Configuration]
+) -> dict:
     logger.info("Call customer service team")
     writer = get_stream_writer()
     writer({"custom_key": "Blending the scents into symphony..."})

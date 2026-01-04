@@ -175,6 +175,7 @@ def call_location_team(state: SupervisorWorkflowState, runtime: Runtime[Configur
             },
         )
 
+
 def call_profile_team(state: SupervisorWorkflowState, runtime: Runtime[Configuration]):
     logger.info("Call profile team")
     writer = get_stream_writer()
@@ -206,6 +207,7 @@ def call_profile_team(state: SupervisorWorkflowState, runtime: Runtime[Configura
                 ]
             },
         )
+
 
 def customer_service_team(
     state: SupervisorWorkflowState, runtime: Runtime[Configuration]

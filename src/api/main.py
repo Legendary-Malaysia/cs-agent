@@ -26,7 +26,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 API_KEY = os.getenv("CSAGENT_API_KEY")
-ACTIVE_GRAPH = os.getenv("ACTIVE_GRAPH")
+ACTIVE_GRAPH = os.getenv("ACTIVE_GRAPH", "router")
 max_messages_str = os.getenv("MAX_MESSAGES", "11")
 try:
     MAX_MESSAGES = int(max_messages_str)

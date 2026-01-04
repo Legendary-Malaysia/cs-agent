@@ -12,6 +12,7 @@ class Classification(TypedDict):
     team: Literal[*TEAMS]
     query: str
 
+
 class ClassificationResult(BaseModel):
     """Result of classifying a user query into agent-specific sub-questions."""
 
@@ -19,11 +20,13 @@ class ClassificationResult(BaseModel):
         description="List of agents to invoke with their targeted sub-questions"
     )
 
+
 class RouterWorkflowState(MessagesState):
     """State of the router workflow."""
 
     classification: list[Classification]
     results: Annotated[list[str], operator.add]
+
 
 class TeamInput(TypedDict):
     """Simple input state for each team."""

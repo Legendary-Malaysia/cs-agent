@@ -33,7 +33,9 @@ def get_products():
     }
     return list(products)
 
+
 PRODUCTS = get_products()
+
 
 @tool(description="Use this tool to read product information.")
 def read_product(product: Literal[*PRODUCTS], language: Literal["en"]) -> str:
@@ -41,7 +43,9 @@ def read_product(product: Literal[*PRODUCTS], language: Literal["en"]) -> str:
     writer({"custom_key": "A fresh fragrance emerges from " + product})
 
     if product not in PRODUCTS:
-        return f"Product '{product}' not found. Available products: {', '.join(PRODUCTS)}"
+        return (
+            f"Product '{product}' not found. Available products: {', '.join(PRODUCTS)}"
+        )
 
     try:
         products_dir = get_resources_dir() / "products"
