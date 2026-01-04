@@ -36,8 +36,8 @@ def test_health_check_deployed():
 
 
 @pytest.mark.skip(reason="Run this test manually")
-def test_run_supervisor_stream_conversation(payload: dict):
-    url = f"{BASE_URL}/supervisor"
+def test_run_customer_service_stream_conversation(payload: dict):
+    url = f"{BASE_URL}/customer-service"
     headers = {
         "X-API-KEY": os.getenv("CSAGENT_API_KEY", ""),
     }
@@ -92,13 +92,13 @@ def test_run_supervisor_stream_conversation(payload: dict):
         pytest.fail(f"Request failed: {e}")
 
 
-def test_supervisor_missing_api_key():
+def test_run_customer_service_missing_api_key():
     """Tests that the endpoint requires an API key."""
     payload = {
         "messages": [{"role": "user", "content": "Hello"}],
         "config": {},
     }
-    response = client.post("/supervisor", json=payload)
+    response = client.post("/customer-service", json=payload)
     assert response.status_code == 401
 
 
@@ -150,4 +150,4 @@ if __name__ == "__main__":
             "model": "LongCat-Flash-Chat",
         },
     }
-    test_run_supervisor_stream_conversation(payload_product)
+    test_run_customer_service_stream_conversation(payload_product)

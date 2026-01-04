@@ -6,9 +6,11 @@ from langchain_core.messages import HumanMessage
 import os
 from pathlib import Path
 from langchain.agents import create_agent
+from langchain.agents.middleware import ToolCallLimitMiddleware
 from langchain_core.tools import tool
 from langgraph.config import get_stream_writer
 import logging
+from typing import Literal
 
 logger = logging.getLogger(__name__)
 
@@ -29,14 +31,16 @@ def get_locations():
     return locations
 
 
-@tool(description="Use this tool to read location information")
-def read_location(location: str):
-    writer = get_stream_writer()
-    writer({"custom_key": "Gathering information about " + location})
+LOCATIONS = get_locations()
 
-    available_locations = get_locations()
-    if location not in available_locations:
-        return f"Location {location} not found. Available locations: {', '.join(available_locations)}"
+
+@tool(description="Use this tool to read location information")
+def read_location(location: Literal[*LOCATIONS]):
+    writer = get_stream_writer()
+    writer({"custom_key": "Anchoring the scent into location..."})
+
+    if location not in LOCATIONS:
+        return f"Location {location} not found. Available locations: {', '.join(LOCATIONS)}"
 
     try:
         locations_dir = get_resources_dir() / "locations"
@@ -69,9 +73,13 @@ def location_agent_node(state: LocationWorkflowState, runtime: Runtime[Configura
         with open(prompt_path, "r") as f:
             system_prompt_template = f.read()
 
-        prompt = system_prompt_template.format(locations=", ".join(get_locations()))
+        prompt = system_prompt_template.format(locations=", ".join(LOCATIONS))
         agent_executor = create_agent(
-            llm, tools, system_prompt=prompt, name="location_agent"
+            llm,
+            tools,
+            system_prompt=prompt,
+            name="location_agent",
+            middleware=[ToolCallLimitMiddleware(run_limit=3)],
         )
         agent_response = agent_executor.invoke(
             {"messages": [HumanMessage(content=f"Here is your task: {task}")]},
