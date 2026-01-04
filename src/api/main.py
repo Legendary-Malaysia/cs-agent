@@ -13,6 +13,7 @@ from typing import List, Dict
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from csagent.supervisor.graph import supervisor_graph
+from csagent.router_agent.graph import router_graph
 from csagent.configuration import Configuration
 from dotenv import load_dotenv
 
@@ -25,6 +26,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 API_KEY = os.getenv("CSAGENT_API_KEY")
+ACTIVE_GRAPH = os.getenv("ACTIVE_GRAPH")
 max_messages_str = os.getenv("MAX_MESSAGES", "11")
 try:
     MAX_MESSAGES = int(max_messages_str)
@@ -35,9 +37,9 @@ except ValueError:
     MAX_MESSAGES = 11
 
 app = FastAPI(
-    title="Supervisor API",
+    title="Customer Service API",
     version="1.0",
-    description="API for the supervisor graph",
+    description="API for the customer service graph",
 )
 
 # Define API Key security scheme
@@ -75,8 +77,8 @@ class UserRequest(BaseModel):
     config: Dict[str, str]
 
 
-@app.post("/supervisor")
-async def run_supervisor(
+@app.post("/customer-service")
+async def run_customer_service(
     request: UserRequest, raw_request: Request, api_key: str = Depends(verify_api_key)
 ):
     if not request.messages:
@@ -92,13 +94,18 @@ async def run_supervisor(
 
     async def event_generator():
         try:
+            graph = router_graph if ACTIVE_GRAPH == "router" else supervisor_graph
+            graph_name = ACTIVE_GRAPH
+            logger.info(f"Using {graph_name} graph")
+
             messages = request.messages
             if len(messages) > MAX_MESSAGES:
                 messages = messages[-MAX_MESSAGES:]
                 logger.info(
-                    f"Messages trimmed. Only last {MAX_MESSAGES} messages sent to supervisor"
+                    f"Messages trimmed. Only last {MAX_MESSAGES} messages sent to {graph_name}"
                 )
-            async for _namespace, mode, data in supervisor_graph.astream(
+
+            async for _namespace, mode, data in graph.astream(
                 {"messages": [msg.model_dump() for msg in messages]},
                 stream_mode=["messages", "custom"],
                 subgraphs=True,
