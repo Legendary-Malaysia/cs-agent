@@ -144,9 +144,11 @@ def customer_service_team(
     logger.info("Call customer service team")
     writer = get_stream_writer()
     writer({"custom_key": "Blending the scents into symphony..."})
-    target_language = (
-        "English" if runtime.context.language == "en" else "Bahasa Indonesia"
-    )
+    language_map = {
+        "en": "English",
+        "id": "Bahasa Indonesia",
+    }
+    target_language = language_map.get(runtime.context.language, "English")
 
     try:
         conversation = get_buffer_string(state["messages"])
