@@ -27,7 +27,7 @@ def classifier_node(
 ) -> dict:
     logger.info("Classifier node")
     writer = get_stream_writer()
-    writer({"custom_key": "Understanding your query..."})
+    writer({"custom_key": "Uncapping the bottle..."})
 
     try:
         if not state["messages"]:
@@ -85,7 +85,7 @@ def route_to_teams(state: RouterWorkflowState) -> list[Send]:
 def call_product_team(state: TeamInput, runtime: Runtime[Configuration]) -> dict:
     logger.info("Call product team")
     writer = get_stream_writer()
-    writer({"custom_key": "Looking up product details..."})
+    writer({"custom_key": "Opening the vial..."})
 
     try:
         response = product_graph.invoke(
@@ -93,7 +93,7 @@ def call_product_team(state: TeamInput, runtime: Runtime[Configuration]) -> dict
         )
 
         logger.info(f"Response from product team: {response['response']}")
-        writer({"custom_key": "Product details found"})
+        writer({"custom_key": "The essence grows richer..."})
 
         return {"results": [response["response"]]}
     except Exception:
@@ -104,7 +104,7 @@ def call_product_team(state: TeamInput, runtime: Runtime[Configuration]) -> dict
 def call_location_team(state: RouterWorkflowState, runtime: Runtime[Configuration]):
     logger.info("Call location team")
     writer = get_stream_writer()
-    writer({"custom_key": "Looking up location details..."})
+    writer({"custom_key": "Unfolding the map..."})
 
     try:
         response = location_graph.invoke(
@@ -112,7 +112,7 @@ def call_location_team(state: RouterWorkflowState, runtime: Runtime[Configuratio
         )
 
         logger.info(f"Response from location team: {response['response']}")
-        writer({"custom_key": "Location details found"})
+        writer({"custom_key": "The trail lingers..."})
 
         return {"results": [response["response"]]}
     except Exception:
@@ -123,7 +123,7 @@ def call_location_team(state: RouterWorkflowState, runtime: Runtime[Configuratio
 def call_profile_team(state: RouterWorkflowState, runtime: Runtime[Configuration]):
     logger.info("Call profile team")
     writer = get_stream_writer()
-    writer({"custom_key": "Looking up profile details..."})
+    writer({"custom_key": "An aura of presence unfolds..."})
 
     try:
         response = profile_graph.invoke(
@@ -131,7 +131,7 @@ def call_profile_team(state: RouterWorkflowState, runtime: Runtime[Configuration
         )
 
         logger.info(f"Response from profile team: {response['response']}")
-        writer({"custom_key": "Profile details found"})
+        writer({"custom_key": "Weaving a lasting impression..."})
 
         return {"results": [response["response"]]}
     except Exception:
@@ -142,7 +142,7 @@ def call_profile_team(state: RouterWorkflowState, runtime: Runtime[Configuration
 def customer_service_team(state: RouterWorkflowState, runtime: Runtime[Configuration]):
     logger.info("Call customer service team")
     writer = get_stream_writer()
-    writer({"custom_key": "Finalizing answer..."})
+    writer({"custom_key": "Blending the scents into symphony..."})
 
     try:
         results = state["results"]
