@@ -10,6 +10,7 @@ dependencies = [
     "langchain-google-genai>=4.1.2",
     "langchain-openai>=1.1.6",
     "langgraph>=1.0.5",
+    "pyaudio>=0.2.14",
     "python-dotenv>=1.2.1",
     "uvicorn>=0.35.0",
 ]
