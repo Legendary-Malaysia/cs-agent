@@ -1,77 +1,74 @@
+import os
 import asyncio
 import base64
+from pathlib import Path
 import json
 import traceback
 from typing import Optional, Dict, Any, List
 
 from fastapi import WebSocket, WebSocketDisconnect
+from websockets.exceptions import ConnectionClosedOK, ConnectionClosedError
 
 from google import genai
 from google.genai import types
 from dotenv import load_dotenv
+import logging
+from csagent.product.utils import get_products, read_product_file
+
+logger = logging.getLogger(__name__)
 
 load_dotenv()
 
 # Gemini client
 client = genai.Client(http_options={"api_version": "v1alpha"})
 
-SYSTEM_INSTRUCTION = """
-You are a helpful and friendly AI assistant.
-Your default tone is helpful, engaging, and clear, with a touch of optimistic wit.
-Anticipate user needs by clarifying ambiguous questions and always conclude your responses
-with an engaging follow-up question to keep the conversation flowing.
-"""
+CURRENT_DIR = Path(__file__).parent
+
+prompt_path = CURRENT_DIR / "resources" / "prompts" / "prompts.md"
+if not prompt_path.exists():
+    raise FileNotFoundError(f"Prompt file not found: {prompt_path}")
+with open(prompt_path, "r") as f:
+    system_prompt = f.read()
+
+SYSTEM_INSTRUCTION = system_prompt
 
 MODEL = "gemini-2.5-flash-native-audio-preview-12-2025"
 
-# Define example function declarations
-# These are simple examples - you can customize them for your use case
+available_products = get_products()
+
+# Define function declarations
 FUNCTION_DECLARATIONS = [
     {
-        "name": "get_weather",
-        "description": "Get the current weather for a location",
+        "name": "legendary_profile",
+        "description": "Get the company profile of Legendary",
         "parameters": {
             "type": "object",
-            "properties": {
-                "location": {
-                    "type": "string",
-                    "description": "The city and state, e.g. San Francisco, CA",
-                },
-                "unit": {
-                    "type": "string",
-                    "enum": ["celsius", "fahrenheit"],
-                    "description": "The temperature unit to use",
-                },
-            },
-            "required": ["location"],
+            "properties": {},
+            "required": [],
         },
     },
     {
-        "name": "turn_on_lights",
-        "description": "Turn on the lights in a specific room",
+        "name": "legendary_locations",
+        "description": "Get the physical store locations, online store, shipping, and retail & business partners",
         "parameters": {
             "type": "object",
-            "properties": {
-                "room": {
-                    "type": "string",
-                    "description": "The room where lights should be turned on",
-                }
-            },
-            "required": ["room"],
+            "properties": {},
+            "required": [],
         },
     },
     {
-        "name": "turn_off_lights",
-        "description": "Turn off the lights in a specific room",
+        "name": "get_product_info",
+        "description": "Get the product information of Legendary",
         "parameters": {
             "type": "object",
             "properties": {
-                "room": {
+                "product_name": {
                     "type": "string",
-                    "description": "The room where lights should be turned off",
-                }
+                    "enum": available_products,
+                    "description": "The product name",
+                },
             },
-            "required": ["room"],
+            "required": ["product_name"],
         },
     },
 ]
@@ -119,14 +116,18 @@ class GeminiAudioSession:
             print(f"Function called: {fc.name}")
             print(f"Function args: {fc.args}")
 
-            # Send tool call notification to client
-            await self.websocket.send_json(
-                {
-                    "type": "tool_call",
-                    "function_name": fc.name,
-                    "arguments": dict(fc.args) if fc.args else {},
-                }
-            )
+            # Send tool call notification to client (ignore if disconnected)
+            try:
+                await self.websocket.send_json(
+                    {
+                        "type": "tool_call",
+                        "function_name": fc.name,
+                        "arguments": dict(fc.args) if fc.args else {},
+                    }
+                )
+            except (WebSocketDisconnect, ConnectionClosedOK, ConnectionClosedError):
+                self.running = False
+                return function_responses
 
             # Execute the function (this is where you'd implement actual logic)
             result = await self.execute_function(fc.name, fc.args)
@@ -137,44 +138,75 @@ class GeminiAudioSession:
             )
             function_responses.append(function_response)
 
-            # Send result to client
-            await self.websocket.send_json(
-                {"type": "tool_result", "function_name": fc.name, "result": result}
-            )
+            # Send result to client (ignore if disconnected)
+            try:
+                await self.websocket.send_json(
+                    {"type": "tool_result", "function_name": fc.name, "result": result}
+                )
+            except (WebSocketDisconnect, ConnectionClosedOK, ConnectionClosedError):
+                self.running = False
+                return function_responses
 
         return function_responses
 
     async def execute_function(self, function_name: str, args: Dict) -> Any:
         """
         Execute the actual function logic.
-        In a real application, you would implement the actual functionality here.
         """
-        if function_name == "get_weather":
-            location = args.get("location", "Unknown")
-            unit = args.get("unit", "fahrenheit")
-            # Simulate weather data
+        if function_name == "legendary_profile":
+            profile_path = (
+                CURRENT_DIR
+                / ".."
+                / "profile"
+                / "resources"
+                / "profiles"
+                / "company_profile.md"
+            )
+            if not profile_path.exists():
+                profile = "Company profile not found"
+            else:
+                with open(profile_path, "r") as f:
+                    profile = f.read()
             return {
-                "location": location,
-                "temperature": 72 if unit == "fahrenheit" else 22,
-                "unit": unit,
-                "condition": "sunny",
-                "humidity": 65,
+                "profile": profile,
             }
 
-        elif function_name == "turn_on_lights":
-            room = args.get("room", "Unknown")
+        elif function_name == "legendary_locations":
+
+            def get_locations():
+                locations_dir = (
+                    CURRENT_DIR / ".." / "location" / "resources" / "locations"
+                )
+                if not locations_dir.exists():
+                    logger.warning(f"Locations directory not found: {locations_dir}")
+                    return []
+                locations = [
+                    file[:-3]
+                    for file in os.listdir(locations_dir)
+                    if file.endswith(".md")
+                ]
+                return locations
+
+            locations = get_locations()
+
+            locations_path = CURRENT_DIR / "resources" / "prompts" / "locations.md"
+            if not locations_path.exists():
+                locations = "Locations not found"
+            else:
+                with open(locations_path, "r") as f:
+                    locations_info = f.read()
+                    locations_info = locations_info.format(
+                        locations=", ".join(locations)
+                    )
             return {
-                "status": "success",
-                "message": f"Lights turned on in {room}",
-                "room": room,
+                "locations": locations_info,
             }
 
-        elif function_name == "turn_off_lights":
-            room = args.get("room", "Unknown")
+        elif function_name == "get_product_info":
+            product_name = args.get("product_name", "Unknown")
+            product_info = read_product_file(product_name)
             return {
-                "status": "success",
-                "message": f"Lights turned off in {room}",
-                "room": room,
+                "product_info": product_info,
             }
 
         else:
@@ -263,6 +295,10 @@ class GeminiAudioSession:
 
                 # Handle turn complete (interruptions)
                 await self.websocket.send_json({"type": "turn_complete"})
+        except (WebSocketDisconnect, ConnectionClosedOK, ConnectionClosedError):
+            # Client disconnected - this is expected behavior, not an error
+            print("Client disconnected, stopping receive_from_gemini")
+            self.running = False
         except Exception as e:
             print(f"Error in receive_from_gemini: {e}")
             traceback.print_exc()
