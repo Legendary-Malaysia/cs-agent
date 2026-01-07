@@ -396,7 +396,6 @@ dependencies = [
     { name = "langchain-google-genai" },
     { name = "langchain-openai" },
     { name = "langgraph" },
-    { name = "pyaudio" },
     { name = "python-dotenv" },
     { name = "uvicorn" },
 ]
@@ -406,6 +405,7 @@ dev = [
     { name = "jupyter" },
     { name = "langgraph-api" },
     { name = "langgraph-cli" },
+    { name = "pyaudio" },
     { name = "pytest" },
 ]
 
@@ -416,7 +416,6 @@ requires-dist = [
     { name = "langchain-google-genai", specifier = ">=4.1.2" },
     { name = "langchain-openai", specifier = ">=1.1.6" },
     { name = "langgraph", specifier = ">=1.0.5" },
-    { name = "pyaudio", specifier = ">=0.2.14" },
     { name = "python-dotenv", specifier = ">=1.2.1" },
     { name = "uvicorn", specifier = ">=0.35.0" },
 ]
@@ -426,6 +425,7 @@ dev = [
     { name = "jupyter", specifier = ">=1.1.1" },
     { name = "langgraph-api", specifier = ">=0.6.11" },
     { name = "langgraph-cli", specifier = ">=0.4.11" },
+    { name = "pyaudio", specifier = ">=0.2.14" },
     { name = "pytest", specifier = ">=9.0.2" },
 ]
 
