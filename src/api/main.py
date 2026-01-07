@@ -1,4 +1,11 @@
-from fastapi import FastAPI, HTTPException, Security, Depends
+from fastapi import (
+    FastAPI,
+    HTTPException,
+    Security,
+    Depends,
+    WebSocket,
+    WebSocketDisconnect,
+)
 from fastapi.security import APIKeyHeader
 from pydantic import BaseModel
 
@@ -15,6 +22,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from csagent.supervisor.graph import supervisor_graph
 from csagent.router_agent.graph import router_graph
 from csagent.configuration import Configuration
+from csagent.voice_agent.GeminiAudioSession import GeminiAudioSession
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -161,3 +169,35 @@ async def run_customer_service(
             "X-Accel-Buffering": "no",
         },
     )
+
+
+@app.websocket("/ws/audio")
+async def websocket_endpoint(
+    websocket: WebSocket, enable_search: bool = False, enable_functions: bool = True
+):
+    """
+    WebSocket endpoint for audio streaming with tool calling support.
+
+    Query parameters:
+    - enable_search: Enable Google Search grounding (default: True)
+    - enable_functions: Enable function calling (default: True)
+
+    Example: ws://localhost:8000/ws/audio?enable_search=true&enable_functions=true
+    """
+    await websocket.accept()
+
+    session = GeminiAudioSession(
+        websocket, enable_search=enable_search, enable_functions=enable_functions
+    )
+    try:
+        await session.run()
+    except WebSocketDisconnect:
+        print("Client disconnected")
+    except Exception as e:
+        print(f"WebSocket error: {e}")
+        # traceback.print_exc()
+    finally:
+        try:
+            await websocket.close()
+        except Exception:
+            pass
