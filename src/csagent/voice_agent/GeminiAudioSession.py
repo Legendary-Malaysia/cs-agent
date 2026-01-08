@@ -247,6 +247,20 @@ class GeminiAudioSession:
             while self.running:
                 turn = self.session.receive()
                 async for response in turn:
+                    # Handle interruption events
+                    if response.server_content and response.server_content.interrupted:
+                        print("Generation interrupted by user speech")
+                        try:
+                            await self.websocket.send_json(
+                                {
+                                    "type": "interrupted",
+                                    "message": "Model generation was interrupted",
+                                }
+                            )
+                        except Exception as e:
+                            print(f"Error sending interruption: {e}")
+                        continue
+
                     # Handle audio data
                     if data := response.data:
                         audio_b64 = base64.b64encode(data).decode("utf-8")
