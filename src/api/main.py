@@ -179,7 +179,7 @@ async def websocket_endpoint(
     WebSocket endpoint for audio streaming with tool calling support.
 
     Query parameters:
-    - enable_search: Enable Google Search grounding (default: True)
+    - enable_search: Enable Google Search grounding (default: False)
     - enable_functions: Enable function calling (default: True)
 
     Example: ws://localhost:8000/ws/audio?enable_search=true&enable_functions=true
@@ -192,7 +192,7 @@ async def websocket_endpoint(
     try:
         await session.run()
     except WebSocketDisconnect:
-        logger.exception("Client disconnected")
+        logger.info("WebSocket client disconnected")
     except Exception:
         logger.exception("WebSocket error")
     finally:
