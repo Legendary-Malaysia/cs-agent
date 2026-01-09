@@ -3,7 +3,6 @@ import asyncio
 import base64
 from pathlib import Path
 import json
-import traceback
 from typing import Optional, Dict, Any, List
 
 from fastapi import WebSocket, WebSocketDisconnect
@@ -113,8 +112,8 @@ class GeminiAudioSession:
         function_responses = []
 
         for fc in tool_call.function_calls:
-            print(f"Function called: {fc.name}")
-            print(f"Function args: {fc.args}")
+            logger.info(f"Function called: {fc.name}")
+            logger.info(f"Function args: {fc.args}")
 
             # Send tool call notification to client (ignore if disconnected)
             try:
@@ -236,9 +235,8 @@ class GeminiAudioSession:
                     break
         except WebSocketDisconnect:
             self.running = False
-        except Exception as e:
-            print(f"Error in send_to_gemini: {e}")
-            traceback.print_exc()
+        except Exception:
+            logger.exception("Error in send_to_gemini")
             self.running = False
 
     async def receive_from_gemini(self):
@@ -249,7 +247,7 @@ class GeminiAudioSession:
                 async for response in turn:
                     # Handle interruption events
                     if response.server_content and response.server_content.interrupted:
-                        print("Generation interrupted by user speech")
+                        logger.info("Generation interrupted by user speech")
                         try:
                             await self.websocket.send_json(
                                 {
@@ -257,8 +255,8 @@ class GeminiAudioSession:
                                     "message": "Model generation was interrupted",
                                 }
                             )
-                        except Exception as e:
-                            print(f"Error sending interruption: {e}")
+                        except Exception:
+                            logger.exception("Error sending interruption")
                         continue
 
                     # Handle audio data
@@ -274,7 +272,7 @@ class GeminiAudioSession:
 
                     # Handle tool calls
                     if response.tool_call:
-                        print("Tool call received from Gemini")
+                        logger.info("Tool call received from Gemini")
                         function_responses = await self.handle_tool_call(
                             response.tool_call
                         )
@@ -311,11 +309,10 @@ class GeminiAudioSession:
                 await self.websocket.send_json({"type": "turn_complete"})
         except (WebSocketDisconnect, ConnectionClosedOK, ConnectionClosedError):
             # Client disconnected - this is expected behavior, not an error
-            print("Client disconnected, stopping receive_from_gemini")
+            logger.exception("Client disconnected, stopping receive_from_gemini")
             self.running = False
-        except Exception as e:
-            print(f"Error in receive_from_gemini: {e}")
-            traceback.print_exc()
+        except Exception:
+            logger.exception("Error in receive_from_gemini")
             self.running = False
 
     async def run(self):
@@ -345,11 +342,12 @@ class GeminiAudioSession:
                     tg.create_task(self.receive_from_gemini())
         except asyncio.CancelledError:
             pass
-        except Exception as e:
-            print(f"Error in session: {e}")
-            traceback.print_exc()
+        except Exception:
+            logger.exception("Error in session")
             try:
-                await self.websocket.send_json({"type": "error", "data": str(e)})
-            except Exception as e:
-                print(f"Error sending error to client: {e}")
+                await self.websocket.send_json(
+                    {"type": "error", "data": "Error in session"}
+                )
+            except Exception:
+                logger.exception("Error sending error to client")
                 pass

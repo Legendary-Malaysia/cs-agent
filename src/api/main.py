@@ -192,12 +192,11 @@ async def websocket_endpoint(
     try:
         await session.run()
     except WebSocketDisconnect:
-        print("Client disconnected")
-    except Exception as e:
-        print(f"WebSocket error: {e}")
-        # traceback.print_exc()
+        logger.exception("Client disconnected")
+    except Exception:
+        logger.exception("WebSocket error")
     finally:
         try:
             await websocket.close()
         except Exception:
-            pass
+            logger.exception("WebSocket close error")
