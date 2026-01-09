@@ -29,13 +29,13 @@ def profile_team_node(state: ProfileWorkflowState, runtime: Runtime[Configuratio
         prompt_path = current_dir / "resources" / "prompts" / "prompts.md"
         if not prompt_path.exists():
             raise FileNotFoundError(f"Prompt file not found: {prompt_path}")
-        with open(prompt_path, "r") as f:
+        with open(prompt_path, "r", encoding="utf-8") as f:
             system_prompt = f.read()
 
         profile_path = current_dir / "resources" / "profiles" / "company_profile.md"
         if not profile_path.exists():
             raise FileNotFoundError(f"Profile file not found: {profile_path}")
-        with open(profile_path, "r") as f:
+        with open(profile_path, "r", encoding="utf-8") as f:
             profile = f.read()
 
         instruction = f"""Your task is: {task}"""

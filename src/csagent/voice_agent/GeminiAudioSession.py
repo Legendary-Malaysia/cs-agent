@@ -23,13 +23,15 @@ client = genai.Client(http_options={"api_version": "v1alpha"})
 
 CURRENT_DIR = Path(__file__).parent
 
-prompt_path = CURRENT_DIR / "resources" / "prompts" / "prompts.md"
-if not prompt_path.exists():
-    raise FileNotFoundError(f"Prompt file not found: {prompt_path}")
-with open(prompt_path, "r") as f:
-    system_prompt = f.read()
 
-SYSTEM_INSTRUCTION = system_prompt
+def load_system_instruction():
+    prompt_path = CURRENT_DIR / "resources" / "prompts" / "prompts.md"
+    if not prompt_path.exists():
+        raise FileNotFoundError(f"Prompt file not found: {prompt_path}")
+    with open(prompt_path, "r") as f:
+        system_prompt = f.read()
+    return system_prompt
+
 
 MODEL = "gemini-2.5-flash-native-audio-preview-12-2025"
 
@@ -88,8 +90,9 @@ class GeminiAudioSession:
 
     def _build_config(self) -> Dict[str, Any]:
         """Build the configuration with tools based on settings"""
+        system_prompt = load_system_instruction()
         config = {
-            "system_instruction": SYSTEM_INSTRUCTION,
+            "system_instruction": system_prompt,
             "response_modalities": ["AUDIO"],
             "proactivity": {"proactive_audio": True},
         }
@@ -190,7 +193,7 @@ class GeminiAudioSession:
 
             locations_path = CURRENT_DIR / "resources" / "prompts" / "locations.md"
             if not locations_path.exists():
-                locations = "Locations not found"
+                locations_info = "Locations not found"
             else:
                 with open(locations_path, "r") as f:
                     locations_info = f.read()
