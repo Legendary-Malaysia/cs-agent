@@ -7,7 +7,7 @@ from csagent.profile.state import (
 from csagent.profile.nodes import profile_team_node
 from csagent.configuration import Configuration
 
-# Build the chat graph
+# Build the profile graph
 profile_builder = StateGraph(
     ProfileWorkflowState,
     input_schema=ProfileWorkflowStateInput,

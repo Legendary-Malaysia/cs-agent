@@ -51,7 +51,7 @@ def classifier_node(
             prompt_path = current_dir / "resources" / "prompts" / "classifier_prompt.md"
             if not prompt_path.exists():
                 raise FileNotFoundError(f"Prompt file not found: {prompt_path}")
-            with open(prompt_path, "r") as f:
+            with open(prompt_path, "r", encoding="utf-8") as f:
                 system_prompt_template = f.read()
 
             system_prompt = SystemMessage(content=system_prompt_template)
@@ -159,10 +159,13 @@ def customer_service_team(
         prompt_path = current_dir / "resources" / "prompts" / "cs_prompt.md"
         if not prompt_path.exists():
             raise FileNotFoundError(f"Prompt file not found: {prompt_path}")
-        with open(prompt_path, "r") as f:
+        with open(prompt_path, "r", encoding="utf-8") as f:
             system_prompt = f.read()
 
-        results_text = "\n-----\n".join(state["results"])
+        results = state.get("results", [])
+        results_text = (
+            "\n-----\n".join(results) if results else "No information gathered yet."
+        )
 
         instruction = f"""
             Here is the conversation so far:
