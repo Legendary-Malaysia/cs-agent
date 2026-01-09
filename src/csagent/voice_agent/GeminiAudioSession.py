@@ -265,13 +265,21 @@ class GeminiAudioSession:
                     # Handle audio data
                     if data := response.data:
                         audio_b64 = base64.b64encode(data).decode("utf-8")
-                        await self.websocket.send_json(
-                            {"type": "audio", "data": audio_b64}
-                        )
+                        try:
+                            await self.websocket.send_json(
+                                {"type": "audio", "data": audio_b64}
+                            )
+                        except Exception:
+                            logger.exception("Error sending audio")
 
                     # Handle text transcription
                     if text := response.text:
-                        await self.websocket.send_json({"type": "text", "data": text})
+                        try:
+                            await self.websocket.send_json(
+                                {"type": "text", "data": text}
+                            )
+                        except Exception:
+                            logger.exception("Error sending text")
 
                     # Handle tool calls
                     if response.tool_call:

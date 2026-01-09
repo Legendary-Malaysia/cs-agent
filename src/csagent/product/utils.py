@@ -19,7 +19,7 @@ def get_products():
     if not products_dir.exists():
         logger.warning(f"Products directory not found: {products_dir}")
         return []
-    # Get unique product names and remove the language suffix
+    # Get unique product names by removing the .md extension
     products = {
         file.rsplit(".", 1)[0]
         for file in os.listdir(products_dir)
