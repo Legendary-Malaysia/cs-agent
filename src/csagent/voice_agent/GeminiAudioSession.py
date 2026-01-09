@@ -223,8 +223,8 @@ class GeminiAudioSession:
                     break
         except WebSocketDisconnect:
             self.running = False
-        except (json.JSONDecodeError, KeyError) as e:
-            logger.exception("Error parsing message in send_to_gemini: %s", e)
+        except (json.JSONDecodeError, KeyError):
+            logger.exception("Error parsing message in send_to_gemini")
             self.running = False
         except Exception:
             logger.exception("Error in send_to_gemini")
@@ -288,21 +288,27 @@ class GeminiAudioSession:
                             for part in model_turn.parts:
                                 # Executable code from Google Search
                                 if part.executable_code:
-                                    await self.websocket.send_json(
-                                        {
-                                            "type": "search_code",
-                                            "code": part.executable_code.code,
-                                        }
-                                    )
+                                    try:
+                                        await self.websocket.send_json(
+                                            {
+                                                "type": "search_code",
+                                                "code": part.executable_code.code,
+                                            }
+                                        )
+                                    except Exception:
+                                        logger.exception("Error sending search code")
 
                                 # Code execution results
                                 if part.code_execution_result:
-                                    await self.websocket.send_json(
-                                        {
-                                            "type": "search_result",
-                                            "output": part.code_execution_result.output,
-                                        }
-                                    )
+                                    try:
+                                        await self.websocket.send_json(
+                                            {
+                                                "type": "search_result",
+                                                "output": part.code_execution_result.output,
+                                            }
+                                        )
+                                    except Exception:
+                                        logger.exception("Error sending search result")
 
                 # Handle turn complete (interruptions)
                 await self.websocket.send_json({"type": "turn_complete"})
