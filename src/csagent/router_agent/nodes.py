@@ -162,7 +162,10 @@ def customer_service_team(
         with open(prompt_path, "r") as f:
             system_prompt = f.read()
 
-        results_text = "\n-----\n".join(state["results"])
+        results = state.get("results", [])
+        results_text = (
+            "\n-----\n".join(results) if results else "No information gathered yet."
+        )
 
         instruction = f"""
             Here is the conversation so far:
