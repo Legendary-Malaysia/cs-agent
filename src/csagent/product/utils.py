@@ -43,10 +43,11 @@ def read_product(product: Literal[*PRODUCTS]) -> str:
 
     try:
         product_info = read_product_file(product)
-        return product_info
     except Exception as e:
         logger.exception("Error in read_product tool")
-        return f"Error in read_product tool: {str(e)}"
+        return f"Error in read_product tool: {e!s}"
+    else:
+        return product_info
 
 
 def read_product_file(product: Literal[*PRODUCTS]) -> str:
