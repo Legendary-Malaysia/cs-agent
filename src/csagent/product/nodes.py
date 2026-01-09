@@ -22,7 +22,7 @@ def product_agent_node(state: ProductWorkflowState, runtime: Runtime[Configurati
         prompt_path = current_dir / "prompts" / "pm_prompt.md"
         if not prompt_path.exists():
             raise FileNotFoundError(f"Prompt file not found: {prompt_path}")
-        with open(prompt_path, "r") as f:
+        with open(prompt_path, "r", encoding="utf-8") as f:
             system_prompt_template = f.read()
 
         system_prompt = system_prompt_template.format(

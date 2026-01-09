@@ -28,7 +28,7 @@ def load_system_instruction():
     prompt_path = CURRENT_DIR / "resources" / "prompts" / "prompts.md"
     if not prompt_path.exists():
         raise FileNotFoundError(f"Prompt file not found: {prompt_path}")
-    with open(prompt_path, "r") as f:
+    with open(prompt_path, "r", encoding="utf-8") as f:
         system_prompt = f.read()
     return system_prompt
 
@@ -167,7 +167,7 @@ class GeminiAudioSession:
             if not profile_path.exists():
                 profile = "Company profile not found"
             else:
-                with open(profile_path, "r") as f:
+                with open(profile_path, "r", encoding="utf-8") as f:
                     profile = f.read()
             return {
                 "profile": profile,
@@ -195,7 +195,7 @@ class GeminiAudioSession:
             if not locations_path.exists():
                 locations_info = "Locations not found"
             else:
-                with open(locations_path, "r") as f:
+                with open(locations_path, "r", encoding="utf-8") as f:
                     locations_info = f.read()
                     locations_info = locations_info.format(
                         locations=", ".join(locations)
@@ -312,7 +312,7 @@ class GeminiAudioSession:
                 await self.websocket.send_json({"type": "turn_complete"})
         except (WebSocketDisconnect, ConnectionClosedOK, ConnectionClosedError):
             # Client disconnected - this is expected behavior, not an error
-            logger.exception("Client disconnected, stopping receive_from_gemini")
+            logger.info("Client disconnected, stopping receive_from_gemini")
             self.running = False
         except Exception:
             logger.exception("Error in receive_from_gemini")
