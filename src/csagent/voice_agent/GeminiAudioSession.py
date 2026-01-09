@@ -1,4 +1,3 @@
-import os
 import asyncio
 import base64
 from pathlib import Path
@@ -13,6 +12,7 @@ from google.genai import types
 from dotenv import load_dotenv
 import logging
 from csagent.product.utils import get_products, read_product_file
+from csagent.location.nodes import get_locations
 
 logger = logging.getLogger(__name__)
 
@@ -174,21 +174,6 @@ class GeminiAudioSession:
             }
 
         elif function_name == "legendary_locations":
-
-            def get_locations():
-                locations_dir = (
-                    CURRENT_DIR / ".." / "location" / "resources" / "locations"
-                )
-                if not locations_dir.exists():
-                    logger.warning(f"Locations directory not found: {locations_dir}")
-                    return []
-                locations = [
-                    file[:-3]
-                    for file in os.listdir(locations_dir)
-                    if file.endswith(".md")
-                ]
-                return locations
-
             locations = get_locations()
 
             locations_path = CURRENT_DIR / "resources" / "prompts" / "locations.md"
