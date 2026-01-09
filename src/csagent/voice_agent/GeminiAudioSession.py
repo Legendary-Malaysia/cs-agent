@@ -27,7 +27,7 @@ CURRENT_DIR = Path(__file__).parent
 def load_system_instruction():
     prompt_path = CURRENT_DIR / "resources" / "prompts" / "prompts.md"
     if not prompt_path.exists():
-        raise FileNotFoundError(f"Prompt file not found: {prompt_path}")
+        raise FileNotFoundError(str(prompt_path))
     with open(prompt_path, "r", encoding="utf-8") as f:
         system_prompt = f.read()
     return system_prompt
@@ -222,6 +222,9 @@ class GeminiAudioSession:
                     self.running = False
                     break
         except WebSocketDisconnect:
+            self.running = False
+        except (json.JSONDecodeError, KeyError) as e:
+            logger.exception("Error parsing message in send_to_gemini: %s", e)
             self.running = False
         except Exception:
             logger.exception("Error in send_to_gemini")
