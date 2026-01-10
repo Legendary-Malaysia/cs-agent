@@ -87,3 +87,21 @@ def read_product_file(product: Literal[*PRODUCTS]) -> str:
         return f"Product information for '{product}' not available"
     with open(file_path, "r", encoding="utf-8") as f:
         return f.read()
+
+
+@tool(
+    description="Use this tool to read the company profile, history, core values, and general information."
+)
+def read_company_profile() -> str:
+    writer = get_stream_writer()
+    writer({"custom_key": "The character settles into harmony..."})
+    try:
+        profiles_dir = get_resources_dir() / "profiles"
+        file_path = profiles_dir / "company_profile.md"
+        if not file_path.exists():
+            return "Company profile not available"
+        with open(file_path, "r", encoding="utf-8") as f:
+            return f.read()
+    except Exception as e:
+        logger.exception("Error in read_company_profile tool")
+        return f"Error in read_company_profile tool: {e!s}"
