@@ -11,8 +11,7 @@ from google import genai
 from google.genai import types
 from dotenv import load_dotenv
 import logging
-from csagent.product.utils import get_products, read_product_file
-from csagent.location.nodes import get_locations
+from csagent.utils import get_locations, get_products, read_product_file
 
 logger = logging.getLogger(__name__)
 

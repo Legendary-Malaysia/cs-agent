@@ -1,5 +1,5 @@
 from csagent.product.state import ProductWorkflowState
-from csagent.product.utils import read_product, get_products, get_resources_dir
+from csagent.utils import read_product, get_products, get_resources_dir
 from csagent.configuration import get_model_info, Configuration
 from langgraph.runtime import Runtime
 from langchain.chat_models import init_chat_model
