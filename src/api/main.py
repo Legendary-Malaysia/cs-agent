@@ -198,5 +198,7 @@ async def websocket_endpoint(
     finally:
         try:
             await websocket.close()
+        except RuntimeError:
+            pass  # Already closed
         except Exception:
             logger.exception("WebSocket close error")
