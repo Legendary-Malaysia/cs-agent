@@ -1,5 +1,8 @@
 import logging
-from pathlib import Path
+
+from csagent.configuration import Configuration, get_model_info
+from csagent.profile.state import ProfileWorkflowState
+from csagent.utils import get_resources_dir
 
 from langchain.chat_models import init_chat_model
 from langgraph.runtime import Runtime
@@ -8,8 +11,6 @@ from langgraph.config import get_stream_writer
 from langchain.agents import create_agent
 from langchain.agents.middleware import ModelFallbackMiddleware
 
-from csagent.configuration import Configuration, get_model_info
-from csagent.profile.state import ProfileWorkflowState
 
 logger = logging.getLogger(__name__)
 
@@ -24,15 +25,13 @@ def profile_team_node(state: ProfileWorkflowState, runtime: Runtime[Configuratio
         model_info = get_model_info(runtime.context.model_medium)
         model_info_small = get_model_info(runtime.context.model_small)
 
-        current_dir = Path(__file__).parent
-
-        prompt_path = current_dir / "resources" / "prompts" / "prompts.md"
+        prompt_path = get_resources_dir() / "prompts" / "profile_prompt.md"
         if not prompt_path.exists():
             raise FileNotFoundError(f"Prompt file not found: {prompt_path}")
         with open(prompt_path, "r", encoding="utf-8") as f:
             system_prompt = f.read()
 
-        profile_path = current_dir / "resources" / "profiles" / "company_profile.md"
+        profile_path = get_resources_dir() / "profiles" / "company_profile.md"
         if not profile_path.exists():
             raise FileNotFoundError(f"Profile file not found: {profile_path}")
         with open(profile_path, "r", encoding="utf-8") as f:
