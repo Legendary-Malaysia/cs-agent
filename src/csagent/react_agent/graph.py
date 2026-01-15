@@ -10,7 +10,7 @@ from csagent.configuration import get_model_info, Configuration
 from langgraph.runtime import Runtime
 from langchain.chat_models import init_chat_model
 from langgraph.config import get_stream_writer
-from langchain_core.messages import HumanMessage
+from langchain_core.messages import HumanMessage, AIMessage
 from langgraph.graph import MessagesState
 from langchain.agents import create_agent
 from langchain.agents.middleware import ToolCallLimitMiddleware
@@ -64,7 +64,7 @@ def react_agent_node(state: MessagesState, runtime: Runtime[Configuration]):
         agent_response = agent_executor.invoke(
             {
                 "messages": state["messages"]
-                + [HumanMessage(content=instruction_map[runtime.context.language])]
+                + [HumanMessage(content=instruction_map.get(runtime.context.language, "en"))]
             }
         )
         logger.info(
@@ -74,7 +74,7 @@ def react_agent_node(state: MessagesState, runtime: Runtime[Configuration]):
         return {"messages": [agent_response["messages"][-1]]}
     except Exception:
         logger.exception("Error in react agent node")
-        return {"messages": [{"type": "ai", "content": "React agent error"}]}
+        return {"messages": [AIMessage(content="React agent error")]}
 
 
 # Build the profile graph

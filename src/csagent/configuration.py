@@ -23,8 +23,7 @@ class Configuration(BaseModel):
         {"__template_metadata__": {"kind": "llm"}},
     ] = Field(
         default="LongCat-Flash-Chat",
-        description="The name of the language model to use for the agent's main interactions. "
-        "Should be in the form: provider/model-name.",
+        description="The name of the language model to use for the agent's main interactions.",
     )
 
     model_medium: Annotated[
@@ -39,7 +38,7 @@ class Configuration(BaseModel):
     ] = Field(
         default="GLM-4.6V-Flash",
         description="The name of the medium language model to use for medium-weight tasks. "
-        "Should be in the form: provider/model-name.",
+        "Google model should be in the form: provider/model-name.",
     )
 
     model_small: Annotated[
@@ -54,7 +53,7 @@ class Configuration(BaseModel):
     ] = Field(
         default="google_genai:gemma-3-4b-it",
         description="The name of the smaller language model to use for lightweight tasks. "
-        "Should be in the form: provider/model-name.",
+        "Google model should be in the form: provider/model-name.",
     )
 
     language: Annotated[

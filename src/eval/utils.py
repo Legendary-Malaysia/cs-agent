@@ -97,7 +97,7 @@ def run_langsmith_eval(
     dataset_name: str,
     evaluators: list,
     model: str,
-    split_name: str = None,
+    split_name: str | None = None,
 ) -> None:
     """
     Run langsmith evaluation pipeline for the specified dataset.

@@ -41,7 +41,7 @@ you obtained from Google AI Studio.
 To run the script:
 
 ```
-python Get_started_LiveAPI_NativeAudio.py
+python gemini_live_nativeaudio.py
 ```
 
 Start talking to Gemini
