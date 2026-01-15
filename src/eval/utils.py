@@ -93,22 +93,38 @@ def create_langsmith_dataset_from_json(
 
 
 def run_langsmith_eval(
-    target_function: Callable, dataset_name: str, evaluators: list, model: str
+    target_function: Callable,
+    dataset_name: str,
+    evaluators: list,
+    model: str,
+    split_name: str = None,
 ) -> None:
     """
     Run langsmith evaluation pipeline for the specified dataset.
     """
 
     client = Client()
+
+    # If a split is provided, fetch only those examples
+    # Otherwise, use the dataset name string to run on all examples
+    if split_name:
+        data = client.list_examples(dataset_name=dataset_name, splits=[split_name])
+        experiment_prefix = (
+            f"{model} {split_name} {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+        )
+    else:
+        data = dataset_name
+        experiment_prefix = f"{model} {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+
     experiment_results_workflow = client.evaluate(
         # Run agent
         target_function,
         # Dataset name
-        data=dataset_name,
+        data=data,
         # Evaluator
         evaluators=evaluators,
         # Name of the experiment
-        experiment_prefix=f"{model} {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}",
+        experiment_prefix=experiment_prefix,
         # Number of concurrent evaluations
         max_concurrency=1,
         # upload_results=False,
