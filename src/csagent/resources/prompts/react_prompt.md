@@ -68,3 +68,5 @@ Style Guidelines
 - Avoid long or overly formal explanations.
 - Use bullet points to list information.
 - Focus on customer satisfaction and brand engagement.
+
+Make sure to reply in {target_language}.

@@ -10,6 +10,7 @@ from csagent.configuration import get_model_info, Configuration
 from langgraph.runtime import Runtime
 from langchain.chat_models import init_chat_model
 from langgraph.config import get_stream_writer
+from langchain_core.messages import HumanMessage
 from langgraph.graph import MessagesState
 from langchain.agents import create_agent
 from langchain.agents.middleware import ToolCallLimitMiddleware
@@ -25,7 +26,13 @@ def react_agent_node(state: MessagesState, runtime: Runtime[Configuration]):
     writer = get_stream_writer()
     writer({"custom_key": "Uncapping the bottle..."})
     logger.info("React agent node")
+    language_map = {
+        "en": "English",
+        "id": "Bahasa Indonesia",
+    }
+
     try:
+        target_language = language_map.get(runtime.context.language, "English")
         resource_dir = get_resources_dir()
 
         prompt_path = resource_dir / "prompts" / "react_prompt.md"
@@ -44,11 +51,13 @@ def react_agent_node(state: MessagesState, runtime: Runtime[Configuration]):
         agent_executor = create_agent(
             llm,
             tools,
-            system_prompt=system_prompt.format(locations=", ".join(get_locations())),
+            system_prompt=system_prompt.format(
+                locations=", ".join(get_locations()), target_language=target_language
+            ),
             name="react_agent",
             middleware=[ToolCallLimitMiddleware(run_limit=3)],
         )
-        agent_response = agent_executor.invoke({"messages": state["messages"]})
+        agent_response = agent_executor.invoke({"messages": state["messages"] + [HumanMessage(content="Make your first tool call.")]})
         logger.info(
             f"React agent response: {agent_response['messages'][-1].content[:50]}"
         )
