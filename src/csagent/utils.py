@@ -90,7 +90,7 @@ def read_product_file(product: Literal[*PRODUCTS]) -> str:
 
 
 @tool(
-    description="Use this tool to read the company profile, history, core values, and general information."
+    description="Use this tool to read the company profile, history, core values, contact information, and general information."
 )
 def read_company_profile() -> str:
     writer = get_stream_writer()
