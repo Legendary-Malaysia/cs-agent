@@ -30,6 +30,10 @@ def react_agent_node(state: MessagesState, runtime: Runtime[Configuration]):
         "en": "English",
         "id": "Bahasa Indonesia",
     }
+    instruction_map = {
+        "en": "Make your first tool call.",
+        "id": "Lakukan panggilan tool pertama.",
+    }
 
     try:
         target_language = language_map.get(runtime.context.language, "English")
@@ -57,7 +61,12 @@ def react_agent_node(state: MessagesState, runtime: Runtime[Configuration]):
             name="react_agent",
             middleware=[ToolCallLimitMiddleware(run_limit=3)],
         )
-        agent_response = agent_executor.invoke({"messages": state["messages"] + [HumanMessage(content="Make your first tool call.")]})
+        agent_response = agent_executor.invoke(
+            {
+                "messages": state["messages"]
+                + [HumanMessage(content=instruction_map[runtime.context.language])]
+            }
+        )
         logger.info(
             f"React agent response: {agent_response['messages'][-1].content[:50]}"
         )
