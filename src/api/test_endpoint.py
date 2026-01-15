@@ -1,14 +1,9 @@
 from fastapi.testclient import TestClient
 import requests
 from main import app
-import sys
 import os
 import pytest
 import json
-
-# Add the 'src' directory to the Python path to resolve csagent module
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-
 from dotenv import load_dotenv
 
 load_dotenv()
