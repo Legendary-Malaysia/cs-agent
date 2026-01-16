@@ -18,9 +18,9 @@ from fastapi.responses import StreamingResponse
 from fastapi import Request
 from typing import List, Dict
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from csagent.supervisor.graph import supervisor_graph
-from csagent.router_agent.graph import router_graph
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__))))
+# from csagent.supervisor.graph import supervisor_graph
+# from csagent.router_agent.graph import router_graph
 from csagent.react_agent.graph import react_agent_graph
 from csagent.configuration import Configuration
 from csagent.voice_agent.GeminiAudioSession import GeminiAudioSession
@@ -35,7 +35,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 API_KEY = os.getenv("CSAGENT_API_KEY")
-ACTIVE_GRAPH = os.getenv("ACTIVE_GRAPH", "router")
+ACTIVE_GRAPH = os.getenv("ACTIVE_GRAPH", "react")
 max_messages_str = os.getenv("MAX_MESSAGES", "11")
 try:
     MAX_MESSAGES = int(max_messages_str)
@@ -103,15 +103,17 @@ async def run_customer_service(
 
     async def event_generator():
         graph_map = {
-            "router": (router_graph, "router"),
-            "supervisor": (supervisor_graph, "supervisor"),
+            # "router": (router_graph, "router"),
+            # "supervisor": (supervisor_graph, "supervisor"),
             "react": (react_agent_graph, "react"),
         }
         try:
             if ACTIVE_GRAPH in graph_map:
                 graph, graph_name = graph_map[ACTIVE_GRAPH]
             else:
-                logger.warning(f"Unknown ACTIVE_GRAPH '{ACTIVE_GRAPH}', defaulting to react")
+                logger.warning(
+                    f"Unknown ACTIVE_GRAPH '{ACTIVE_GRAPH}', defaulting to react"
+                )
                 graph, graph_name = react_agent_graph, "react"
             logger.info(f"Using {graph_name} graph")
 

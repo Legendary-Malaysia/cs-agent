@@ -9,8 +9,13 @@ logger = logging.getLogger(__name__)
 
 
 def get_resources_dir():
-    current_dir = Path(__file__).parent
-    return current_dir / "resources"
+    cwd = Path(os.getcwd())
+    resources_path = cwd / "src" / "csagent" / "resources"
+    
+    if resources_path.exists():
+        return resources_path
+    
+    return cwd / "resources"
 
 
 def get_locations():
