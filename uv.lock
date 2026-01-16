@@ -403,6 +403,7 @@ dependencies = [
 [package.dev-dependencies]
 dev = [
     { name = "jupyter" },
+    { name = "langdetect" },
     { name = "langgraph-api" },
     { name = "langgraph-cli" },
     { name = "pyaudio" },
@@ -423,6 +424,7 @@ requires-dist = [
 [package.metadata.requires-dev]
 dev = [
     { name = "jupyter", specifier = ">=1.1.1" },
+    { name = "langdetect", specifier = ">=1.0.9" },
     { name = "langgraph-api", specifier = ">=0.6.11" },
     { name = "langgraph-cli", specifier = ">=0.4.11" },
     { name = "pyaudio", specifier = ">=0.2.14" },
@@ -1265,6 +1267,15 @@ sdist = { url = "https://files.pythonhosted.org/packages/ae/67/228dc28b4498ea164
 wheels = [
     { url = "https://files.pythonhosted.org/packages/db/5b/1f6521df83c1a8e8d3f52351883b59683e179c0aa1bec75d0a77a394c9e7/langchain_openai-1.1.6-py3-none-any.whl", hash = "sha256:c42d04a67a85cee1d994afe400800d2b09ebf714721345f0b651eb06a02c3948", size = 84701, upload-time = "2025-12-18T17:58:51.527Z" },
 ]
+
+[[package]]
+name = "langdetect"
+version = "1.0.9"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "six" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/0e/72/a3add0e4eec4eb9e2569554f7c70f4a3c27712f40e3284d483e88094cc0e/langdetect-1.0.9.tar.gz", hash = "sha256:cbc1fef89f8d062739774bd51eda3da3274006b3661d199c2655f6b3f6d605a0", size = 981474, upload-time = "2021-05-07T07:54:13.562Z" }
 
 [[package]]
 name = "langgraph"

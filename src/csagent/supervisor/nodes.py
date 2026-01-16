@@ -90,7 +90,6 @@ def supervisor_node(
             else [*messages, instruction_prompt]
         )
         response = llm.invoke(final_prompt)
-        logger.info(f"Response: {response.reason}")
 
         return Command(
             goto=response.next_step,
@@ -120,7 +119,7 @@ def call_product_team(state: SupervisorWorkflowState, runtime: Runtime[Configura
             {"task": state["task"]}, context=runtime.context
         )
 
-        logger.info(f"Response from product team: {response['response']}")
+        logger.info("Response from product team")
         writer({"custom_key": "Product details found"})
 
         return Command(
@@ -153,7 +152,7 @@ def call_location_team(state: SupervisorWorkflowState, runtime: Runtime[Configur
             {"task": state["task"]}, context=runtime.context
         )
 
-        logger.info(f"Response from location team: {response['response']}")
+        logger.info("Response from location team")
         writer({"custom_key": "Location details found"})
 
         return Command(
@@ -186,7 +185,7 @@ def call_profile_team(state: SupervisorWorkflowState, runtime: Runtime[Configura
             {"task": state["task"]}, context=runtime.context
         )
 
-        logger.info(f"Response from profile team: {response['response']}")
+        logger.info("Response from profile team")
         writer({"custom_key": "Profile details found"})
 
         return Command(
@@ -266,7 +265,7 @@ def customer_service_team(
 
         response = llm.invoke(messages)
 
-        logger.info(f"Response from customer service team: {response.content}")
+        logger.info("Response from customer service team")
 
         response.name = "customer_service_team"
         return {"messages": [response]}

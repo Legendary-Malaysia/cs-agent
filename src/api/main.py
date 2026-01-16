@@ -21,6 +21,7 @@ from typing import List, Dict
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from csagent.supervisor.graph import supervisor_graph
 from csagent.router_agent.graph import router_graph
+from csagent.react_agent.graph import react_agent_graph
 from csagent.configuration import Configuration
 from csagent.voice_agent.GeminiAudioSession import GeminiAudioSession
 from dotenv import load_dotenv
@@ -101,9 +102,17 @@ async def run_customer_service(
         raise HTTPException(status_code=500, detail="Configuration error") from e
 
     async def event_generator():
+        graph_map = {
+            "router": (router_graph, "router"),
+            "supervisor": (supervisor_graph, "supervisor"),
+            "react": (react_agent_graph, "react"),
+        }
         try:
-            graph = router_graph if ACTIVE_GRAPH == "router" else supervisor_graph
-            graph_name = ACTIVE_GRAPH
+            if ACTIVE_GRAPH in graph_map:
+                graph, graph_name = graph_map[ACTIVE_GRAPH]
+            else:
+                logger.warning(f"Unknown ACTIVE_GRAPH '{ACTIVE_GRAPH}', defaulting to react")
+                graph, graph_name = react_agent_graph, "react"
             logger.info(f"Using {graph_name} graph")
 
             messages = request.messages
@@ -154,6 +163,15 @@ async def run_customer_service(
                             yield f"data: {json.dumps(response_data)}\n\n"
                         except TypeError:
                             logger.exception("JSON serialization error")
+                    elif node_name == "model" and content and graph_name == "react":
+                        response_data = {
+                            "node": "customer_service_team",
+                            "content": content,
+                        }
+                        try:
+                            yield f"data: {json.dumps(response_data)}\n\n"
+                        except TypeError:
+                            logger.exception("JSON serialization error")
             # Signal completion
             yield f"data: {json.dumps({'event': 'done'})}\n\n"
         except Exception:
@@ -198,5 +216,7 @@ async def websocket_endpoint(
     finally:
         try:
             await websocket.close()
+        except RuntimeError:
+            pass  # Already closed
         except Exception:
             logger.exception("WebSocket close error")

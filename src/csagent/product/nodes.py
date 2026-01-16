@@ -1,5 +1,5 @@
 from csagent.product.state import ProductWorkflowState
-from csagent.product.utils import read_product, get_products, get_resources_dir
+from csagent.utils import read_product, get_products, get_resources_dir
 from csagent.configuration import get_model_info, Configuration
 from langgraph.runtime import Runtime
 from langchain.chat_models import init_chat_model
@@ -17,9 +17,9 @@ def product_agent_node(state: ProductWorkflowState, runtime: Runtime[Configurati
     try:
         task = state.get("task")
 
-        current_dir = get_resources_dir()
+        resource_dir = get_resources_dir()
 
-        prompt_path = current_dir / "prompts" / "pm_prompt.md"
+        prompt_path = resource_dir / "prompts" / "pm_prompt.md"
         if not prompt_path.exists():
             raise FileNotFoundError(f"Prompt file not found: {prompt_path}")
         with open(prompt_path, "r", encoding="utf-8") as f:

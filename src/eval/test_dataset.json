@@ -1,0 +1,582 @@
+[
+  {
+    "inputs": {
+      "messages": [
+        {
+          "role": "human",
+          "content": "Where can I find Legendary perfumes in Penang?"
+        }
+      ]
+    },
+    "outputs": {
+      "role": "assistant",
+      "content": "You can find Legendary in SASA outlets:\n- **1st Avenue Mall** (Lot 1-13A, First Floor)\n- **AEON Mall Bukit Mertajam** (Lot G46, Ground Floor)\n- **Gurney Paragon** (Level 2)\n- **Gurney Plaza** (First Floor)\n- **Queensbay Mall** (1F-115 & 113A)\n- **Sunway Carnival Mall** (GF45, Ground Floor)\n\nOr visit **Tropical Beauty Enterprise** at Penang International Airport (International Departure Airside)",
+      "expected_tools_called": [{ "read_location": { "location": "Penang" } }]
+    },
+    "split": "en"
+  },
+  {
+    "inputs": {
+      "messages": [
+        {
+          "role": "human",
+          "content": "Di mana saya bisa menemukan parfum Legendary di Penang?"
+        }
+      ]
+    },
+    "outputs": {
+      "role": "assistant",
+      "content": "Anda dapat menemukan Legendary di gerai SASA:\n- **1st Avenue Mall** (Lot 1-13A, Lantai Satu)\n- **AEON Mall Bukit Mertajam** (Lot G46, Lantai Dasar)\n- **Gurney Paragon** (Level 2)\n- **Gurney Plaza** (Lantai Satu)\n- **Queensbay Mall** (1F-115 & 113A)\n- **Sunway Carnival Mall** (GF45, Lantai Dasar)\n\nAtau kunjungi **Tropical Beauty Enterprise** di Bandara Internasional Penang (Area Keberangkatan Internasional Airside)",
+      "expected_tools_called": [{ "read_location": { "location": "Penang" } }]
+    },
+    "split": "id"
+  },
+  {
+    "inputs": {
+      "messages": [
+        {
+          "role": "human",
+          "content": "Hi! Can you tell me what Orchid fragrance is all about?"
+        }
+      ]
+    },
+    "outputs": {
+      "role": "assistant",
+      "content": "Hello! I'd be happy to tell you about Orchid! It's Legendary's signature fragrance, inspired by the tropical rainforests of Malaysia. Orchid is a beautiful blend of floral and fruity notes that feels fresh, elegant, and sophisticated—perfect for everyday wear. Our tagline is \"Exotic Orchid for Extraordinary Soul.\" It's designed for anyone who wants a scent that's uplifting yet comforting, without being overpowering. 🌸",
+      "expected_tools_called": [{ "read_product": { "product": "orchid" } }]
+    },
+    "split": "en"
+  },
+  {
+    "inputs": {
+      "messages": [
+        {
+          "role": "human",
+          "content": "Hai! Bisakah kamu ceritakan tentang parfum Orchid?"
+        }
+      ]
+    },
+    "outputs": {
+      "role": "assistant",
+      "content": "Halo! Dengan senang hati saya akan menceritakan tentang Orchid! Ini adalah parfum khas dari Legendary, terinspirasi oleh hutan hujan tropis Malaysia. Orchid merupakan perpaduan indah antara nuansa floral dan fruity yang terasa segar, elegan, dan berkelas—sempurna untuk pemakaian sehari-hari. Tagline kami adalah \"Exotic Orchid for Extraordinary Soul.\" Dirancang untuk siapa saja yang menginginkan aroma yang membangkitkan semangat namun tetap menenangkan, tanpa terasa berlebihan. 🌸",
+      "expected_tools_called": [{ "read_product": { "product": "orchid" } }]
+    },
+    "split": "id"
+  },
+  {
+    "inputs": {
+      "messages": [
+        {
+          "role": "human",
+          "content": "How long does Orchid fragrance last?"
+        }
+      ]
+    },
+    "outputs": {
+      "role": "assistant",
+      "content": "Orchid has been upgraded to contain 25% fragrance oil (up from 20%), which means it lasts longer than before! You'll notice the scent stays on both your skin and clothing for 4-7 hours. The higher concentration gives you a richer, more lasting scent experience throughout the day.",
+      "expected_tools_called": [{ "read_product": { "product": "orchid" } }]
+    },
+    "split": "en" 
+  },
+  {
+    "inputs": {
+      "messages": [
+        {
+          "role": "human",
+          "content": "What occasions would Orchid be suitable for?"
+        }
+      ]
+    },
+    "outputs": {
+      "role": "assistant",
+      "content": "Orchid is wonderfully versatile! It's perfect for daily wear, office and professional settings, and casual outings. Because it's fresh, elegant, and universally appealing, it's also an excellent choice for gifting. Really, you can wear it anywhere—it's that kind of effortless, all-occasion fragrance that works beautifully whether you're at work, running errands, or meeting friends.",
+      "expected_tools_called": [{ "read_product": { "product": "orchid" } }]
+    },
+    "split": "en"
+  },
+  {
+    "inputs": {
+      "messages": [
+        {
+          "role": "human",
+          "content": "Who would love Orchid fragrance?"
+        }
+      ]
+    },
+    "outputs": {
+      "role": "assistant",
+      "content": "Orchid is perfect for anyone who loves fresh floral fragrances that are soft, elegant, and wearable! It's ideal if you want a signature daily fragrance, appreciate beautiful storytelling, or prefer scents that aren't overpowering. It suits all ages and is especially great for those new to perfume. Whether you're a minimalist who wants one versatile scent or someone with refined, calm confidence who appreciates natural elegance, Orchid is a beautiful choice!",
+      "expected_tools_called": [{ "read_product": { "product": "orchid" } }]
+    },
+    "split": "en"
+  },
+  {
+    "inputs": {
+      "messages": [
+        {
+          "role": "human",
+          "content": "What are the scent notes in Mahsuri?"
+        }
+      ]
+    },
+    "outputs": {
+      "role": "assistant",
+      "content": "Great question! Mahsuri has a beautiful composition:\n\n• Top Notes: Peach and Grapefruit - creating a fresh, luminous, and gently sweet opening\n• Heart Notes: Rose and Muguet - adding classic floral elegance and femininity\n• Base Notes: Musk and Cedarwood - leaving a clean, warm, and confident trail\n\nIn simple terms, it opens fresh and soft, blooms into elegant florals, and settles into a warm, graceful finish!",
+      "expected_tools_called": [{ "read_product": { "product": "mahsuri" } }]
+    },
+    "split": "en"
+  },
+  {
+    "inputs": {
+      "messages": [
+        {
+          "role": "human",
+          "content": "What's the story behind this Mahsuri fragrance?"
+        }
+      ]
+    },
+    "outputs": {
+      "role": "assistant",
+      "content": "Mahsuri is inspired by the legendary tale of Mahsuri, a symbol of grace under adversity, inner strength, purity of spirit, and timeless feminine courage. This Malaysian legend gives the fragrance emotional depth and cultural meaning. It's not just a perfume - it captures the spirit of a legendary woman known for her grace, purity, and strength in a modern, elegant way.",
+      "expected_tools_called": [{ "read_product": { "product": "mahsuri" } }]
+    },
+    "split": "en"
+  },
+  {
+    "inputs": {
+      "messages": [
+        {
+          "role": "human",
+          "content": "Apa kisah di balik parfum Mahsuri ini?"
+        }
+      ]
+    },
+    "outputs": {
+      "role": "assistant",
+      "content": "Mahsuri terinspirasi dari kisah legenda Mahsuri, simbol keanggunan dalam menghadapi cobaan, kekuatan batin, kemurnian jiwa, dan keberanian feminin yang abadi. Legenda Malaysia ini memberikan kedalaman emosional dan makna budaya pada parfum tersebut. Ini bukan sekadar parfum—melainkan menangkap semangat seorang wanita legendaris yang dikenal akan keanggunan, kemurnian, dan kekuatannya dalam balutan modern yang elegan.",
+      "expected_tools_called": [{ "read_product": { "product": "mahsuri" } }]
+    },
+    "split": "id"
+  },
+  {
+    "inputs": {
+      "messages": [
+        {
+          "role": "human",
+          "content": "How does the water-based formula work in Three Wishes? Does it last long?"
+        }
+      ]
+    },
+    "outputs": {
+      "role": "assistant",
+      "content": "Yes, it does! Three Wishes uses encapsulation technology—an oil and water-based formula combined using nano-technology. This creates a slower evaporation rate, so the fragrance actually lasts longer throughout the day compared to typical water-based perfumes. You get a long-lasting scent without the heaviness of traditional perfumes, and it has a light, luxurious milky texture that feels wonderful on the skin!",
+      "expected_tools_called": [
+        { "read_product": { "product": "threewishes" } }
+      ]
+    },
+    "split": "en"
+  },
+  {
+    "inputs": {
+      "messages": [
+        {
+          "role": "human",
+          "content": "Does Three Wishes have any skincare benefits?"
+        }
+      ]
+    },
+    "outputs": {
+      "role": "assistant",
+      "content": "Absolutely! Three Wishes is infused with skin-conditioning ingredients that moisturize and nourish your skin. It contains Glycerin for hydration, Butylene Glycol for smoothness, and coconut-derived ingredients for softness. Your skin feels moisturized and pampered after application—it's like a fragrance and skincare hybrid in one bottle!",
+      "expected_tools_called": [
+        { "read_product": { "product": "threewishes" } }
+      ]
+    },
+    "split": "en"
+  },
+  {
+    "inputs": {
+      "messages": [
+        {
+          "role": "human",
+          "content": "Apakah Three Wishes memiliki manfaat perawatan kulit?"
+        }
+      ]
+    },
+    "outputs": {
+      "role": "assistant",
+      "content": "Tentu saja! Three Wishes diperkaya dengan bahan-bahan yang membantu merawat kulit dengan melembapkan dan menutrisi. Mengandung Glycerin untuk hidrasi, Butylene Glycol untuk kelembutan, serta bahan turunan kelapa yang memberikan rasa halus dan lembut pada kulit. Setelah pemakaian, kulit terasa lembap dan dimanjakan—seperti perpaduan antara parfum dan perawatan kulit dalam satu botol!",
+      "expected_tools_called": [
+        { "read_product": { "product": "threewishes" } }
+      ]
+    },
+    "split": "id"
+  },
+  {
+    "inputs": {
+      "messages": [
+        {
+          "role": "human",
+          "content": "What does each 'wish' represent? Can you explain the concept?"
+        }
+      ]
+    },
+    "outputs": {
+      "role": "assistant",
+      "content": "I'd love to! Each wish represents a meaningful stage of self-love:\n\n• Wish I - The Beginning of Self-Love: Your permission to love yourself. It's light, fresh, cheerful, and graceful—perfect for daytime wear.\n\n• Wish II - Self-Awareness & Commitment: Represents awareness, maturity, and sensuality. It's more intense, mesmerizing, and confident—ideal for evening and romantic occasions.\n\n• Wish III - Fulfilment & Pampering: The completion of your self-love journey. It's joyful, warm, comforting, and indulgent—perfect for relaxed days and self-care routines.\n\nThree Wishes isn't just a fragrance—it's a daily reminder to care for yourself, one wish at a time!",
+      "expected_tools_called": [
+        { "read_product": { "product": "threewishes" } }
+      ]
+    },
+    "split": "en"
+  },
+  {
+    "inputs": {
+      "messages": [
+        {
+          "role": "human",
+          "content": "How many fragrances are in the Nyonya Series?"
+        }
+      ]
+    },
+    "outputs": {
+      "role": "assistant",
+      "content": "The Nyonya Series consists of three distinct scents: Kebaya Blooms (elegant and floral), Nyonya Aromatic (fresh and spicy), and Ondeh Delights (warm and sweet). Each one tells a different cultural story and offers a unique scent personality, making it a beautifully curated trio that's perfect for different occasions, moods, and preferences!",
+      "expected_tools_called": [{ "read_product": { "product": "nyonya" } }]
+    },
+    "split": "en"
+  },
+  {
+    "inputs": {
+      "messages": [
+        {
+          "role": "human",
+          "content": "Tell me about Kebaya Blooms. What does it smell like?"
+        }
+      ]
+    },
+    "outputs": {
+      "role": "assistant",
+      "content": "Kebaya Blooms is absolutely elegant! It's inspired by the floral motifs of traditional Nyonya kebaya and has a soft, graceful, timelessly elegant character. The notes are:\n\n• Top: Ambrette, Leafy Notes, Lemon\n• Heart: Orange Blossom, Violet, Ylang Ylang\n• Base: Musk, Powdery Vetiver\n\nIt's floral and refined with clean elegance and a gentle powdery finish. Perfect for daytime wear, office or formal settings, and ideal if you love classic, graceful floral scents. It's like wearing a beautifully embroidered kebaya in scent form!",
+      "expected_tools_called": [{ "read_product": { "product": "nyonya" } }]
+    },
+    "split": "en"
+  },
+  {
+    "inputs": {
+      "messages": [
+        {
+          "role": "human",
+          "content": "What's special about Nyonya Aromatic?"
+        }
+      ]
+    },
+    "outputs": {
+      "role": "assistant",
+      "content": "Nyonya Aromatic is wonderfully fresh and sophisticated! It's inspired by herbs and spices found in traditional Nyonya cuisine, creating a warm, aromatic, and uplifting fragrance with citrus freshness. The notes include:\n\n• Top: Bergamot, Black Pepper, Lemongrass\n• Heart: Osmanthus, Rose, Violet\n• Base: Musk, Labdanum, Amber\n\nIt has a citrus-floral character with a spicy edge that's energetic yet refined. Perfect for day-to-night transition and ideal for those who like fresh scents with character. It feels like stepping into a Nyonya kitchen—aromatic, lively, and full of character, yet still very elegant!",
+      "expected_tools_called": [{ "read_product": { "product": "nyonya" } }]
+    },
+    "split": "en"
+  },
+  {
+    "inputs": {
+      "messages": [
+        {
+          "role": "human",
+          "content": "Apa yang istimewa dari Nyonya Aromatic?"
+        }
+      ]
+    },
+    "outputs": {
+      "role": "assistant",
+      "content": "Nyonya Aromatic terasa sangat segar dan berkelas! Terinspirasi dari herba dan rempah-rempah dalam masakan tradisional Nyonya, parfum ini menghadirkan aroma yang hangat, aromatik, dan membangkitkan semangat dengan kesegaran citrus. Komposisi aromanya meliputi:\n\n• Top: Bergamot, Black Pepper, Lemongrass\n• Heart: Osmanthus, Rose, Violet\n• Base: Musk, Labdanum, Amber\n\nMemiliki karakter citrus-floral dengan sentuhan pedas yang energik namun tetap elegan. Cocok untuk transisi dari siang ke malam dan ideal bagi mereka yang menyukai aroma segar dengan karakter. Rasanya seperti melangkah ke dapur Nyonya—aromatik, hidup, penuh karakter, namun tetap sangat anggun!",
+      "expected_tools_called": [{ "read_product": { "product": "nyonya" } }]
+    },
+    "split": "id"
+  },
+  {
+    "inputs": {
+      "messages": [
+        {
+          "role": "human",
+          "content": "What makes the Nyonya Series unique?"
+        }
+      ]
+    },
+    "outputs": {
+      "role": "assistant",
+      "content": "The Nyonya Series has several unique qualities! First, it features deep cultural storytelling—each scent is inspired by Malaysian Nyonya heritage and tells a different cultural story. It's a versatile trio with three different scent personalities suitable for various occasions and moods. The collection is artisanal and thoughtfully crafted with carefully balanced notes that feel nostalgic yet modern. Plus, it has a travel-friendly design that's compact and easy to carry, perfect for daily use and on-the-go lifestyles. It's a beautifully curated trio that's cultural, versatile, and easy to carry anywhere!",
+      "expected_tools_called": [{ "read_product": { "product": "nyonya" } }]
+    },
+    "split": "en"
+  },
+  {
+    "inputs": {
+      "messages": [
+        {
+          "role": "human",
+          "content": "Who is Spirit I ideal for?"
+        }
+      ]
+    },
+    "outputs": {
+      "role": "assistant",
+      "content": "Spirit I appeals to customers who enjoy variety instead of committing to one scent, believe fragrance reflects emotion and mood, and want perfumes suitable for different occasions. It's ideal for young professionals, first-time fragrance buyers, customers looking for meaningful gifts, and those who enjoy layering or rotating perfumes. It's perfect if you appreciate thoughtful gifting with symbolic meaning and prefer elegant, modern scents that are easy to wear!",
+      "expected_tools_called": [{ "read_product": { "product": "spiritI" } }]
+    },
+    "split": "en"
+  },
+  {
+    "inputs": {
+      "messages": [
+        {
+          "role": "human",
+          "content": "What's the difference between Spirit I and Spirit II?"
+        }
+      ]
+    },
+    "outputs": {
+      "role": "assistant",
+      "content": "Great question! Spirit II is the evolution of the original Spirit collection. The primary difference between the two collections lies in their thematic inspiration and fragrance profiles. Spirit I is built around the themes of Hope, Confidence, and Love, offering moods that are fresh, romantic, and elegant through main notes of green leaves, florals, and wood. In contrast, Spirit II focuses on the themes of Passion, Dream, and Life, providing scents that evoke a bright, warm, and nostalgic feeling using notes like amber, red berries, and incense. While both sets share the same functional benefits, such as a compact design and skin-safe glitter for a shimmering glow, they cater to different emotional atmospheres.",
+      "expected_tools_called": [
+        { "read_product": { "product": "spiritI" } },
+        { "read_product": { "product": "spiritII" } }
+      ]
+    },
+    "split": "en"
+  },
+  {
+    "inputs": {
+      "messages": [
+        {
+          "role": "human",
+          "content": "Apa perbedaan antara Spirit I dan Spirit II?"
+        }
+      ]
+    },
+    "outputs": {
+      "role": "assistant",
+      "content": "Pertanyaan yang bagus! Spirit II merupakan evolusi dari koleksi Spirit yang original. Perbedaan utama antara kedua koleksi ini terletak pada inspirasi tema dan profil aromanya. Spirit I dibangun dengan tema Hope, Confidence, dan Love, menghadirkan nuansa yang segar, romantis, dan elegan melalui aroma utama daun hijau, floral, dan kayu. Sementara itu, Spirit II berfokus pada tema Passion, Dream, dan Life, dengan aroma yang memberikan kesan cerah, hangat, dan nostalgik menggunakan nuansa amber, red berries, dan incense. Meskipun keduanya memiliki manfaat fungsional yang sama—seperti desain yang ringkas dan glitter yang aman untuk kulit untuk efek kilau—masing-masing koleksi menawarkan suasana emosional yang berbeda.",
+      "expected_tools_called": [
+        { "read_product": { "product": "spiritI" } },
+        { "read_product": { "product": "spiritII" } }
+      ]
+    },
+    "split": "id"
+  },
+  {
+    "inputs": {
+      "messages": [
+        {
+          "role": "human",
+          "content": "Does Violet contain any allergens I should know about? And where can I find Legendary perfumes in Penang?"
+        }
+      ]
+    },
+    "outputs": {
+      "role": "assistant",
+      "content": "I don't have detailed ingredient or allergen information for Violet. If you have specific allergy concerns, I'd strongly recommend checking our official website for complete ingredient listings or speaking with our store staff directly. They can provide detailed information about the formulation and help determine if it would be safe for your specific sensitivities!You can find **Violet in Penang** at any of these SASA outlets:\n- **1st Avenue Mall** (Lot 1-13A, First Floor)\n- **AEON Mall Bukit Mertajam** (Lot G46, Ground Floor)\n- **Gurney Paragon** (Level 2)\n- **Gurney Plaza** (First Floor)\n- **Queensbay Mall** (1F-115 & 113A)\n- **Sunway Carnival Mall** (GF45, Ground Floor)\n\nOr visit **Tropical Beauty Enterprise** at Penang International Airport (International Departure Airside)",
+      "expected_tools_called": [
+        { "read_product": { "product": "violet" } },
+        { "read_location": { "location": "Penang" } }
+      ]
+    },
+    "split": "en"
+  },
+  {
+    "inputs": {
+      "messages": [
+        {
+          "role": "human",
+          "content": "Apakah Violet mengandung alergen yang perlu saya ketahui? Dan di mana saya bisa menemukan parfum Legendary di Penang?"
+        }
+      ]
+    },
+    "outputs": {
+      "role": "assistant",
+      "content": "Saya tidak memiliki informasi detail mengenai bahan atau kandungan alergen pada Violet. Jika Anda memiliki kekhawatiran alergi tertentu, saya sangat menyarankan untuk memeriksa situs web resmi kami untuk daftar bahan yang lengkap atau berbicara langsung dengan staf toko. Mereka dapat memberikan informasi rinci tentang formulasi produk dan membantu memastikan apakah aman untuk sensitivitas Anda.\n\nAnda dapat menemukan **Violet di Penang** di gerai SASA berikut:\n- **1st Avenue Mall** (Lot 1-13A, Lantai Satu)\n- **AEON Mall Bukit Mertajam** (Lot G46, Lantai Dasar)\n- **Gurney Paragon** (Level 2)\n- **Gurney Plaza** (Lantai Satu)\n- **Queensbay Mall** (1F-115 & 113A)\n- **Sunway Carnival Mall** (GF45, Lantai Dasar)\n\nAtau kunjungi **Tropical Beauty Enterprise** di Bandara Internasional Penang (Area Keberangkatan Internasional Airside)",
+      "expected_tools_called": [
+        { "read_product": { "product": "violet" } },
+        { "read_location": { "location": "Penang" } }
+      ]
+    },
+    "split": "id"
+  },
+  {
+    "inputs": {
+      "messages": [
+        {
+          "role": "human",
+          "content": "What makes Violet special or unique?"
+        },
+        {
+          "role": "assistant",
+          "content": "Violet has several wonderful unique qualities! First, it's a unique, multi-layered scent—a sophisticated blend of floral, fruity, and musky/woody notes that evolves over time, revealing new layers the longer it's worn. It feels personal and different on every wearer! Second, it offers long-lasting performance of 4-7 hours. Third, it's easy to carry with its compact, travel-friendly bottle that's perfect for handbags, travel, or touch-ups anytime. Perfect for women on the go—easy to bring, easy to love! Would you like to know more about where you can purchase Violet, or perhaps how it differs from our other fragrances like Mahsuri or Orchid?"
+        },
+        {
+          "role": "human",
+          "content": "What makes Violet special or unique?"
+        }
+      ]
+    },
+    "outputs": {
+      "role": "assistant",
+      "content": "Violet is distinguished by its mysterious blend of floral, fruity, and musky/woody notes, which create a complex layering of scents. This unique composition means the fragrance is constantly changing the longer it is worn, offering an invigorating freshness that awakens the senses. Beyond its scent profile, Violet is also notable for being long-lasting, leaving an impression for 4 to 7 hours, and it is packaged in a compact bottle designed to be easily carried for a busy lifestyle.",
+      "expected_tools_called": [{ "read_product": { "product": "violet" } }]
+    },
+    "split": "en"
+  },
+  {
+    "inputs": {
+      "messages": [
+        {
+          "role": "human",
+          "content": "Apa yang membuat Violet istimewa atau unik?"
+        },
+        {
+          "role": "assistant",
+          "content": "Violet memiliki beberapa keunikan yang luar biasa! Pertama, aromanya bersifat unik dan berlapis—perpaduan sophisticated antara nuansa floral, fruity, serta musk/kayu yang berkembang seiring waktu, menampilkan lapisan aroma baru semakin lama dipakai. Wanginya terasa personal dan bisa berbeda pada setiap pemakainya! Kedua, performanya tahan lama selama 4–7 jam. Ketiga, kemasannya praktis dan mudah dibawa dengan botol berukuran ringkas yang cocok untuk tas tangan, bepergian, atau touch-up kapan saja. Sempurna untuk wanita yang aktif—mudah dibawa, mudah disukai! Apakah Anda ingin tahu lebih lanjut tentang di mana bisa membeli Violet, atau bagaimana perbedaannya dibanding parfum kami yang lain seperti Mahsuri atau Orchid?"
+        },
+        {
+          "role": "human",
+          "content": "What makes Violet special or unique?"
+        }
+      ]
+    },
+    "outputs": {
+      "role": "assistant",
+      "content": "Violet istimewa karena perpaduan aromanya yang misterius antara floral, fruity, serta nuansa musk/kayu yang menciptakan lapisan aroma yang kompleks. Komposisi unik ini membuat wanginya terus berkembang semakin lama digunakan, memberikan kesegaran yang membangkitkan indera. Selain profil aromanya, Violet juga dikenal tahan lama dengan daya tahan sekitar 4 hingga 7 jam, serta dikemas dalam botol ringkas yang dirancang agar mudah dibawa untuk gaya hidup yang sibuk.",
+      "expected_tools_called": [{ "read_product": { "product": "violet" } }]
+    },
+    "split": "id"
+  },
+  {
+    "inputs": {
+      "messages": [
+        {
+          "role": "human",
+          "content": "Who is Violet ideal for?"
+        }
+      ]
+    },
+    "outputs": {
+      "role": "assistant",
+      "content": "Violet is perfect for women who love romantic and elegant fragrances, customers who enjoy floral scents with depth, those looking for a signature evening or date-night perfume, and customers who want a scent that feels feminine but not overly sweet. It's designed for women who embrace both softness and strength, and who appreciate a fragrance that's mysterious, sophisticated, and timeless!",
+      "expected_tools_called": [{ "read_product": { "product": "violet" } }]
+    },
+    "split": "en"
+  },
+  {
+    "inputs": {
+      "messages": [
+        {
+          "role": "human",
+          "content": "What does Man smell like? What are the notes?"
+        }
+      ]
+    },
+    "outputs": {
+      "role": "assistant",
+      "content": "Man has a Green Fougère fragrance family with a beautiful scent journey:\n\n• Top Notes: Grapefruit, Lemon - creating an immediate burst of freshness that feels clean, energetic, and uplifting\n• Heart Notes: Apple, Raspberry, Orange Flower, Muguet, Jasmine - adding depth with a balanced blend of fruity freshness and subtle florals, enhancing sophistication and approachability\n• Base Notes: Cedarwood, Musk, Sandalwood, Vanilla - delivering a smooth, woody warmth that lingers, creating a strong masculine signature with a soft, elegant finish\n\nIt captures the harmony between strength and warmth perfectly!",
+      "expected_tools_called": [{ "read_product": { "product": "man" } }]
+    },
+    "split": "en"
+  },
+  {
+    "inputs": {
+      "messages": [
+        {
+          "role": "human",
+          "content": "Can I wear Man both during the day and at night?"
+        }
+      ]
+    },
+    "outputs": {
+      "role": "assistant",
+      "content": "Absolutely! That's one of Man's key strengths—it's designed to transition seamlessly from day to night. The fresh citrus notes make it perfect for daytime freshness, while the warm woody base notes provide nighttime warmth. If you're looking for a fragrance that feels fresh during the day and warm at night, Man is an excellent choice. It's elegant, masculine, and works for any occasion!",
+      "expected_tools_called": [{ "read_product": { "product": "man" } }]
+    },
+    "split": "en"
+  },
+  {
+    "inputs": {
+      "messages": [
+        {
+          "role": "human",
+          "content": "Apakah saya bisa memakai Man baik di siang hari maupun malam hari?"
+        }
+      ]
+    },
+    "outputs": {
+      "role": "assistant",
+      "content": "Tentu saja! Itu adalah salah satu keunggulan utama Man—dirancang untuk bertransisi dengan mulus dari siang ke malam. Nuansa citrus yang segar membuatnya sempurna untuk kesegaran di siang hari, sementara aroma dasar kayu yang hangat memberikan kehangatan di malam hari. Jika Anda mencari wewangian yang terasa segar di siang hari dan hangat di malam hari, Man adalah pilihan yang sangat tepat. Elegan, maskulin, dan cocok untuk berbagai kesempatan!",
+      "expected_tools_called": [{ "read_product": { "product": "man" } }]
+    },
+    "split": "id"
+  },
+  {
+    "inputs": {
+      "messages": [
+        {
+          "role": "human",
+          "content": "What is your most well-known perfume?"
+        }
+      ]
+    },
+    "outputs": {
+      "role": "assistant",
+      "content": "Our most iconic and well-known fragrance is Orchid, which represents the signature scent of Legendary.",
+      "expected_tools_called": [{ "read_product": { "product": "orchid" } }]
+    },
+    "split": "en"
+  },
+  {
+    "inputs": {
+      "messages": [
+        {
+          "role": "human",
+          "content": "Where can I find Legendary perfumes?"
+        }
+      ]
+    },
+    "outputs": {
+      "role": "assistant",
+      "content": "You can find Legendary in over 100 locations, including international airports, department stores, and direct stores like KLIA2, Pavilion KL, Melaka, and Genting.",
+      "expected_tools_called": []
+    },
+    "split": "en"
+  },
+  {
+    "inputs": {
+      "messages": [
+        {
+          "role": "human",
+          "content": "What types of perfumes do you offer?"
+        }
+      ]
+    },
+    "outputs": {
+      "role": "assistant",
+      "content": "We offer a range of Eau de Parfum collections, including Orchid, Violet, Man (which is halal certified), Mahsuri, and gift sets like Spirit I, Spirit II, and 3 Wishes.",
+      "expected_tools_called": []
+    },
+    "split": "en"
+  },
+  {
+    "inputs": {
+      "messages": [
+        {
+          "role": "human",
+          "content": "How can I contact Legendary?"
+        }
+      ]
+    },
+    "outputs": {
+      "role": "assistant",
+      "content": "You can reach us via phone at +60 17-388 3888, email at davy@legendary.com.my, or visit our website at www.legendary.com.my.",
+      "expected_tools_called": [{ "read_company_profile": {} }]
+    },
+    "split": "en"
+  }
+]

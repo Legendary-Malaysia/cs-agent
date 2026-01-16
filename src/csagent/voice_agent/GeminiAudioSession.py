@@ -11,8 +11,7 @@ from google import genai
 from google.genai import types
 from dotenv import load_dotenv
 import logging
-from csagent.product.utils import get_products, read_product_file
-from csagent.location.nodes import get_locations
+from csagent.utils import get_resources_dir, get_locations, get_products, read_product_file
 
 logger = logging.getLogger(__name__)
 
@@ -156,14 +155,7 @@ class GeminiAudioSession:
         Execute the actual function logic.
         """
         if function_name == "legendary_profile":
-            profile_path = (
-                CURRENT_DIR
-                / ".."
-                / "profile"
-                / "resources"
-                / "profiles"
-                / "company_profile.md"
-            )
+            profile_path = get_resources_dir() / "profiles" / "company_profile.md"
             if not profile_path.exists():
                 profile = "Company profile not found"
             else:

@@ -14,6 +14,7 @@ Product Highlights
 - Mahsuri : Featured as the cover fragrance in AirAsia’s Inflight Magazine. Floral notes.
 - Spirit I : Available in three variants: Hope, Love, and Confidence. Enriched with luxurious glitters. Fresh, floral & fruity notes.
 - Spirit II : Available in three variants: Passion, Dream, and Life. Enriched with luxurious glitters. Fresh, floral & fruity notes.
+- Violet : mysterious, elegant, and deeply feminine fragrance. Fruity & Floral with Musky-Woody notes.
 - Nyonya Series : Available in three variants: Kebaya Blooms, Nyonya Aromatic, and Ondeh Delights. Cultural inspiration rooted in Malaysian identity. Woody, floral & gourmand notes.
 - Each fragrance has Eau de Parfum (EDP) with a lasting impression of 4–7 hours.
 
