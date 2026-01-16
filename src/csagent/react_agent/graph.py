@@ -64,12 +64,16 @@ def react_agent_node(state: MessagesState, runtime: Runtime[Configuration]):
         agent_response = agent_executor.invoke(
             {
                 "messages": state["messages"]
-                + [HumanMessage(content=instruction_map.get(runtime.context.language, "en"))]
+                + [
+                    HumanMessage(
+                        content=instruction_map.get(
+                            runtime.context.language, instruction_map["en"]
+                        )
+                    )
+                ]
             }
         )
-        logger.info(
-            f"React agent response: {agent_response['messages'][-1].content[:50]}"
-        )
+        logger.info("React agent response")
 
         return {"messages": [agent_response["messages"][-1]]}
     except Exception:

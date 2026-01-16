@@ -102,9 +102,17 @@ async def run_customer_service(
         raise HTTPException(status_code=500, detail="Configuration error") from e
 
     async def event_generator():
+        graph_map = {
+            "router": (router_graph, "router"),
+            "supervisor": (supervisor_graph, "supervisor"),
+            "react": (react_agent_graph, "react"),
+        }
         try:
-            graph = router_graph if ACTIVE_GRAPH == "router" else supervisor_graph if ACTIVE_GRAPH == "supervisor" else react_agent_graph
-            graph_name = ACTIVE_GRAPH
+            if ACTIVE_GRAPH in graph_map:
+                graph, graph_name = graph_map[ACTIVE_GRAPH]
+            else:
+                logger.warning(f"Unknown ACTIVE_GRAPH '{ACTIVE_GRAPH}', defaulting to react")
+                graph, graph_name = react_agent_graph, "react"
             logger.info(f"Using {graph_name} graph")
 
             messages = request.messages

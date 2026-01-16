@@ -41,7 +41,7 @@ def read_location(location: Literal[*LOCATIONS]):
             return f.read()
     except Exception as e:
         logger.exception("Error in read_location tool")
-        return f"Error in read_location tool: {str(e)}"
+        return f"Error in read_location tool: {e!s}"
 
 
 def get_products():
