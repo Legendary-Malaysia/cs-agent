@@ -1,6 +1,6 @@
 from fastapi.testclient import TestClient
 import requests
-from main import app
+from index import app
 import os
 import pytest
 import json
